@@ -11,7 +11,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-// Dan is awesome
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -19,5 +18,4 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    // test commit comment
 }
