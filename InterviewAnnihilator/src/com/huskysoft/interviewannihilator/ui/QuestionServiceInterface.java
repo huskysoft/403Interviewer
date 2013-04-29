@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.huskysoft.interviewannihilator.util.CategoryEnum;
 import com.huskysoft.interviewannihilator.util.DifficultyEnum;
+import com.huskysoft.interviewannihilator.util.PaginatedResults;
 
 /**
  * 
@@ -28,7 +29,7 @@ public interface QuestionServiceInterface {
 	 * @return A list of questions, with size less than or equal to the
 	 * numQuestions parameter
 	 */
-	public List<Question> getQuestions(int numQuestions, List<CategoryEnum> 
+	public PaginatedResults<Question> getQuestions(int numQuestions, List<CategoryEnum> 
 		category, DifficultyEnum difficulty);
 	
 	/**
@@ -38,7 +39,7 @@ public interface QuestionServiceInterface {
 	 * answers to
 	 * @return A list of the solutions associated with a given question
 	 */
-	public List<Solution> getSolutions(int questionId);
+	public PaginatedResults<Solution> getSolutions(int questionId);
 	
 	/**
 	 * Called when the application user wants to post a question to the
