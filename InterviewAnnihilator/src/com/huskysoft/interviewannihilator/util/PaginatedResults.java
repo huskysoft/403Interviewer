@@ -4,6 +4,9 @@ import java.util.List;
 
 /**
  * A generic PaginatedResults object to return paginated data from the DB.
+ * Users would get one page of results from the DB, and can then request
+ * additional pages (nextOffset = offset + limit) if more results are
+ * available (totaNumberOfResults > offset + limit).
  * 
  * @author bkng
  *
@@ -11,10 +14,19 @@ import java.util.List;
  */
 public class PaginatedResults<T> {
 
+	/** list of objects returned from the DB */
 	private List<T> results;
+	
+	/** total number of objects in the DB matching the request */
 	private int totalNumberOfResults;
+	
+	/** the requested number of objects */
 	private int limit;
+	
+	/** the requested offset */
 	private int offset;
+	
+	/** the type object contained in 'results' */
 	private Class<T> clazz;
 	
 	public PaginatedResults(List<T> results, int totalNumberOfResults, 
@@ -23,47 +35,27 @@ public class PaginatedResults<T> {
 		this.totalNumberOfResults = totalNumberOfResults;
 		this.limit = limit;
 		this.offset = offset;
-		this.setClazz(clazz);
+		this.clazz = clazz;
 	}
 
 	public List<T> getResults() {
 		return results;
 	}
 
-	public void setResults(List<T> results) {
-		this.results = results;
-	}
-
 	public int getTotalNumberOfResults() {
 		return totalNumberOfResults;
-	}
-
-	public void setTotalNumberOfResults(int totalNumberOfResults) {
-		this.totalNumberOfResults = totalNumberOfResults;
 	}
 
 	public int getLimit() {
 		return limit;
 	}
 
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
-
 	public int getOffset() {
 		return offset;
 	}
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-
 	public Class<T> getClazz() {
 		return clazz;
-	}
-
-	public void setClazz(Class<T> clazz) {
-		this.clazz = clazz;
 	}
 
 	@Override

@@ -18,28 +18,29 @@ import com.huskysoft.interviewannihilator.util.PaginatedResults;
 public interface QuestionServiceInterface {
 
 	/**
-	 * Retrieves a list of questions from the database, where the size of the
-	 * list and its contents are dictated by the arguments
+	 * Retrieves a list of questions from the database.
 	 * 
-	 * @param numQuestions The number of questions the user wants
-	 * @param category A list representing the filters on the categories of
+	 * @param category - list representing the filters on the categories of
 	 * the questions they want back. Can be null
-	 * @param difficulty A filter representing how hard they want the questions
+	 * @param difficulty - filter representing how hard they want the questions
 	 * they get back to be. Can be null
-	 * @return A list of questions, with size less than or equal to the
-	 * numQuestions parameter
+	 * @param limit - number of questions requested
+	 * @param offset - query offset
+	 * @return PaginatedResults containing the selected questions
 	 */
-	public PaginatedResults<Question> getQuestions(int numQuestions, List<CategoryEnum> 
-		category, DifficultyEnum difficulty);
+	public PaginatedResults<Question> getQuestions(List<CategoryEnum> 
+		category, DifficultyEnum difficulty, int limit, int offset);
 	
 	/**
 	 * Gets the solutions corresponding to a given question from the database
 	 * 
 	 * @param questionId the identifier for the question that the user wants
 	 * answers to
-	 * @return A list of the solutions associated with a given question
+	 * @param limit - number of solutions requested
+	 * @param offset - query offset
+	 * @return PaginatedResults containing the selected solutions
 	 */
-	public PaginatedResults<Solution> getSolutions(int questionId);
+	public PaginatedResults<Solution> getSolutions(int questionId, int limit, int offset);
 	
 	/**
 	 * Called when the application user wants to post a question to the
