@@ -12,10 +12,6 @@ import java.sql.Date;
  *
  */
 public class Solution {
-
-	// The minimum number of likes a question needs to have to have a
-	// a valid positive rating
-	private static final int MIN_LIKES = 5;
 	
 	private int id;
 	private String text;
@@ -112,23 +108,5 @@ public class Solution {
 	 */
 	public int getDislikes() {
 		return dislikes;
-	}
-	
-	/**
-	 * Calculates the rank of this solution based on the number of likes and
-	 * dislikes of the solution
-	 * 
-	 * @return a float representing the rating of the solution. This is
-	 * calculated based on the ratio of likes to dislikes, as long as the
-	 * solution has at least a minimum number of likes. If it doesn't, 
-	 * then it is given a negative rating, which starts at the negative of
-	 * the minimum number and increments for every like it
-	 * gets (until it reaches the min. # of likes)
-	 */
-	public double getRank() {
-		if (likes < MIN_LIKES) {
-			return ((-1 * MIN_LIKES) + likes);
-		}
-		return ((double) likes / dislikes);
 	}
 }

@@ -22,9 +22,9 @@ public interface QuestionServiceInterface {
 	 * 
 	 * @param numQuestions The number of questions the user wants
 	 * @param category A list representing the filters on the categories of
-	 * the questions they want back
+	 * the questions they want back. Can be null
 	 * @param difficulty A filter representing how hard they want the questions
-	 * they get back to be
+	 * they get back to be. Can be null
 	 * @return A list of questions, with size less than or equal to the
 	 * numQuestions parameter
 	 */
