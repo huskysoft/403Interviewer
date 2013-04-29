@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator;
+package com.huskysoft.interviewannihilator.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.huskysoft.interviewannihilator.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,7 +66,8 @@ public class MainActivity extends Activity {
 			HttpPost httppost = new HttpPost(urls[0]);
 			try {				
 				HttpResponse response = httpclient.execute(httppost);
-				result = inputStreamToString(response.getEntity().getContent()).toString();					    	
+				result = inputStreamToString(response.getEntity().
+						getContent()).toString();					    	
 			}
 			catch (Exception e) {
 				e.printStackTrace();
