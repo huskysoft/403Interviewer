@@ -25,7 +25,6 @@ public class Utility {
 	 * then it is given a negative rating, which starts at the negative of
 	 * the minimum number and increments for every like it
 	 * gets (until it reaches the min. # of likes).
-	 * Returns null if an exception occurs.
 	 */
 	public double getRank(LikeableObject obj) {
 		int likes = obj.getLikes();
