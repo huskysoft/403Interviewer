@@ -13,7 +13,7 @@ import java.util.List;
  *
  */
 public class Question implements LikeableObject {
-	
+
 	private int id;
 	private String text;
 	private String title;
@@ -138,5 +138,66 @@ public class Question implements LikeableObject {
 	 */
 	public int getDislikes() {
 		return dislikes;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + authorId;
+		result = prime * result
+				+ ((category == null) ? 0 : category.hashCode());
+		result = prime * result
+				+ ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		result = prime * result
+				+ ((difficulty == null) ? 0 : difficulty.hashCode());
+		result = prime * result + dislikes;
+		result = prime * result + id;
+		result = prime * result + likes;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		if (authorId != other.authorId)
+			return false;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
+		if (dateCreated == null) {
+			if (other.dateCreated != null)
+				return false;
+		} else if (!dateCreated.equals(other.dateCreated))
+			return false;
+		if (difficulty != other.difficulty)
+			return false;
+		if (dislikes != other.dislikes)
+			return false;
+		if (id != other.id)
+			return false;
+		if (likes != other.likes)
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
 	}
 }
