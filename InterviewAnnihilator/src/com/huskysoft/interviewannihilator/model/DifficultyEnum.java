@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator.util;
+package com.huskysoft.interviewannihilator.model;
 
 /**
  * An enum describing the different difficulty levels a question can

@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator.util;
+package com.huskysoft.interviewannihilator.model;
 
 /**
  * An enum describing all the different categories a question can
