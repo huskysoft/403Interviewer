@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator.ui;
+package com.huskysoft.interviewannihilator.model;
 
 import java.sql.Date;
 
@@ -11,7 +11,7 @@ import java.sql.Date;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Solution {
+public class Solution implements LikeableObject {
 	
 	private int id;
 	private String text;

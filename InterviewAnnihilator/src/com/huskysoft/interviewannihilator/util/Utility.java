@@ -1,5 +1,7 @@
 package com.huskysoft.interviewannihilator.util;
 
+import com.huskysoft.interviewannihilator.model.LikeableObject;
+
 /**
  * Contains some common constants and helper functions that are used
  * in our application
@@ -23,20 +25,17 @@ public class Utility {
 	 * then it is given a negative rating, which starts at the negative of
 	 * the minimum number and increments for every like it
 	 * gets (until it reaches the min. # of likes).
-	 * Returns null if an exception occurs.
 	 */
-	public Double getRank(int likes, int dislikes) {
-		try {
-			if (likes < MIN_LIKES) {
-				return Double.valueOf((-1 * MIN_LIKES) + likes);
-			}
-			if (dislikes == 0) {
-				return Double.valueOf(likes);
-			}
-			return ((double) likes / dislikes);
+	public double getRank(LikeableObject obj) {
+		int likes = obj.getLikes();
+		int dislikes = obj.getDislikes();
+
+		if (likes < MIN_LIKES) {
+			return (-1 * MIN_LIKES) + likes;
 		}
-		catch (Exception e) {
-			return null;
+		if (dislikes == 0) {
+			return likes;
 		}
+		return ((double) likes / dislikes);
 	}
 }

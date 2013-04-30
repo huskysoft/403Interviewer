@@ -1,9 +1,11 @@
-package com.huskysoft.interviewannihilator.ui;
+package com.huskysoft.interviewannihilator.service;
 
 import java.util.List;
 
-import com.huskysoft.interviewannihilator.util.CategoryEnum;
-import com.huskysoft.interviewannihilator.util.DifficultyEnum;
+import com.huskysoft.interviewannihilator.model.CategoryEnum;
+import com.huskysoft.interviewannihilator.model.DifficultyEnum;
+import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.PaginatedResults;
 
 /**

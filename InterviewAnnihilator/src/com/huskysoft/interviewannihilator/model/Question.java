@@ -1,10 +1,8 @@
-package com.huskysoft.interviewannihilator.ui;
+package com.huskysoft.interviewannihilator.model;
 
 import java.sql.Date;
 import java.util.List;
 
-import com.huskysoft.interviewannihilator.util.CategoryEnum;
-import com.huskysoft.interviewannihilator.util.DifficultyEnum;
 
 /**
  * 
@@ -14,7 +12,7 @@ import com.huskysoft.interviewannihilator.util.DifficultyEnum;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Question {
+public class Question implements LikeableObject {
 	
 	private int id;
 	private String text;
