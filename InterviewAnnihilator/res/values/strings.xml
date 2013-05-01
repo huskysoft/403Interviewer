@@ -4,5 +4,9 @@
     <string name="app_name">InterviewAnnihilator</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="edit_message">Enter Message</string>
+    <string name="button_solutions">Solutions</string>
+    <string name="title_activity_question">Question</string>
+    <string name="title_activity_solution">Solution</string>
 
 </resources>
