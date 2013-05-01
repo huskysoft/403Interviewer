@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,46 +34,75 @@ public class MainActivity extends Activity {
 	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
 	
 	public TextView textView;
-	public LinearLayout ll;
+	
+	
+	private LinearLayout questionll; //Layout element that holds the questions
+	private List<String> questions; //List of question elements
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		String url = "http://students.washington.edu/bkng/cse403/foo.php";
-		//textView = (TextView)findViewById(R.id.textView1);
-		//textView.setText("Loading...");
-
-		//new PostURLTask().execute(url , null, null);
-		ll = (LinearLayout)findViewById(R.id.linear_layout);
 		
-		TextView[] t = new TextView[10];
-		for(int i = 0; i < 10; i++){
+		questions = new LinkedList<String>();
+		questionll = (LinearLayout)findViewById(R.id.linear_layout);
+		
+		if(questions.isEmpty())
+			getQuestions();
+		displayQuestions();
+		
+	}
+	
+	/**
+	 * Method that builds TextView objects for each question
+	 * in the questions list. Appends the TextView objects to the
+	 * main Linear Layout. 
+	 */
+	private void displayQuestions(){
+		Iterator<String> it = questions.iterator();
+		int idCount = 1;
+		while(it.hasNext()){		
+			TextView t = new TextView(this);
+			t.setText(it.next());
+			t.setTextSize(40);
 			
-			t[i] = new TextView(this);
-			t[i].setText("Question " + (i + 1));
-			t[i].setTextSize(40);
-			
+			t.setBackgroundColor(0xfff00000);
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		    llp.setMargins(0, 10, 0, 10); // llp.setMargins(left, top, right, bottom);
+		    llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+		   
 		    llp.gravity = 1; //Horizontal Center
 		    
-		    t[i].setLayoutParams(llp);
+		    t.setLayoutParams(llp);
 			
-			t[i].setId(i);
-			t[i].setOnClickListener(new View.OnClickListener() {
-				
+			t.setId(idCount);
+			t.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					openQuestion(v);
 				}
 			});
 			
-			ll.addView(t[i]);
+			idCount++;
+			questionll.addView(t);
 		}
+	}
 	
+	/**
+	 * Gathers 10 new questions. Appends questions to the 
+	 * questions list.
+	 * 
+	 * @author Phillip Leland
+	 */
+	private void getQuestions(){
+		
+		//Temporary Testing 
+		//Real method will call network interface
+		for(int i = 0; i < 20; i++){
+			String ques = "Question " + (i + 1);
+			questions.add(ques);
+		}	
 	}
 	
 	@Override

@@ -33,6 +33,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.MainActivity" />
         </activity>
+        <activity
+            android:name="com.huskysoft.interviewannihilator.SolutionActivity"
+            android:label="@string/title_activity_solution"
+            android:parentActivityName="com.huskysoft.interviewannihilator.QuestionActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.huskysoft.interviewannihilator.QuestionActivity" />
+        </activity>
     </application>
 
 </manifest>
