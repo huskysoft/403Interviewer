@@ -23,14 +23,14 @@ public class QuestionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_question);	
 		
-		//Get intent
+		// Get intent
 		Intent intent = getIntent();
 		String question = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		
-		//Grab Linear Layout
+		// Grab Linear Layout
 		LinearLayout singleQuestionll = (LinearLayout)findViewById(R.id.linear_layout);
 		
-		//Create TextView that holds Question
+		// Create TextView that holds Question
 		TextView textview = new TextView(this);
 		textview.setTextSize(40);
 		textview.setText(question);

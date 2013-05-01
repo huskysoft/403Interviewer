@@ -41,8 +41,8 @@ public class MainActivity extends Activity {
 	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
 		
 	
-	private LinearLayout questionll; //Layout element that holds the questions
-	private List<String> questions; //List of question elements
+	private LinearLayout questionll; // Layout element that holds the questions
+	private List<String> questions; // List of question elements
 	
 	
 	/**
@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		questions = new LinkedList<String>(); //Will be a list of Question Objects
+		questions = new LinkedList<String>(); // Will be a list of Question Objects
 		questionll = (LinearLayout)findViewById(R.id.linear_layout);
 		
 		if(questions.isEmpty())
@@ -81,9 +81,9 @@ public class MainActivity extends Activity {
 			t.setBackgroundColor(0xfff00000);
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		    llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+			llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
 		   
-		    llp.gravity = 1; //Horizontal Center
+		    llp.gravity = 1; // Horizontal Center
 		    
 		    t.setLayoutParams(llp);
 			
@@ -108,8 +108,8 @@ public class MainActivity extends Activity {
 	 */
 	private void getQuestions(){
 		
-		//Temporary Testing 
-		//Real method will call network interface
+		// Temporary Testing 
+		// Real method will call network interface
 		for(int i = 0; i < 20; i++){
 			String ques = "Question " + (i + 1);
 			questions.add(ques);
