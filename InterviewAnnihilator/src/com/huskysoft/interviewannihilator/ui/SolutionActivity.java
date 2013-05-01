@@ -1,55 +1,25 @@
-package com.huskysoft.interviewannihilator;
+package com.huskysoft.interviewannihilator.ui;
+
+import com.huskysoft.interviewannihilator.R;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.support.v4.app.NavUtils;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 
-public class QuestionActivity extends Activity {
+public class SolutionActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_question);	
-		
-		//Get intent
-		Intent intent = getIntent();
-		String question = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-		
-		//Grab Linear Layout
-		LinearLayout singleQuestionll = (LinearLayout)findViewById(R.id.linear_layout);
-		
-		//Create TextView that holds Question
-		TextView textview = new TextView(this);
-		textview.setTextSize(40);
-		textview.setText(question);
-		
-		singleQuestionll.addView(textview, 0);
-		
+		setContentView(R.layout.activity_solution);
 		// Show the Up button in the action bar.
-		// setupActionBar();
+		//setupActionBar();
 	}
-	
-	/**
-	 * Button handler for the "Solutions" button.
-	 * Starts the solutions activity.
-	 * 
-	 * @param v 
-	 */
-	public void showSolutions(View v){
-		Intent intent = new Intent(this, SolutionActivity.class);
-		startActivity(intent);
-	}
-	
+
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -63,7 +33,7 @@ public class QuestionActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.question, menu);
+		getMenuInflater().inflate(R.menu.solution, menu);
 		return true;
 	}
 

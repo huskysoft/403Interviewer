@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator;
+package com.huskysoft.interviewannihilator.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.huskysoft.interviewannihilator.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,21 +33,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	
+	/*
+	 * Used to pass the String question to the child activity.
+	 * Will pass a Question object.
+	 */
 	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
-	
-	public TextView textView;
-	
+		
 	
 	private LinearLayout questionll; //Layout element that holds the questions
 	private List<String> questions; //List of question elements
 	
+	
+	/**
+	 * Method that populates the app when the MainActivity is created.
+	 * Initializes the questions and questionll fields. Also calls
+	 * the displayQuestions function.
+	 */
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		questions = new LinkedList<String>();
+		questions = new LinkedList<String>(); //Will be a list of Question Objects
 		questionll = (LinearLayout)findViewById(R.id.linear_layout);
 		
 		if(questions.isEmpty())
@@ -112,6 +123,13 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	/**
+	 * Function used as the onClickHandler of the Question tiles
+	 * on the main menu of the application.
+	 * 
+	 * 
+	 * @param view The TextView that holds the selected question.
+	 */
 	public void openQuestion(View view){
 		Intent intent = new Intent(this, QuestionActivity.class);
 		TextView tv = (TextView) view;
@@ -120,45 +138,4 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	private StringBuilder inputStreamToString(InputStream is) {
-		String rLine = "";
-		StringBuilder answer = new StringBuilder();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-		try {
-			while ((rLine = rd.readLine()) != null) {
-				answer.append(rLine);
-			}
-		}
-
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		return answer;
-	}
-
-	private class PostURLTask extends AsyncTask<String, Void, String> {
-		protected String doInBackground(String... urls) {
-			String result = "";
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(urls[0]);
-			try {				
-				HttpResponse response = httpclient.execute(httppost);
-				result = inputStreamToString(response.getEntity().getContent()).toString();					    	
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			return result;
-		}
-
-		protected void onProgressUpdate(Void... progress) {
-
-		}
-
-		protected void onPostExecute(String result) {
-			textView.setText(result);
-		}
-	}
-
 }

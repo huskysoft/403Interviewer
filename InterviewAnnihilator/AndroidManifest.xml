@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.huskysoft.interviewannihilator.MainActivity"
+            android:name="com.huskysoft.interviewannihilator.ui.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,20 +26,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.huskysoft.interviewannihilator.QuestionActivity"
+            android:name="com.huskysoft.interviewannihilator.ui.QuestionActivity"
             android:label="@string/title_activity_question"
-            android:parentActivityName="com.huskysoft.interviewannihilator.MainActivity" >
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huskysoft.interviewannihilator.MainActivity" />
+                android:value="com.huskysoft.interviewannihilator.ui.MainActivity" />
         </activity>
         <activity
-            android:name="com.huskysoft.interviewannihilator.SolutionActivity"
+            android:name="com.huskysoft.interviewannihilator.ui.SolutionActivity"
             android:label="@string/title_activity_solution"
-            android:parentActivityName="com.huskysoft.interviewannihilator.QuestionActivity" >
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.QuestionActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huskysoft.interviewannihilator.QuestionActivity" />
+                android:value="com.huskysoft.interviewannihilator.ui.QuestionActivity" />
         </activity>
     </application>
 
