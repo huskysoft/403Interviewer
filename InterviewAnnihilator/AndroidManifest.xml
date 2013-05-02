@@ -41,6 +41,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.ui.QuestionActivity" />
         </activity>
+        <activity
+            android:name="com.huskysoft.interviewannihilator.ui.PostSolution"
+            android:label="@string/title_activity_post_solution"
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.SolutionActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.huskysoft.interviewannihilator.ui.SolutionActivity" />
+        </activity>
+        <activity
+            android:name="com.huskysoft.interviewannihilator.ui.PostResult"
+            android:label="@string/title_activity_post_result"
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.PostSolution" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.huskysoft.interviewannihilator.ui.PostSolution" />
+        </activity>
     </application>
 
 </manifest>
