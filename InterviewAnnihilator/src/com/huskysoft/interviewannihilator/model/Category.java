@@ -7,7 +7,7 @@ package com.huskysoft.interviewannihilator.model;
  * @author Dan Sanders, 4/29/13
  *
  */
-public enum CategoryEnum {
+public enum Category {
 	COMPSCI, BUSINESS, MANAGEMENT, LOGIC, ESTIMATION, BRAINTEASER,
 	GAME, MATH, SCIENCE;
 }

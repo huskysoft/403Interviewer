@@ -12,15 +12,15 @@ import java.util.List;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Question implements LikeableObject {
+public class Question implements Likeable {
 
 	private int id;
 	private String text;
 	private String title;
 	private int authorId;
 	private Date dateCreated;
-	private List<CategoryEnum> category;
-	private DifficultyEnum difficulty;
+	private List<Category> category;
+	private Difficulty difficulty;
 	private int likes;
 	private int dislikes;
 	
@@ -48,8 +48,8 @@ public class Question implements LikeableObject {
 	 * @param category
 	 * @param difficulty
 	 */
-	public Question(String text, String title, List<CategoryEnum> category, 
-			DifficultyEnum difficulty) {
+	public Question(String text, String title, List<Category> category, 
+			Difficulty difficulty) {
 		this.text = text;
 		this.title = title;
 		this.category = category;
@@ -108,7 +108,7 @@ public class Question implements LikeableObject {
 	 * 
 	 * @return category of the question
 	 */
-	public List<CategoryEnum> getCategory() {
+	public List<Category> getCategory() {
 		return category;
 	}
 	
@@ -118,7 +118,7 @@ public class Question implements LikeableObject {
 	 * @return the value in the difficultyEnum identifying how hard this
 	 * question is
 	 */
-	public DifficultyEnum getDifficulty() {
+	public Difficulty getDifficulty() {
 		return difficulty;
 	}
 	

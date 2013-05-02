@@ -11,7 +11,7 @@ import java.sql.Date;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Solution implements LikeableObject {
+public class Solution implements Likeable {
 
 	private int id;
 	private String text;
