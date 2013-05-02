@@ -42,7 +42,8 @@ public interface QuestionServiceInterface {
 	 * @param offset - query offset
 	 * @return PaginatedResults containing the selected solutions
 	 */
-	public PaginatedResults<Solution> getSolutions(int questionId, int limit, int offset);
+	public PaginatedResults<Solution> getSolutions(int questionId, int limit, 
+			int offset);
 	
 	/**
 	 * Called when the application user wants to post a question to the
@@ -80,4 +81,15 @@ public interface QuestionServiceInterface {
 	 * @return bool representing whether the "dislike" was successful
 	 */
 	public boolean downvoteSolution(int solutionId);
+	
+	/**
+	 * Retrieves a number of the users' favorite questions that they have
+	 * saved on the app
+	 * 
+	 * @param limit the number of favorites they want to retrieve
+	 * @param offset the starting offset of the query
+	 * @return PaginatedResults containing up to limit number of questions,
+	 * starting at the given offset
+	 */
+	public PaginatedResults<Question> getFavorites(int limit, int offset); 
 }
