@@ -1,6 +1,6 @@
 package com.huskysoft.interviewannihilator.util;
 
-import com.huskysoft.interviewannihilator.model.LikeableObject;
+import com.huskysoft.interviewannihilator.model.Likeable;
 
 /**
  * Contains some common constants and helper functions that are used
@@ -26,7 +26,7 @@ public class Utility {
 	 * the minimum number and increments for every like it
 	 * gets (until it reaches the min. # of likes).
 	 */
-	public double getRank(LikeableObject obj) {
+	public double getRank(Likeable obj) {
 		int likes = obj.getLikes();
 		int dislikes = obj.getDislikes();
 

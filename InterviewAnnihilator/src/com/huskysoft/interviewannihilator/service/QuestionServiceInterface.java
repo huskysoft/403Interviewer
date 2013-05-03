@@ -2,8 +2,8 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.util.List;
 
-import com.huskysoft.interviewannihilator.model.CategoryEnum;
-import com.huskysoft.interviewannihilator.model.DifficultyEnum;
+import com.huskysoft.interviewannihilator.model.Category;
+import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.PaginatedResults;
@@ -30,8 +30,8 @@ public interface QuestionServiceInterface {
 	 * @param offset - query offset
 	 * @return PaginatedResults containing the selected questions
 	 */
-	public PaginatedResults<Question> getQuestions(List<CategoryEnum> 
-		category, DifficultyEnum difficulty, int limit, int offset);
+	public PaginatedResults<Question> getQuestions(List<Category> 
+		category, Difficulty difficulty, int limit, int offset);
 	
 	/**
 	 * Gets the solutions corresponding to a given question from the database
