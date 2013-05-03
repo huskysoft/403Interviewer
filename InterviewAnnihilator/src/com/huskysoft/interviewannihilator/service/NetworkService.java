@@ -16,6 +16,8 @@ import android.accounts.NetworkErrorException;
 
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
+import com.huskysoft.interviewannihilator.model.NetworkException;
+
 import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
 
 /**
@@ -57,7 +59,7 @@ public class NetworkService {
 	 */
 	public String getQuestions(Difficulty difficulty, 
 			Collection<Category> categories, int limit, int offset) 
-			throws NetworkErrorException {
+			throws NetworkException {
 		HttpParams params = new BasicHttpParams();
 		params.setIntParameter(PARAM_LIMIT, limit);
 		params.setIntParameter(PARAM_OFFSET, offset);
@@ -71,10 +73,9 @@ public class NetworkService {
 	}
 
 	private String dispatchGetRequest(String url, HttpParams params) 
-			throws NetworkErrorException {
+			throws NetworkException {
 		try {
 			// create client and send request
-			
 			HttpGet request = new HttpGet(url);			
 			request.setParams(params);
 			HttpResponse response = httpClient.execute(request);
@@ -82,7 +83,7 @@ public class NetworkService {
 			// get response
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new NetworkErrorException("Request to " + url +
+				throw new NetworkException("Request to " + url +
 						" failed with response code " + statusCode);
 			}
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
@@ -97,7 +98,7 @@ public class NetworkService {
 			return ret.toString();
 
 		} catch (IOException e) {
-			throw new NetworkErrorException("Request to " + url + " failed", e);
+			throw new NetworkException("Request to " + url + " failed", e);
 		}
 	}
 	

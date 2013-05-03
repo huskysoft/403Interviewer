@@ -9,6 +9,7 @@ import android.accounts.NetworkErrorException;
 
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
+import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.PaginatedResults;
@@ -45,7 +46,7 @@ public class QuestionService implements QuestionServiceInterface {
 	@Override
 	public PaginatedResults<Question> getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset) 
-			throws NetworkErrorException, JSONException {
+			throws NetworkException, JSONException {
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset);
 		PaginatedResultsDTO dto;
