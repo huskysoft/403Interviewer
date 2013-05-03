@@ -5,8 +5,6 @@ import java.util.List;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 
-import android.accounts.NetworkErrorException;
-
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
@@ -30,6 +28,11 @@ public class QuestionService implements QuestionServiceInterface {
 
 	private QuestionService() {
 		networkService = NetworkService.getInstance();
+		mapper = new ObjectMapper();
+	}
+	
+	protected QuestionService(NetworkService networkService) {
+		this.networkService = networkService;
 		mapper = new ObjectMapper();
 	}
 		

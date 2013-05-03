@@ -1,4 +1,4 @@
-package com.huskysoft.interviewannihilator.service.test;
+package com.huskysoft.interviewannihilator.service;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,11 +15,10 @@ public class NetworkServiceTest extends TestCase {
 	@BeforeClass
 	public void setUp() {
 		this.networkService = NetworkService.getInstance();
-	}
-	
+	}	
 
 	@Test
 	public void testGetAllQuestions() throws NetworkException {
-		System.out.println(networkService.getQuestions(null, null, 10, 0));
+		assertNotNull(networkService.getQuestions(null, null, 10, 0));
 	}
 }
