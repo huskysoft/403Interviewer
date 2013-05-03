@@ -16,6 +16,22 @@ import com.huskysoft.interviewannihilator.util.PaginatedResults;
  *
  */
 public class QuestionService implements QuestionServiceInterface {
+	
+	private static QuestionService instance;
+	
+	/**
+	 * Private constructor - QuestionService implements the singleton pattern
+	 */
+	private QuestionService() {
+		
+	}
+	
+	public static QuestionService getInstance() {
+		if (instance == null) {
+			instance = new QuestionService();
+		}
+		return instance;
+	}
 
 	@Override
 	public PaginatedResults<Question> getQuestions(List<Category> category,

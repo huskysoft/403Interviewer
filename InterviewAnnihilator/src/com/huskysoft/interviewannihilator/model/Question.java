@@ -1,5 +1,6 @@
 package com.huskysoft.interviewannihilator.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class Question implements Likeable {
 	private String title;
 	private int authorId;
 	private Date dateCreated;
-	private List<Category> category;
-	private Difficulty difficulty;
+	private List<Integer> category;
+	private int difficulty;
 	private int likes;
 	private int dislikes;
 	
@@ -45,15 +46,18 @@ public class Question implements Likeable {
 	 * 
 	 * @param text
 	 * @param title
-	 * @param category
+	 * @param categories
 	 * @param difficulty
 	 */
-	public Question(String text, String title, List<Category> category, 
+	public Question(String text, String title, List<Category> categories, 
 			Difficulty difficulty) {
 		this.text = text;
-		this.title = title;
-		this.category = category;
-		this.difficulty = difficulty;
+		this.title = title;		
+		this.difficulty = difficulty.ordinal();
+		this.category = new ArrayList<Integer>(categories.size());
+		for (Category cat : categories) {
+			this.category.add(cat.ordinal());
+		}
 	}
 	
 	/**
@@ -109,7 +113,11 @@ public class Question implements Likeable {
 	 * @return category of the question
 	 */
 	public List<Category> getCategory() {
-		return category;
+		List<Category> categories = new ArrayList<Category>(category.size());
+		for (Integer i : category) {
+			categories.add(Category.values()[i]);
+		}
+		return categories;
 	}
 	
 	/**
@@ -119,7 +127,7 @@ public class Question implements Likeable {
 	 * question is
 	 */
 	public Difficulty getDifficulty() {
-		return difficulty;
+		return Difficulty.values()[difficulty];
 	}
 	
 	/**
@@ -139,7 +147,7 @@ public class Question implements Likeable {
 	public int getDislikes() {
 		return dislikes;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -149,8 +157,7 @@ public class Question implements Likeable {
 				+ ((category == null) ? 0 : category.hashCode());
 		result = prime * result
 				+ ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result
-				+ ((difficulty == null) ? 0 : difficulty.hashCode());
+		result = prime * result + difficulty;
 		result = prime * result + dislikes;
 		result = prime * result + id;
 		result = prime * result + likes;
@@ -200,4 +207,5 @@ public class Question implements Likeable {
 			return false;
 		return true;
 	}
+	
 }
