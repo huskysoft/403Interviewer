@@ -7,6 +7,6 @@ package com.huskysoft.interviewannihilator.model;
  * @author Dan Sanders, 4/29/13
  *
  */
-public enum DifficultyEnum {
+public enum Difficulty {
 	EASY, MEDIUM, HARD;
 }

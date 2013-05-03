@@ -5,7 +5,7 @@ package com.huskysoft.interviewannihilator.model;
  * 
  * @author Bennett
  */
-public interface LikeableObject {
+public interface Likeable {
 	
 	public int getLikes();
 	public int getDislikes();
