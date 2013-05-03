@@ -2,6 +2,10 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.util.List;
 
+import org.json.JSONException;
+
+import android.accounts.NetworkErrorException;
+
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
@@ -29,9 +33,12 @@ public interface QuestionServiceInterface {
 	 * @param limit - number of questions requested
 	 * @param offset - query offset
 	 * @return PaginatedResults containing the selected questions
+	 * @throws NetworkErrorException 
+	 * @throws JSONException 
 	 */
-	public PaginatedResults<Question> getQuestions(List<Category> 
-		category, Difficulty difficulty, int limit, int offset);
+	public PaginatedResults<Question> getQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset) 
+			throws NetworkErrorException, JSONException;
 	
 	/**
 	 * Gets the solutions corresponding to a given question from the database

@@ -3,69 +3,107 @@ package com.huskysoft.interviewannihilator.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+
+import android.accounts.NetworkErrorException;
+
+import com.huskysoft.interviewannihilator.model.Category;
+import com.huskysoft.interviewannihilator.model.Difficulty;
+import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
 
 /**
- * A class that provides basic functionalities for getting a response string
- * from the server for questions and solutions.
+ * A class that provides basic functionalities for getting JSON response strings
+ * from the server.
  * 
  * @author Kevin Loh, 5/3/2013
  * 
  */
+/**
+ * @author Bennett
+ *
+ */
 public class NetworkService {
-
+	
+	private static NetworkService instance;
+	private HttpClient httpClient;
+	
+	private NetworkService() {
+		httpClient = new DefaultHttpClient();
+	}
+	
 	/**
-	 * The url of our server for both solution and question.
+	 * Get the singleton NetworkService
 	 */
-	public static final String BASE_URL = "http://students.washington.edu/bkng/cse403/403Interviewer-php/";
-
-	/**
-	 * The url for getting all the questions.
-	 */
-	public static final String QUESTION_URL = BASE_URL + "getQuestions.php";
-
-	/**
-	 * The url for getting solutions. Must be parameterized with questionId.
-	 */
-	public static final String SOLUTION_URL = BASE_URL + "getSolutions.php";
+	public static NetworkService getInstance() {
+		if (instance == null) {
+			instance = new NetworkService();
+		}
+		return instance;
+	}
 
 	/**
 	 * Request all the questions on the server.
 	 * 
 	 * @return a string with the form [q_1, q_2, ..., q_n]. Each q_i is a JSON
 	 *         String; null if an exception occurs or the request fails.
+	 * @throws NetworkErrorException 
 	 */
-	public static String requestQuestions() {
+	public String getQuestions(Difficulty difficulty, 
+			Collection<Category> categories, int limit, int offset) 
+			throws NetworkErrorException {
+		HttpParams params = new BasicHttpParams();
+		params.setIntParameter(PARAM_LIMIT, limit);
+		params.setIntParameter(PARAM_OFFSET, offset);
+		if (difficulty != null) {
+			params.setParameter(PARAM_DIFFICULTY, difficulty.name());
+		}
+		if (categories != null && categories.size() != 0) {
+			params.setParameter(PARAM_CATEGORY, categories.toString());
+		}
+		return dispatchGetRequest(GET_QUESTIONS_URL, params);
+	}
+
+	private String dispatchGetRequest(String url, HttpParams params) 
+			throws NetworkErrorException {
 		try {
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet(QUESTION_URL);
-			HttpResponse response = client.execute(request);
+			// create client and send request
+			
+			HttpGet request = new HttpGet(url);			
+			request.setParams(params);
+			HttpResponse response = httpClient.execute(request);
 
-			if (response.getStatusLine().getStatusCode() != 200) {
-				return null;
+			// get response
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new NetworkErrorException("Request to " + url +
+						" failed with response code " + statusCode);
 			}
-
-			// Get the response
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
 
-			String ret = "";
+			StringBuilder ret = new StringBuilder();
 			String line = rd.readLine();
 			while (line != null) {
-				ret += line;
+				ret.append(line);
 				line = rd.readLine();
-			}
+			}			
+			return ret.toString();
 
-			client.getConnectionManager().shutdown();
-			return ret;
-
-		} catch (Exception e) {
-			return null;
+		} catch (IOException e) {
+			throw new NetworkErrorException("Request to " + url + " failed", e);
 		}
+	}
+	
+	@Override
+	public void finalize() {
+		httpClient.getConnectionManager().shutdown();
 	}
 
 }

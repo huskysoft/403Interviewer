@@ -2,11 +2,17 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+
+import android.accounts.NetworkErrorException;
+
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.PaginatedResults;
+import com.huskysoft.interviewannihilator.util.PaginatedResultsDTO;
 
 /**
  * A class to provide services to the front end for getting questions,
@@ -18,14 +24,17 @@ import com.huskysoft.interviewannihilator.util.PaginatedResults;
 public class QuestionService implements QuestionServiceInterface {
 	
 	private static QuestionService instance;
-	
-	/**
-	 * Private constructor - QuestionService implements the singleton pattern
-	 */
+	private NetworkService networkService;
+	private ObjectMapper mapper;
+
 	private QuestionService() {
-		
+		networkService = NetworkService.getInstance();
+		mapper = new ObjectMapper();
 	}
-	
+		
+	/**
+	 * Get the singleton QuestionService
+	 */
 	public static QuestionService getInstance() {
 		if (instance == null) {
 			instance = new QuestionService();
@@ -34,8 +43,17 @@ public class QuestionService implements QuestionServiceInterface {
 	}
 
 	@Override
-	public PaginatedResults<Question> getQuestions(List<Category> category,
-			Difficulty difficulty, int limit, int offset) {
+	public PaginatedResults<Question> getQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset) 
+			throws NetworkErrorException, JSONException {
+		String json = networkService.getQuestions(difficulty, categories,
+				limit, offset);
+		PaginatedResultsDTO dto;
+		try {
+			dto = mapper.readValue(json, PaginatedResultsDTO.class);
+		} catch (Exception e) {
+			throw new JSONException("Failed to deserialize JSON :" + json);
+		}
 		return null;
 	}
 
