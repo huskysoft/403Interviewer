@@ -21,17 +21,17 @@ public class NetworkService {
 	/**
 	 * The url of our server for both solution and question.
 	 */
-	private static String baseUrl = "http://students.washington.edu/bkng/cse403/403Interviewer-php/";
+	public static final String BASE_URL = "http://students.washington.edu/bkng/cse403/403Interviewer-php/";
 
 	/**
 	 * The url for getting all the questions.
 	 */
-	private static String questionUrl = baseUrl + "getQuestions.php";
+	public static final String QUESTION_URL = BASE_URL + "getQuestions.php";
 
 	/**
 	 * The url for getting solutions. Must be parameterized with questionId.
 	 */
-	private static String solutionUrl = baseUrl + "getSolutions.php";
+	public static final String SOLUTION_URL = BASE_URL + "getSolutions.php";
 
 	/**
 	 * Request all the questions on the server.
@@ -42,7 +42,7 @@ public class NetworkService {
 	public static String requestQuestions() {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet(questionUrl);
+			HttpGet request = new HttpGet(QUESTION_URL);
 			HttpResponse response = client.execute(request);
 
 			if (response.getStatusLine().getStatusCode() != 200) {
@@ -66,11 +66,6 @@ public class NetworkService {
 		} catch (Exception e) {
 			return null;
 		}
-	}
-
-	public static void main(String[] args) {
-		String result = NetworkService.requestQuestions();
-		System.out.println(result);
 	}
 
 }
