@@ -60,12 +60,17 @@ public class QuestionService implements QuestionServiceInterface {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public PaginatedResults<Solution> getSolutions(int questionId, int limit,
 			int offset) {
-		// TODO Auto-generated method stub
-		return null;
+		PaginatedResults<Solution> solutionPages = 
+				new PaginatedResults<Solution>();
+		String json = networkService.getSolutions(questionId, limit, offset);
+		PaginatedResultsDTO dto;
+		try {
+			dto = mapper.readValue(json, PaginatedResultsDTO.class);
+		}
 	}
 
 	@Override

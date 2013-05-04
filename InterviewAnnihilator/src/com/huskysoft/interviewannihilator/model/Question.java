@@ -1,8 +1,6 @@
 package com.huskysoft.interviewannihilator.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -20,8 +18,8 @@ public class Question implements Likeable {
 	private String title;
 	private int authorId;
 	private Date dateCreated;
-	private List<Integer> category;
-	private int difficulty;
+	private Category category;
+	private Difficulty difficulty;
 	private int likes;
 	private int dislikes;
 	
@@ -49,105 +47,86 @@ public class Question implements Likeable {
 	 * @param categories
 	 * @param difficulty
 	 */
-	public Question(String text, String title, List<Category> categories, 
+	public Question(String text, String title, Category category, 
 			Difficulty difficulty) {
 		this.text = text;
 		this.title = title;		
-		this.difficulty = difficulty.ordinal();
-		this.category = new ArrayList<Integer>(categories.size());
-		for (Category cat : categories) {
-			this.category.add(cat.ordinal());
-		}
+		this.difficulty = difficulty;
+		this.category = category;
 	}
-	
-	/**
-	 * Gets the unique identification number of this question
-	 * 
-	 * @return the unique id number of the question
-	 */
+
 	public int getId() {
 		return id;
 	}
 	
-	/**
-	 * Gets the text of this question
-	 * 
-	 * @return the text of the question
-	 */
 	public String getText() {
 		return text;
 	}
 	
-	/**
-	 * Gets the title of this question
-	 * 
-	 * @return the title of the question
-	 */
 	public String getTitle() {
 		return title;
 	}
 	
-	/**
-	 * Gets the id of the author
-	 *
-	 * @return the id of the author of the question
-	 */
 	public int getAuthorId() {
 		return authorId;
 	}
 	
-	/**
-	 * Gets the date the question was added to the database
-	 * 
-	 * @return a Date object representing when this question was added
-	 * to the database
-	 */
 	public Date getDateCreated() {
 		return dateCreated;
 	}
 	
-	/**
-	 * Gets a list representing all of the different categories this question
-	 * can be classified under
-	 * 
-	 * @return category of the question
-	 */
-	public List<Category> getCategory() {
-		List<Category> categories = new ArrayList<Category>(category.size());
-		for (Integer i : category) {
-			categories.add(Category.values()[i]);
-		}
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 	
-	/**
-	 * Gets the difficulty rating of this question
-	 * 
-	 * @return the value in the difficultyEnum identifying how hard this
-	 * question is
-	 */
 	public Difficulty getDifficulty() {
-		return Difficulty.values()[difficulty];
+		return difficulty;
 	}
 	
-	/**
-	 * Gets the number of likes of the question
-	 * 
-	 * @return the number of likes
-	 */
 	public int getLikes() {
 		return likes;
 	}
 	
-	/**
-	 * Gets the number of dislikes of the question
-	 * 
-	 * @return the number of dislikes
-	 */
 	public int getDislikes() {
 		return dislikes;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public void setDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -157,7 +136,8 @@ public class Question implements Likeable {
 				+ ((category == null) ? 0 : category.hashCode());
 		result = prime * result
 				+ ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result + difficulty;
+		result = prime * result
+				+ ((difficulty == null) ? 0 : difficulty.hashCode());
 		result = prime * result + dislikes;
 		result = prime * result + id;
 		result = prime * result + likes;
@@ -177,10 +157,7 @@ public class Question implements Likeable {
 		Question other = (Question) obj;
 		if (authorId != other.authorId)
 			return false;
-		if (category == null) {
-			if (other.category != null)
-				return false;
-		} else if (!category.equals(other.category))
+		if (category != other.category)
 			return false;
 		if (dateCreated == null) {
 			if (other.dateCreated != null)
