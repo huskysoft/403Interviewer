@@ -24,4 +24,5 @@ public class NetworkConstants {
 	public static final String PARAM_OFFSET = "offset";	
 	public static final String PARAM_DIFFICULTY = "difficulty";
 	public static final String PARAM_CATEGORY = "category";
+	public static final String PARAM_QUESTIONID = "questionId";
 }

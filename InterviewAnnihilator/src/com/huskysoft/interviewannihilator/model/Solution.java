@@ -21,7 +21,7 @@ public class Solution implements Likeable {
 	private int likes;
 	private int dislikes;
 	
-	public Solution(String jsonSolution) {}
+	public Solution() {}
 	
 	/** Called when the user of our application wants to add a solution to the
 	 *  database. Our database will populate the rest of the fields of the

@@ -87,6 +87,8 @@ public class NetworkService {
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
 		String urlToSend = GET_SOLUTIONS_URL + "?";
+		urlToSend = appendParameter(urlToSend, PARAM_QUESTIONID,
+				String.valueOf(questionId));
 		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
 				String.valueOf(limit));
 		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
@@ -103,6 +105,7 @@ public class NetworkService {
 	 */
 	private String appendParameter(String url, String paramName,
 			String paramVal) {
+		// TODO: Remove trailing '&'
 		String completeUrl = url;
 		completeUrl += (paramName + "=" + paramVal + "&");
 		return completeUrl;

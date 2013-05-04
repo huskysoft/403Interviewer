@@ -87,10 +87,10 @@ public class QuestionService {
 			JsonNode node = mapper.readTree(json);
 			
 			// deserialize nested Questions
-			String questionsJson = node.get(RESULTS_KEY).asText();
+			String solutionsJson = node.get(RESULTS_KEY).asText();
 			JavaType jtype = TypeFactory.defaultInstance().
 					constructParametricType(List.class, Solution.class);
-			List<Solution> solutions = mapper.readValue(questionsJson, jtype);
+			List<Solution> solutions = mapper.readValue(solutionsJson, jtype);
 			res.setSolutions(solutions);
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);

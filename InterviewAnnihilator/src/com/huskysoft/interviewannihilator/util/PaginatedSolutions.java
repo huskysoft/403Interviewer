@@ -9,8 +9,12 @@ public class PaginatedSolutions extends PaginatedResults {
 	/** List of the solutions returned */
 	private List<Solution> solutions;
 	
-	PaginatedSolutions(List<Solution> solutions, int totalNumberOfResults, 
-			int limit, int offset) {
+	public PaginatedSolutions() {
+		super();
+	}
+	
+	public PaginatedSolutions(List<Solution> solutions, 
+			int totalNumberOfResults, int limit, int offset) {
 		super(totalNumberOfResults, limit, offset);
 		this.solutions = solutions;
 	}

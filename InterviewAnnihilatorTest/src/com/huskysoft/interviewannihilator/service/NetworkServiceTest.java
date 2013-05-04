@@ -19,6 +19,6 @@ public class NetworkServiceTest extends TestCase {
 
 	@Test
 	public void testGetAllQuestions() throws NetworkException {
-		System.out.println(networkService.getQuestions(null, null, 10, 0));
+		assertNotNull(networkService.getQuestions(null, null, 10, 0));
 	}
 }
