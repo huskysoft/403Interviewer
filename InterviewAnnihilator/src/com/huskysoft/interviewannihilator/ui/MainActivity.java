@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.util.*;
@@ -70,7 +71,15 @@ public class MainActivity extends Activity {
 		databaseService = QuestionService.getInstance();
 		
 		if(questions.isEmpty())
-			retrieveQuestions();
+			try {
+				retrieveQuestions();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		displayQuestions();
 		
 	}
@@ -115,8 +124,10 @@ public class MainActivity extends Activity {
 	 * questions list.
 	 * 
 	 * @author Phillip Leland
+	 * @throws JSONException 
+	 * @throws NetworkException 
 	 */
-	private void retrieveQuestions() {
+	private void retrieveQuestions() throws NetworkException, JSONException {
 		PaginatedQuestions currentQuestions = 
 				databaseService.getQuestions(null, null, 20, 0);
 		List<Question> questionList = currentQuestions.getQuestions();

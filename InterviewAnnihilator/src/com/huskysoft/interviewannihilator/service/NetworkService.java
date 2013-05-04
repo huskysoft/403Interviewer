@@ -58,7 +58,7 @@ public class NetworkService {
 	public String getQuestions(Difficulty difficulty, 
 			Collection<Category> categories, int limit, int offset) 
 			throws NetworkException {
-		String urlToSend = GET_QUESTIONS_URL;
+		String urlToSend = GET_QUESTIONS_URL + "?";
 		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
 				String.valueOf(limit));
 		urlToSend = appendParameter(urlToSend, PARAM_OFFSET, 
@@ -86,7 +86,7 @@ public class NetworkService {
 	 */
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
-		String urlToSend = GET_SOLUTIONS_URL;
+		String urlToSend = GET_SOLUTIONS_URL + "?";
 		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
 				String.valueOf(limit));
 		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
@@ -104,7 +104,7 @@ public class NetworkService {
 	private String appendParameter(String url, String paramName,
 			String paramVal) {
 		String completeUrl = url;
-		completeUrl += ("? " + paramName + "=" + paramVal);
+		completeUrl += (paramName + "=" + paramVal + "&");
 		return completeUrl;
 	}
 	
@@ -131,7 +131,6 @@ public class NetworkService {
 				line = rd.readLine();
 			}			
 			return ret.toString();
-
 		} catch (IOException e) {
 			throw new NetworkException("Request to " + url + " failed", e);
 		}
