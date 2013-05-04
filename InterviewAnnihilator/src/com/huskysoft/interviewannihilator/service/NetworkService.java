@@ -9,8 +9,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 
 import android.accounts.NetworkErrorException;
 
@@ -60,16 +58,20 @@ public class NetworkService {
 	public String getQuestions(Difficulty difficulty, 
 			Collection<Category> categories, int limit, int offset) 
 			throws NetworkException {
-		HttpParams params = new BasicHttpParams();
-		params.setIntParameter(PARAM_LIMIT, limit);
-		params.setIntParameter(PARAM_OFFSET, offset);
+		String urlToSend = GET_QUESTIONS_URL;
+		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
+				String.valueOf(limit));
+		urlToSend = appendParameter(urlToSend, PARAM_OFFSET, 
+				String.valueOf(offset));
 		if (difficulty != null) {
-			params.setParameter(PARAM_DIFFICULTY, difficulty.name());
+			urlToSend = appendParameter(urlToSend, PARAM_DIFFICULTY, 
+					difficulty.name());
 		}
 		if (categories != null && categories.size() != 0) {
-			params.setParameter(PARAM_CATEGORY, categories.toString());
+			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY, 
+					categories.toString());
 		}
-		return dispatchGetRequest(GET_QUESTIONS_URL, params);
+		return dispatchGetRequest(urlToSend);
 	}
 
 	/**
@@ -84,18 +86,33 @@ public class NetworkService {
 	 */
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
-		HttpParams params = new BasicHttpParams();
-		params.setIntParameter(PARAM_LIMIT, limit);
-		params.setIntParameter(PARAM_OFFSET, offset);
-		return dispatchGetRequest(GET_SOLUTIONS_URL, params);
+		String urlToSend = GET_SOLUTIONS_URL;
+		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
+				String.valueOf(limit));
+		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
+				String.valueOf(offset));
+		return dispatchGetRequest(urlToSend);
 	}
 	
-	private String dispatchGetRequest(String url, HttpParams params) 
+	/**
+	 * 
+	 * @param url the url to which the parameters will be appended to
+	 * @param paramName the name of the parameter appended to the url
+	 * @param paramVal the value of the parameter appended to the url
+	 * @return a new String with the parameter appended
+	 */
+	private String appendParameter(String url, String paramName,
+			String paramVal) {
+		String completeUrl = url;
+		completeUrl += ("? " + paramName + "=" + paramVal);
+		return completeUrl;
+	}
+	
+	private String dispatchGetRequest(String url) 
 			throws NetworkException {
 		try {
 			// create client and send request
 			HttpGet request = new HttpGet(url);			
-			request.setParams(params);
 			HttpResponse response = httpClient.execute(request);
 
 			// get response
