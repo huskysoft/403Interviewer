@@ -10,14 +10,14 @@ import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.util.PaginatedResults;
-import com.huskysoft.interviewannihilator.util.PaginatedResultsDTO;
+import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
+import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
 /**
  * A class to provide services to the front end for getting questions,
  * getting and posting solutions, etc. 
  * 
- * @author Kevin Loh, 5/2/2013
+ * @author Dan Sanders, Bennett Ng, 5/2/2013
  *
  */
 public class QuestionService {
@@ -46,31 +46,31 @@ public class QuestionService {
 		return instance;
 	}
 
-	public PaginatedResults<Question> getQuestions(List<Category> categories,
+	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset) 
 			throws NetworkException, JSONException {
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset);
-		PaginatedResultsDTO dto;
+		PaginatedQuestions res;
 		try {
-			dto = mapper.readValue(json, PaginatedResultsDTO.class);
+			res = mapper.readValue(json, PaginatedQuestions.class);
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
-		return null;
+		return res;
 	}
 	
-	public PaginatedResults<Solution> getSolutions(int questionId, int limit,
+	public PaginatedSolutions getSolutions(int questionId, int limit,
 			int offset)
 			throws NetworkException, JSONException {
 		String json = networkService.getSolutions(questionId, limit, offset);
-		PaginatedResults<Solution> pagedResults;
+		PaginatedSolutions res;
 		try {
-			pagedResults = mapper.readValue(json, PaginatedResults.class);
+			res = mapper.readValue(json, PaginatedSolutions.class);
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
-		return pagedResults;
+		return res;
 	}
 
 	public int postQuestion(Question toPost) {
@@ -93,7 +93,7 @@ public class QuestionService {
 		return false;
 	}
 
-	public PaginatedResults<Question> getFavorites(int limit, int offset) {
+	public PaginatedQuestions getFavorites(int limit, int offset) {
 		// TODO Auto-generated method stub
 		return null;
 	}
