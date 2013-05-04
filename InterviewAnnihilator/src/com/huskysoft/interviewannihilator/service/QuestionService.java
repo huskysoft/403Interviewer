@@ -20,7 +20,7 @@ import com.huskysoft.interviewannihilator.util.PaginatedResultsDTO;
  * @author Kevin Loh, 5/2/2013
  *
  */
-public class QuestionService implements QuestionServiceInterface {
+public class QuestionService {
 	
 	private static QuestionService instance;
 	private NetworkService networkService;
@@ -46,7 +46,6 @@ public class QuestionService implements QuestionServiceInterface {
 		return instance;
 	}
 
-	@Override
 	public PaginatedResults<Question> getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset) 
 			throws NetworkException, JSONException {
@@ -61,43 +60,39 @@ public class QuestionService implements QuestionServiceInterface {
 		return null;
 	}
 	
-	@Override
 	public PaginatedResults<Solution> getSolutions(int questionId, int limit,
-			int offset) {
-		PaginatedResults<Solution> solutionPages = 
-				new PaginatedResults<Solution>();
+			int offset)
+			throws NetworkException, JSONException {
 		String json = networkService.getSolutions(questionId, limit, offset);
-		PaginatedResultsDTO dto;
+		PaginatedResults<Solution> pagedResults;
 		try {
-			dto = mapper.readValue(json, PaginatedResultsDTO.class);
+			pagedResults = mapper.readValue(json, PaginatedResults.class);
+		} catch (Exception e) {
+			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
+		return pagedResults;
 	}
 
-	@Override
 	public int postQuestion(Question toPost) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public int postSolution(Solution toPost) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public boolean upvoteSolution(int solutionId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean downvoteSolution(int solutionId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public PaginatedResults<Question> getFavorites(int limit, int offset) {
 		// TODO Auto-generated method stub
 		return null;

@@ -58,16 +58,25 @@ public class PaginatedResults<T> {
 		return clazz;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
-		result = prime * result + limit;
-		result = prime * result + offset;
-		result = prime * result + ((results == null) ? 0 : results.hashCode());
-		result = prime * result + totalNumberOfResults;
-		return result;
+
+	public void setResults(List<T> results) {
+		this.results = results;
+	}
+
+	public void setTotalNumberOfResults(int totalNumberOfResults) {
+		this.totalNumberOfResults = totalNumberOfResults;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	public void setClazz(Class<T> clazz) {
+		this.clazz = clazz;
 	}
 
 	@Override
@@ -96,5 +105,17 @@ public class PaginatedResults<T> {
 		if (totalNumberOfResults != other.totalNumberOfResults)
 			return false;
 		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
+		result = prime * result + limit;
+		result = prime * result + offset;
+		result = prime * result + ((results == null) ? 0 : results.hashCode());
+		result = prime * result + totalNumberOfResults;
+		return result;
 	}
 }

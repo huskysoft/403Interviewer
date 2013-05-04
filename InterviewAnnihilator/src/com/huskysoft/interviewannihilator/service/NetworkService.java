@@ -72,6 +72,24 @@ public class NetworkService {
 		return dispatchGetRequest(GET_QUESTIONS_URL, params);
 	}
 
+	/**
+	 * 
+	 * @param questionId the id of the question of the solutions we are
+	 * fetching
+	 * @param limit the number of solutions wanted
+	 * @param offset the starting offset of the solutions wanted
+	 * @return a String that can be deserialized into JSON representing the
+	 * answers to a question
+	 * @throws NetworkErrorException
+	 */
+	public String getSolutions(int questionId, int limit, int offset)
+			throws NetworkException {
+		HttpParams params = new BasicHttpParams();
+		params.setIntParameter(PARAM_LIMIT, limit);
+		params.setIntParameter(PARAM_OFFSET, offset);
+		return dispatchGetRequest(GET_SOLUTIONS_URL, params);
+	}
+	
 	private String dispatchGetRequest(String url, HttpParams params) 
 			throws NetworkException {
 		try {
