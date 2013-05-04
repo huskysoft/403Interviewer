@@ -33,14 +33,14 @@ public class QuestionService {
 	private ObjectMapper mapper;
 
 	private QuestionService() {
-		networkService = NetworkService.getInstance();
-		mapper = new ObjectMapper();
+		this(NetworkService.getInstance());
 	}
 	
 	protected QuestionService(NetworkService networkService) {
 		this.networkService = networkService;
 		mapper = new ObjectMapper();
-		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(DeserializationConfig.
+				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 		
 	/**

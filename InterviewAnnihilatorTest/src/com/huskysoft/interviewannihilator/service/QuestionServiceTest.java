@@ -33,13 +33,13 @@ public class QuestionServiceTest extends TestCase {
 				any(Collection.class), anyInt(), anyInt())).
 				thenReturn(GET_QUESTIONS_RESPONSE);
 		questionService = new QuestionService(mockNetworkService);
+		System.out.println(GET_QUESTIONS_RESPONSE);
 	}
 	
 	@Test
 	public void testGetAllQuestions() throws NetworkException, JSONException {
 		PaginatedQuestions questions = questionService.getQuestions(null, null, 10, 0);
-		System.out.println(questions);
+		// System.out.println(questions);
 	}
-
 
 }
