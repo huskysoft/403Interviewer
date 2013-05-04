@@ -9,7 +9,11 @@ public class PaginatedQuestions extends PaginatedResults {
 	/** List of the questions returned */
 	private List<Question> questions;
 	
-	PaginatedQuestions(List<Question> questions, int totalNumberOfResults, 
+	public PaginatedQuestions() {
+		super();
+	};
+	
+	public PaginatedQuestions(List<Question> questions, int totalNumberOfResults, 
 			int limit, int offset) {
 		super(totalNumberOfResults, limit, offset);
 		this.questions = questions;
@@ -21,6 +25,11 @@ public class PaginatedQuestions extends PaginatedResults {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+
+	@Override
+	public String toString() {
+		return "PaginatedQuestions [questions=" + questions + "]";
 	}
 
 }

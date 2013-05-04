@@ -22,6 +22,8 @@ public abstract class PaginatedResults {
 	/** the requested offset */
 	private int offset;
 	
+	public PaginatedResults() {};
+	
 	public PaginatedResults(int totalNumberOfResults, 
 			int limit, int offset) {
 		this.totalNumberOfResults = totalNumberOfResults;

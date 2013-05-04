@@ -23,4 +23,9 @@ public class PaginatedSolutions extends PaginatedResults {
 		this.solutions = solutions;
 	}
 
+	@Override
+	public String toString() {
+		return "PaginatedSolutions [solutions=" + solutions + "]";
+	}
+
 }

@@ -23,18 +23,7 @@ public class Question implements Likeable {
 	private int likes;
 	private int dislikes;
 	
-	/**
-	 * Called when we have received the data for a question back from the
-	 * database as a String in JSON format. We are creating a Question object
-	 * for our application to use
-	 * 
-	 * @param jsonQuestion the String to parse that contains the property
-	 * values for the question
-	 */
-	public Question(String jsonQuestion) {
-		// parse the String into a JSON object, then get its property values
-		
-	}
+	public Question() {}
 	
 	/**
 	 * Called when our android application is trying to create a new question
@@ -183,6 +172,14 @@ public class Question implements Likeable {
 		} else if (!title.equals(other.title))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", text=" + text + ", title=" + title
+				+ ", authorId=" + authorId + ", dateCreated=" + dateCreated
+				+ ", category=" + category + ", difficulty=" + difficulty
+				+ ", likes=" + likes + ", dislikes=" + dislikes + "]";
 	}
 	
 }

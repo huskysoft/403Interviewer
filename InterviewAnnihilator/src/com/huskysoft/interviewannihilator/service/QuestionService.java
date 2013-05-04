@@ -2,7 +2,12 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.type.TypeFactory;
+import org.codehaus.jackson.type.JavaType;
+
 import org.json.JSONException;
 
 import com.huskysoft.interviewannihilator.model.Category;
@@ -22,6 +27,7 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
  */
 public class QuestionService {
 	
+	private static final String RESULTS_KEY = "results";
 	private static QuestionService instance;
 	private NetworkService networkService;
 	private ObjectMapper mapper;
@@ -34,6 +40,7 @@ public class QuestionService {
 	protected QuestionService(NetworkService networkService) {
 		this.networkService = networkService;
 		mapper = new ObjectMapper();
+		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 		
 	/**
@@ -53,7 +60,16 @@ public class QuestionService {
 				limit, offset);
 		PaginatedQuestions res;
 		try {
+			// deserialize "flat parameters"
 			res = mapper.readValue(json, PaginatedQuestions.class);
+			JsonNode node = mapper.readTree(json);
+			
+			// deserialize nested Questions
+			String questionsJson = node.get(RESULTS_KEY).asText();
+			JavaType jtype = TypeFactory.defaultInstance().
+					constructParametricType(List.class, Question.class);
+			List<Question> questions = mapper.readValue(questionsJson, jtype);
+			res.setQuestions(questions);
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
@@ -66,7 +82,16 @@ public class QuestionService {
 		String json = networkService.getSolutions(questionId, limit, offset);
 		PaginatedSolutions res;
 		try {
+			// deserialize "flat parameters"
 			res = mapper.readValue(json, PaginatedSolutions.class);
+			JsonNode node = mapper.readTree(json);
+			
+			// deserialize nested Questions
+			String questionsJson = node.get(RESULTS_KEY).asText();
+			JavaType jtype = TypeFactory.defaultInstance().
+					constructParametricType(List.class, Solution.class);
+			List<Solution> solutions = mapper.readValue(questionsJson, jtype);
+			res.setSolutions(solutions);
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}

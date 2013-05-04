@@ -21,17 +21,7 @@ public class Solution implements Likeable {
 	private int likes;
 	private int dislikes;
 	
-	/** 
-	 * Called when we have received the data for a solution back from the
-	 * database as a String in JSON format. We are creating a Solution object
-	 * for our application to use
-	 * 
-	 * @param jsonSolution the String to parse that contains the property
-	 * values for the solution
-	 */
-	public Solution(String jsonSolution) {
-		// parse the String into a JSON object, then get its property values
-	}
+	public Solution(String jsonSolution) {}
 	
 	/** Called when the user of our application wants to add a solution to the
 	 *  database. Our database will populate the rest of the fields of the
@@ -147,5 +137,13 @@ public class Solution implements Likeable {
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Solution [id=" + id + ", text=" + text + ", questionId="
+				+ questionId + ", authorId=" + authorId + ", dateCreated="
+				+ dateCreated + ", likes=" + likes + ", dislikes=" + dislikes
+				+ "]";
 	}
 }
