@@ -1,6 +1,6 @@
 package com.huskysoft.interviewannihilator.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 
@@ -21,17 +21,7 @@ public class Solution implements Likeable {
 	private int likes;
 	private int dislikes;
 	
-	/** 
-	 * Called when we have received the data for a solution back from the
-	 * database as a String in JSON format. We are creating a Solution object
-	 * for our application to use
-	 * 
-	 * @param jsonSolution the String to parse that contains the property
-	 * values for the solution
-	 */
-	public Solution(String jsonSolution) {
-		// parse the String into a JSON object, then get its property values
-	}
+	public Solution() {}
 	
 	/** Called when the user of our application wants to add a solution to the
 	 *  database. Our database will populate the rest of the fields of the
@@ -46,70 +36,62 @@ public class Solution implements Likeable {
 		this.text = text;
 	}
 	
-	/**
-	 * Gets the unique identification number of this solution
-	 * 
-	 * @return the unique id number of the solution
-	 */
 	public int getId() {
 		return id;
 	}
 	
-	/**
-	 * Gets the text of this solution
-	 * 
-	 * @return the text of the solution
-	 */
 	public String getText() {
 		return text;
 	}
 	
-	/**
-	 * Gets the id of the question that this solution is answering
-	 * 
-	 * @return the id of the question
-	 */
 	public int getQuestionId() {
 		return questionId;
 	}
 	
-	/**
-	 * Gets the id of the author
-	 *
-	 * @return the id of the author of the solution
-	 */
 	public int getAuthorId() {
 		return authorId;
 	}
 	
-	/**
-	 * Gets the date the solution was added to the database
-	 * 
-	 * @return a Date object representing when this solution was added
-	 * to the database
-	 */
 	public Date getDateCreated() {
 		return dateCreated;
 	}
 	
-	/**
-	 * Gets the number of likes of the solution
-	 * 
-	 * @return the number of likes
-	 */
 	public int getLikes() {
 		return likes;
 	}
-	
-	/**
-	 * Gets the number of dislikes of the solution
-	 * 
-	 * @return the number of dislikes
-	 */
+
 	public int getDislikes() {
 		return dislikes;
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public void setQuestionId(int questionId) {
+		this.questionId = questionId;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -155,5 +137,13 @@ public class Solution implements Likeable {
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Solution [id=" + id + ", text=" + text + ", questionId="
+				+ questionId + ", authorId=" + authorId + ", dateCreated="
+				+ dateCreated + ", likes=" + likes + ", dislikes=" + dislikes
+				+ "]";
 	}
 }

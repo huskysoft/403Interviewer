@@ -1,7 +1,6 @@
 package com.huskysoft.interviewannihilator.model;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 
 
 /**
@@ -19,23 +18,12 @@ public class Question implements Likeable {
 	private String title;
 	private int authorId;
 	private Date dateCreated;
-	private List<Category> category;
+	private Category category;
 	private Difficulty difficulty;
 	private int likes;
 	private int dislikes;
 	
-	/**
-	 * Called when we have received the data for a question back from the
-	 * database as a String in JSON format. We are creating a Question object
-	 * for our application to use
-	 * 
-	 * @param jsonQuestion the String to parse that contains the property
-	 * values for the question
-	 */
-	public Question(String jsonQuestion) {
-		// parse the String into a JSON object, then get its property values
-		
-	}
+	public Question() {}
 	
 	/**
 	 * Called when our android application is trying to create a new question
@@ -45,99 +33,87 @@ public class Question implements Likeable {
 	 * 
 	 * @param text
 	 * @param title
-	 * @param category
+	 * @param categories
 	 * @param difficulty
 	 */
-	public Question(String text, String title, List<Category> category, 
+	public Question(String text, String title, Category category, 
 			Difficulty difficulty) {
 		this.text = text;
-		this.title = title;
-		this.category = category;
+		this.title = title;		
 		this.difficulty = difficulty;
+		this.category = category;
 	}
-	
-	/**
-	 * Gets the unique identification number of this question
-	 * 
-	 * @return the unique id number of the question
-	 */
+
 	public int getId() {
 		return id;
 	}
 	
-	/**
-	 * Gets the text of this question
-	 * 
-	 * @return the text of the question
-	 */
 	public String getText() {
 		return text;
 	}
 	
-	/**
-	 * Gets the title of this question
-	 * 
-	 * @return the title of the question
-	 */
 	public String getTitle() {
 		return title;
 	}
 	
-	/**
-	 * Gets the id of the author
-	 *
-	 * @return the id of the author of the question
-	 */
 	public int getAuthorId() {
 		return authorId;
 	}
 	
-	/**
-	 * Gets the date the question was added to the database
-	 * 
-	 * @return a Date object representing when this question was added
-	 * to the database
-	 */
 	public Date getDateCreated() {
 		return dateCreated;
 	}
 	
-	/**
-	 * Gets a list representing all of the different categories this question
-	 * can be classified under
-	 * 
-	 * @return category of the question
-	 */
-	public List<Category> getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 	
-	/**
-	 * Gets the difficulty rating of this question
-	 * 
-	 * @return the value in the difficultyEnum identifying how hard this
-	 * question is
-	 */
 	public Difficulty getDifficulty() {
 		return difficulty;
 	}
 	
-	/**
-	 * Gets the number of likes of the question
-	 * 
-	 * @return the number of likes
-	 */
 	public int getLikes() {
 		return likes;
 	}
 	
-	/**
-	 * Gets the number of dislikes of the question
-	 * 
-	 * @return the number of dislikes
-	 */
 	public int getDislikes() {
 		return dislikes;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public void setDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 	
 	@Override
@@ -170,10 +146,7 @@ public class Question implements Likeable {
 		Question other = (Question) obj;
 		if (authorId != other.authorId)
 			return false;
-		if (category == null) {
-			if (other.category != null)
-				return false;
-		} else if (!category.equals(other.category))
+		if (category != other.category)
 			return false;
 		if (dateCreated == null) {
 			if (other.dateCreated != null)
@@ -200,4 +173,13 @@ public class Question implements Likeable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", text=" + text + ", title=" + title
+				+ ", authorId=" + authorId + ", dateCreated=" + dateCreated
+				+ ", category=" + category + ", difficulty=" + difficulty
+				+ ", likes=" + likes + ", dislikes=" + dislikes + "]";
+	}
+	
 }
