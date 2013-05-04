@@ -32,3 +32,6 @@ proguard/
 
 # DS_Store Files
 .DS_Store
+
+# log files
+*.log
