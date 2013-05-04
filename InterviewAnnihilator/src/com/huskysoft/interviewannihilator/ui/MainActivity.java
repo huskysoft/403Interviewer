@@ -15,6 +15,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.util.*;
+import com.huskysoft.interviewannihilator.service.*;
+import com.huskysoft.interviewannihilator.model.*;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,11 +41,17 @@ public class MainActivity extends Activity {
 	 * Used to pass the String question to the child activity.
 	 * Will pass a Question object.
 	 */
-	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
+	public final static String EXTRA_MESSAGE = 
+			"com.huskysoft.interviewannihilator.QUESTION";
 		
+	/** Layout element that holds the questions */
+	private LinearLayout questionll;
 	
-	private LinearLayout questionll; // Layout element that holds the questions
-	private List<String> questions; // List of question elements
+	/** List of question elements */
+	private List<String> questions;
+	
+	 /** service that interacts with database */
+	private QuestionService databaseService;
 	
 	
 	/**
@@ -58,9 +67,10 @@ public class MainActivity extends Activity {
 		
 		questions = new LinkedList<String>(); // Will be a list of Question Objects
 		questionll = (LinearLayout)findViewById(R.id.linear_layout);
+		databaseService = QuestionService.getInstance();
 		
 		if(questions.isEmpty())
-			getQuestions();
+			retrieveQuestions();
 		displayQuestions();
 		
 	}
@@ -70,7 +80,7 @@ public class MainActivity extends Activity {
 	 * in the questions list. Appends the TextView objects to the
 	 * main Linear Layout. 
 	 */
-	private void displayQuestions(){
+	private void displayQuestions() {
 		Iterator<String> it = questions.iterator();
 		int idCount = 1;
 		while(it.hasNext()){		
@@ -101,19 +111,19 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * Gathers 10 new questions. Appends questions to the 
+	 * Gathers 20 new questions. Appends questions to the 
 	 * questions list.
 	 * 
 	 * @author Phillip Leland
 	 */
-	private void getQuestions(){
-		
-		// Temporary Testing 
-		// Real method will call network interface
-		for(int i = 0; i < 20; i++){
-			String ques = "Question " + (i + 1);
-			questions.add(ques);
-		}	
+	private void retrieveQuestions() {
+		PaginatedQuestions currentQuestions = 
+				databaseService.getQuestions(null, null, 20, 0);
+		List<Question> questionList = currentQuestions.getQuestions();
+		for (int i = 0; i < questionList.size(); i++) {
+			String questionText = questionList.get(i).getText();
+			questions.add(questionText);
+		}
 	}
 	
 	@Override
