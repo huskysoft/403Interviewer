@@ -1,23 +1,74 @@
 package com.huskysoft.interviewannihilator.ui;
 
+import java.util.List;
+
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ActionBar.LayoutParams;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 
 public class SolutionActivity extends Activity {
 
+	private Question question;
+	private List<Solution> solutions;
+	private LinearLayout solutionll;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_solution);
-		// Show the Up button in the action bar.
-		// setupActionBar();
+		
+		Intent intent = getIntent();
+		question = (Question)intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+		
+		solutionll = (LinearLayout)findViewById(R.id.linear_layout);
+		new FetchSolutionsTask(this, question).execute();
+	}
+	
+	/**
+	 * Displays a single solution
+	 * @param solution
+	 */
+	public void displaySolution(Solution solution){
+		//TODO: Change this to getText(), but it currently isn't populated
+		String solutionText = solution.getText();
+		
+		TextView t = new TextView(this);
+		
+		t.setText(solutionText);
+		t.setTextSize(40);
+		
+		t.setBackgroundColor(0xfff00000);
+		
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+	   
+	    llp.gravity = 1; // Horizontal Center
+	    
+	    t.setLayoutParams(llp);
+		
+		t.setId(solution.getId());
+		t.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//do nothing at the moment
+			}
+		});
+
+		solutionll.addView(t);
 	}
 
 	/**

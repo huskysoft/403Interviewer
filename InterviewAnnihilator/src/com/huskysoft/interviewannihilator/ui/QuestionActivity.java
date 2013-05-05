@@ -1,6 +1,16 @@
 package com.huskysoft.interviewannihilator.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,7 +27,9 @@ import android.content.Intent;
 import android.os.Build;
 
 public class QuestionActivity extends Activity {
-
+	
+	private Question question;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +37,7 @@ public class QuestionActivity extends Activity {
 		
 		// Get intent
 		Intent intent = getIntent();
-		String question = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		question = (Question)intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
 		// Grab Linear Layout
 		LinearLayout singleQuestionll = (LinearLayout)findViewById(R.id.linear_layout);
@@ -33,7 +45,7 @@ public class QuestionActivity extends Activity {
 		// Create TextView that holds Question
 		TextView textview = new TextView(this);
 		textview.setTextSize(40);
-		textview.setText(question);
+		textview.setText(question.getTitle()); //TODO: change to getText();
 		
 		singleQuestionll.addView(textview, 0);
 		
@@ -49,6 +61,7 @@ public class QuestionActivity extends Activity {
 	 */
 	public void showSolutions(View v){
 		Intent intent = new Intent(this, SolutionActivity.class);
+		intent.putExtra(MainActivity.EXTRA_MESSAGE, question);
 		startActivity(intent);
 	}
 	

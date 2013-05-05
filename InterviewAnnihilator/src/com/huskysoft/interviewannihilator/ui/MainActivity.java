@@ -19,6 +19,7 @@ import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.util.*;
 import com.huskysoft.interviewannihilator.service.*;
 import com.huskysoft.interviewannihilator.model.*;
+import com.huskysoft.interviewannihilator.runtime.*;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,75 +67,44 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		questions = new LinkedList<String>(); // Will be a list of Question Objects
 		questionll = (LinearLayout)findViewById(R.id.linear_layout);
-		databaseService = QuestionService.getInstance();
 		
-		if(questions.isEmpty())
-			try {
-				retrieveQuestions();
-			} catch (NetworkException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		new FetchQuestionsTask(this).execute();
+	}
+	
+	/**
+	 * Displays a single question
+	 * @param question
+	 */
+	public void displayQuestion(Question question) {
+		
+		//TODO: Change this to getText(), but it currently isn't populated
+		String questionText = question.getTitle();
+		
+		TextView t = new TextView(this);
+		
+		t.setTag(question);
+		t.setText(questionText);
+		t.setTextSize(40);
+		
+		t.setBackgroundColor(0xfff00000);
+		
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+	   
+	    llp.gravity = 1; // Horizontal Center
+	    
+	    t.setLayoutParams(llp);
+		
+		t.setId(question.getId());
+		t.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openQuestion(v);
 			}
-		displayQuestions();
-		
-	}
-	
-	/**
-	 * Method that builds TextView objects for each question
-	 * in the questions list. Appends the TextView objects to the
-	 * main Linear Layout. 
-	 */
-	private void displayQuestions() {
-		Iterator<String> it = questions.iterator();
-		int idCount = 1;
-		while(it.hasNext()){		
-			TextView t = new TextView(this);
-			t.setText(it.next());
-			t.setTextSize(40);
-			
-			t.setBackgroundColor(0xfff00000);
-			
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
-		   
-		    llp.gravity = 1; // Horizontal Center
-		    
-		    t.setLayoutParams(llp);
-			
-			t.setId(idCount);
-			t.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					openQuestion(v);
-				}
-			});
-			
-			idCount++;
-			questionll.addView(t);
-		}
-	}
-	
-	/**
-	 * Gathers 20 new questions. Appends questions to the 
-	 * questions list.
-	 * 
-	 * @author Phillip Leland
-	 * @throws JSONException 
-	 * @throws NetworkException 
-	 */
-	private void retrieveQuestions() throws NetworkException, JSONException {
-		PaginatedQuestions currentQuestions = 
-				databaseService.getQuestions(null, null, 20, 0);
-		List<Question> questionList = currentQuestions.getQuestions();
-		for (int i = 0; i < questionList.size(); i++) {
-			String questionText = questionList.get(i).getText();
-			questions.add(questionText);
-		}
+		});
+
+		questionll.addView(t);
 	}
 	
 	@Override
@@ -154,8 +124,7 @@ public class MainActivity extends Activity {
 	public void openQuestion(View view){
 		Intent intent = new Intent(this, QuestionActivity.class);
 		TextView tv = (TextView) view;
-		String message = tv.getText().toString();
-		intent.putExtra(EXTRA_MESSAGE, message);
+		intent.putExtra(EXTRA_MESSAGE, (Question)view.getTag());
 		startActivity(intent);
 	}
 	

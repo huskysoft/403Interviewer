@@ -1,5 +1,6 @@
 package com.huskysoft.interviewannihilator.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -11,8 +12,10 @@ import java.util.Date;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Question implements Likeable {
+public class Question implements Likeable, Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private int id;
 	private String text;
 	private String title;
@@ -180,6 +183,5 @@ public class Question implements Likeable {
 				+ ", authorId=" + authorId + ", dateCreated=" + dateCreated
 				+ ", category=" + category + ", difficulty=" + difficulty
 				+ ", likes=" + likes + ", dislikes=" + dislikes + "]";
-	}
-	
+	}	
 }
