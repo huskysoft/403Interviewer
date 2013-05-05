@@ -129,7 +129,7 @@ public class NetworkService {
 		String completeUrl = url;
 		completeUrl += (paramName + "=" + paramVal);
 		if (addAmpersand) {
-			completeUrl += "?";
+			completeUrl += "&";
 		}
 		return completeUrl;
 	}
