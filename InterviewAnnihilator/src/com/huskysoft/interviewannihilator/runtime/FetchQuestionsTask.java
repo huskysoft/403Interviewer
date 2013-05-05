@@ -1,5 +1,6 @@
 package com.huskysoft.interviewannihilator.runtime;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.json.JSONException;
@@ -52,6 +53,9 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
