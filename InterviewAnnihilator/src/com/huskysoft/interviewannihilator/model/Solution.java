@@ -1,7 +1,3 @@
-package com.huskysoft.interviewannihilator.model;
-
-import java.util.Date;
-
 /**
  * 
  * Governs the fields and behavior of a solution in our application
@@ -11,6 +7,11 @@ import java.util.Date;
  * @author Dan Sanders, 4/29/13
  *
  */
+
+package com.huskysoft.interviewannihilator.model;
+
+import java.util.Date;
+
 public class Solution implements Likeable {
 
 	private int id;
@@ -21,7 +22,9 @@ public class Solution implements Likeable {
 	private int likes;
 	private int dislikes;
 	
-	public Solution() {}
+	public Solution() {
+		
+	}
 	
 	/** Called when the user of our application wants to add a solution to the
 	 *  database. Our database will populate the rest of the fields of the
@@ -97,53 +100,81 @@ public class Solution implements Likeable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + authorId;
+		int i;
+		if (dateCreated == null) {
+			i = 0;
+		}
+		else {
+			i = dateCreated.hashCode();
+		}
 		result = prime * result
-				+ ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		+ i;
 		result = prime * result + dislikes;
 		result = prime * result + id;
 		result = prime * result + likes;
 		result = prime * result + questionId;
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		int j;
+		if (text == null) {
+			j = 0;
+		}
+		else {
+			j = text.hashCode();
+		}
+		result = prime * result + j;
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(getClass().equals(obj.getClass()))) {
 			return false;
+		}
 		Solution other = (Solution) obj;
-		if (authorId != other.authorId)
+		if (authorId != other.authorId) {
 			return false;
+		}
 		if (dateCreated == null) {
-			if (other.dateCreated != null)
+			if (other.dateCreated != null) {
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+			}
+		} 
+		else if (!dateCreated.equals(other.dateCreated)) {
 			return false;
-		if (dislikes != other.dislikes)
+		}
+		if (dislikes != other.dislikes) {
 			return false;
-		if (id != other.id)
+		}
+		if (id != other.id) {
 			return false;
-		if (likes != other.likes)
+		}
+		if (likes != other.likes) {
 			return false;
-		if (questionId != other.questionId)
+		}
+		if (questionId != other.questionId) {
 			return false;
+		}
 		if (text == null) {
-			if (other.text != null)
+			if (other.text != null) {
 				return false;
-		} else if (!text.equals(other.text))
+			}
+		} 
+		else if (!text.equals(other.text)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "Solution [id=" + id + ", text=" + text + ", questionId="
-				+ questionId + ", authorId=" + authorId + ", dateCreated="
-				+ dateCreated + ", likes=" + likes + ", dislikes=" + dislikes
-				+ "]";
+		+ questionId + ", authorId=" + authorId + ", dateCreated="
+		+ dateCreated + ", likes=" + likes + ", dislikes=" + dislikes
+		+ "]";
 	}
 }

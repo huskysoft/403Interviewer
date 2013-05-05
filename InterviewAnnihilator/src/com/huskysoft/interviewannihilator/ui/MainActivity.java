@@ -45,9 +45,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		questionll = (LinearLayout) findViewById(R.id.linear_layout);
-		
+
+		questionll = (LinearLayout) findViewById(R.id.linear_layout);		
 		new FetchQuestionsTask(this).execute();
 	}
 	

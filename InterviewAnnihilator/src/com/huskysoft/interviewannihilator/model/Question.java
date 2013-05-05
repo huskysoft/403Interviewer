@@ -1,9 +1,3 @@
-package com.huskysoft.interviewannihilator.model;
-
-import java.io.Serializable;
-import java.util.Date;
-
-
 /**
  * 
  * Governs the fields and behavior of the questions that are created
@@ -12,11 +6,13 @@ import java.util.Date;
  * @author Dan Sanders, 4/29/13
  *
  */
-public class Question implements Likeable, Serializable {
+package com.huskysoft.interviewannihilator.model;
 
-	private static final long serialVersionUID = 1L;
+import java.util.Date;
+
+public class Question implements Likeable {
 	
-	private int questionsId;
+	private int questionId;
 	private String text;
 	private String title;
 	private int authorId;
@@ -26,7 +22,9 @@ public class Question implements Likeable, Serializable {
 	private int likes;
 	private int dislikes;
 	
-	public Question() {}
+	public Question() {
+		
+	}
 	
 	/**
 	 * Called when our android application is trying to create a new question
@@ -40,7 +38,7 @@ public class Question implements Likeable, Serializable {
 	 * @param difficulty
 	 */
 	public Question(String text, String title, Category category, 
-			Difficulty difficulty) {
+	Difficulty difficulty) {
 		this.text = text;
 		this.title = title;		
 		this.difficulty = difficulty;
@@ -48,7 +46,7 @@ public class Question implements Likeable, Serializable {
 	}
 
 	public int getQuestionId() {
-		return questionsId;
+		return questionId;
 	}
 	
 	public String getText() {
@@ -84,7 +82,7 @@ public class Question implements Likeable, Serializable {
 	}
 
 	public void setQuestionId(int id) {
-		this.questionsId = id;
+		this.questionId = id;
 	}
 
 	public void setText(String text) {
@@ -124,64 +122,118 @@ public class Question implements Likeable, Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + authorId;
-		result = prime * result
-				+ ((category == null) ? 0 : category.hashCode());
-		result = prime * result
-				+ ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result
-				+ ((difficulty == null) ? 0 : difficulty.hashCode());
+		int i;
+		if (category == null) {
+			i = 0;
+		}
+		else {
+			i = category.hashCode();
+		}
+		result = prime * result + i;
+		int diffResult;
+		if (dateCreated == null) {
+			diffResult = 0;
+		}
+		else {
+			diffResult = dateCreated.hashCode();
+		}
+		int nextPrime = diffResult;
+		int k = nextPrime;
+		result = prime * result + k;
+		int diffJ;
+		if (difficulty == null) {
+			diffJ = 0;
+		}
+		else {
+			diffJ = difficulty.hashCode();
+		}
+		result = prime * result + diffJ;
 		result = prime * result + dislikes;
-		result = prime * result + questionsId;
+		result = prime * result + questionId;
 		result = prime * result + likes;
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		int y;
+		if (text == null) {
+			y = 0;
+		}
+		else {
+			y = text.hashCode();
+		}
+		result = prime * result + y;
+		int diffK;
+		if (title == null) {
+			diffK = 0;
+		}
+		else {
+			diffK = title.hashCode();
+		}
+		result = prime * result + diffK;
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(getClass().equals(obj.getClass()))) {
 			return false;
+		}
 		Question other = (Question) obj;
-		if (authorId != other.authorId)
+		if (authorId != other.authorId) {
 			return false;
-		if (category != other.category)
+		}
+		if (category != other.category) {
 			return false;
+		}
 		if (dateCreated == null) {
-			if (other.dateCreated != null)
+			if (other.dateCreated != null) {
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+			}
+		} 
+		else if (!dateCreated.equals(other.dateCreated)) {
 			return false;
-		if (difficulty != other.difficulty)
+		}
+		if (difficulty != other.difficulty) {
 			return false;
-		if (dislikes != other.dislikes)
+		}
+		if (dislikes != other.dislikes) {
 			return false;
-		if (questionsId != other.questionsId)
+		}
+		if (questionId != other.questionId) {
 			return false;
-		if (likes != other.likes)
+		}
+		if (likes != other.likes) {
 			return false;
+		}
 		if (text == null) {
-			if (other.text != null)
+			if (other.text != null) {
 				return false;
-		} else if (!text.equals(other.text))
+			}
+		} 
+		else if (!text.equals(other.text)) {
 			return false;
+		}
 		if (title == null) {
-			if (other.title != null)
+			if (other.title != null) {
 				return false;
-		} else if (!title.equals(other.title))
+			}
+		} 
+		else if (!title.equals(other.title)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Question [id=" + questionsId + ", text=" + text + ", title=" + title
-				+ ", authorId=" + authorId + ", dateCreated=" + dateCreated
-				+ ", category=" + category + ", difficulty=" + difficulty
-				+ ", likes=" + likes + ", dislikes=" + dislikes + "]";
-	}	
+		return "Question [id=" + questionId + ", text=" + text + ", " 
+		+ "title=" + title + ", authorId=" + authorId 
+		+ ", dateCreated=" + dateCreated + ", category=" + category 
+		+ ", difficulty=" + difficulty + ", likes=" + likes 
+		+ ", dislikes=" + dislikes + "]";
+	}
+
 }
