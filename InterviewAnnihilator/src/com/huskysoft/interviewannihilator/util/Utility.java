@@ -1,7 +1,3 @@
-package com.huskysoft.interviewannihilator.util;
-
-import com.huskysoft.interviewannihilator.model.Likeable;
-
 /**
  * Contains some common constants and helper functions that are used
  * in our application
@@ -9,6 +5,11 @@ import com.huskysoft.interviewannihilator.model.Likeable;
  * @author Dan Sanders, 4/29/13
  *
  */
+
+package com.huskysoft.interviewannihilator.util;
+
+import com.huskysoft.interviewannihilator.model.Likeable;
+
 public class Utility {
 	
 	// The minimum number of likes needed to have to have a

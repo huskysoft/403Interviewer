@@ -1,9 +1,16 @@
+/**
+ * A PaginatedResults class that stores a list of questions
+ * 
+ * @author Dan Sanders, 05/04/2013
+ */
+
 package com.huskysoft.interviewannihilator.util;
 
 import com.huskysoft.interviewannihilator.model.Question;
+
+import java.util.ArrayList;
 import java.util.List;
 
-/** A PaginatedResults class that stores a list of questions */
 public class PaginatedQuestions extends PaginatedResults {
 	
 	/** List of the questions returned */
@@ -11,10 +18,11 @@ public class PaginatedQuestions extends PaginatedResults {
 	
 	public PaginatedQuestions() {
 		super();
+		this.questions = new ArrayList<Question>();
 	};
 	
-	public PaginatedQuestions(List<Question> questions, int totalNumberOfResults, 
-			int limit, int offset) {
+	public PaginatedQuestions(List<Question> questions, 
+	int totalNumberOfResults, int limit, int offset) {
 		super(totalNumberOfResults, limit, offset);
 		this.questions = questions;
 	}
