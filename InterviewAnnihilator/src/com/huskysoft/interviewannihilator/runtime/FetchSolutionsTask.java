@@ -22,30 +22,30 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
  *
  */
 public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
-
-    private QuestionService questionService;
-    private SolutionActivity context;
-    private List<Solution> solutionList;
-    private Question question;
-    
-    /**
-     * 
-     * @param context reference to SolutionActivity
-     * @param question question to find solutions for
-     */
-    public FetchSolutionsTask(Activity context, Question question){
-    	this.context = (SolutionActivity)context;
-    	this.question = question;
-    }
-
-    /**
-     * This is the main function of the AsyncTask thread. This will populate
-     * solutionList with Solutions so that they may be displayed afterwards.
-     */
-    @Override
-    protected Void doInBackground(Void... params) {
-    	questionService = QuestionService.getInstance();
-    	
+	
+	private QuestionService questionService;
+	private SolutionActivity context;
+	private List<Solution> solutionList;
+	private Question question;
+	
+	/**
+	 * 
+	 * @param context reference to SolutionActivity
+	 * @param question question to find solutions for
+	 */
+	public FetchSolutionsTask(Activity context, Question question){
+		this.context = (SolutionActivity) context;
+		this.question = question;
+	}
+	
+	/**
+	 * This is the main function of the AsyncTask thread. This will populate
+	 * solutionList with Solutions so that they may be displayed afterwards.
+	 */
+	@Override
+	protected Void doInBackground(Void... params) {
+		questionService = QuestionService.getInstance();
+		
 		try {
 			PaginatedSolutions paginatedSolutions =
 					questionService.getSolutions(question.getQuestionId(), 10, 0);
@@ -60,14 +60,14 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 		}
 		
 		return null;
-    }
-    
-    /**
-     * This event fires when doInBackground() is complete, and it will populate
-     * the MainActivity question area.
-     */
-    @Override
-    protected void onPostExecute(Void result){
+	}
+	
+	/**
+	 * This event fires when doInBackground() is complete, and it will populate
+	 * the MainActivity question area.
+	 */
+	@Override
+	protected void onPostExecute(Void result){
 		context.displaySolutions(solutionList);
-    }
- }
+	}
+}

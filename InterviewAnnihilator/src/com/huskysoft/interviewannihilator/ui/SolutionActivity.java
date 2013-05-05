@@ -31,9 +31,9 @@ public class SolutionActivity extends Activity {
 		setContentView(R.layout.activity_solution);
 		
 		Intent intent = getIntent();
-		question = (Question)intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+		question = (Question) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
-		solutionll = (LinearLayout)findViewById(R.id.linear_layout);
+		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
 		new FetchSolutionsTask(this, question).execute();
 	}
 	
@@ -48,8 +48,8 @@ public class SolutionActivity extends Activity {
 		
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
-	   
-	    llp.gravity = 1; // Horizontal Center
+
+		llp.gravity = 1; // Horizontal Center
 		
 		if(solutions.size() <= 0){
 			TextView t = new TextView(this);

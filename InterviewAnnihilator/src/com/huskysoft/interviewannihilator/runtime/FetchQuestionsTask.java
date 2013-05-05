@@ -22,28 +22,28 @@ import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
  *
  */
 public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
-
-    private QuestionService questionService;
-    private MainActivity context;
-    private List<Question> questionList;
-    
-    /**
-     * 
-     * @param context reference to MainActivity
-     */
-    public FetchQuestionsTask(Activity context){
-    	this.context = (MainActivity)context;
-    }
-
-    
-    /**
-     * This is the main function of the AsyncTask thread. This will populate
-     * questionList with Questions so that they may be displayed afterwards.
-     */
-    @Override
-    protected Void doInBackground(Void... params) {
-    	questionService = QuestionService.getInstance();
-    	
+	
+	private QuestionService questionService;
+	private MainActivity context;
+	private List<Question> questionList;
+	
+	/**
+	 * 
+	 * @param context reference to MainActivity
+	 */
+	public FetchQuestionsTask(Activity context){
+		this.context = (MainActivity) context;
+	}
+	
+	
+	/**
+	 * This is the main function of the AsyncTask thread. This will populate
+	 * questionList with Questions so that they may be displayed afterwards.
+	 */
+	@Override
+	protected Void doInBackground(Void... params) {
+		questionService = QuestionService.getInstance();
+		
 		try {
 			PaginatedQuestions currentQuestions =
 					questionService.getQuestions(null, null, 20, 0);
@@ -57,14 +57,14 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		}
 	
 		return null;
-    }
-    
-    /**
-     * This event fires when doInBackground() is complete, and it will populate
-     * the MainActivity question area.
-     */
-    @Override
-    protected void onPostExecute(Void result){
+	}
+	
+	/**
+	 * This event fires when doInBackground() is complete, and it will populate
+	 * the MainActivity question area.
+	 */
+	@Override
+	protected void onPostExecute(Void result){
 		context.displayQuestions(questionList);
-    }
- }
+	}
+}

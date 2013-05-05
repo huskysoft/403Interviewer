@@ -23,8 +23,7 @@ public class MainActivity extends Activity {
 	 * Used to pass the String question to the child activity.
 	 * Will pass a Question object.
 	 */
-	public final static String EXTRA_MESSAGE = 
-			"com.huskysoft.interviewannihilator.QUESTION";
+	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
 		
 	/** Layout element that holds the questions */
 	private LinearLayout questionll;
@@ -32,7 +31,7 @@ public class MainActivity extends Activity {
 	/** List of question elements */
 	private List<String> questions;
 	
-	 /** service that interacts with database */
+	/** Service that interacts with database */
 	private QuestionService databaseService;
 	
 	
@@ -47,7 +46,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		questionll = (LinearLayout)findViewById(R.id.linear_layout);
+		questionll = (LinearLayout) findViewById(R.id.linear_layout);
 		
 		new FetchQuestionsTask(this).execute();
 	}
@@ -63,9 +62,9 @@ public class MainActivity extends Activity {
 		
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
-	   
-	    llp.gravity = 1; // Horizontal Center
-	    
+		
+		llp.gravity = 1;  // Horizontal Center
+		
 		if(questions.size() <= 0){
 			TextView t = new TextView(this);
 			
@@ -89,8 +88,8 @@ public class MainActivity extends Activity {
 				t.setBackgroundColor(0xfff00000);
 				
 
-			    
-			    t.setLayoutParams(llp);
+
+				t.setLayoutParams(llp);
 				
 				t.setId(question.getQuestionId());
 				t.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +121,7 @@ public class MainActivity extends Activity {
 	public void openQuestion(View view){
 		Intent intent = new Intent(this, QuestionActivity.class);
 		TextView tv = (TextView) view;
-		intent.putExtra(EXTRA_MESSAGE, (Question)view.getTag());
+		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
 		startActivity(intent);
 	}
 	
