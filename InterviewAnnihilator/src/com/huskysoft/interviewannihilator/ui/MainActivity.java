@@ -80,6 +80,9 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			  catch (IOException e) {
+				  e.printStackTrace();
+			  }
 		displayQuestions();
 		
 	}
@@ -125,11 +128,13 @@ public class MainActivity extends Activity {
 	 * 
 	 * @author Phillip Leland
 	 * @throws JSONException 
-	 * @throws NetworkException 
+	 * @throws NetworkException
+	 * @throws IOException 
 	 */
-	private void retrieveQuestions() throws NetworkException, JSONException {
+	private void retrieveQuestions() throws NetworkException, JSONException,
+	IOException {
 		PaginatedQuestions currentQuestions = 
-				databaseService.getQuestions(null, null, 20, 0);
+		databaseService.getQuestions(null, null, 20, 0);
 		List<Question> questionList = currentQuestions.getQuestions();
 		for (int i = 0; i < questionList.size(); i++) {
 			String questionText = questionList.get(i).getText();

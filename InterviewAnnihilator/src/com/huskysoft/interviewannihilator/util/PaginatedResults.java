@@ -1,5 +1,3 @@
-package com.huskysoft.interviewannihilator.util;
-
 /**
  * A generic PaginatedResults object to return paginated data from the DB.
  * Users would get one page of results from the DB, and can then request
@@ -7,10 +5,11 @@ package com.huskysoft.interviewannihilator.util;
  * available (totaNumberOfResults > offset + limit). Subclassed by
  * PaginatedQuestions and PaginatedSolutions.
  * 
- * @author bkng
- *
- * @param <T>
+ * @author Bennett Ng, 05/04/2013
  */
+
+package com.huskysoft.interviewannihilator.util;
+
 public abstract class PaginatedResults {
 	
 	/** total number of objects in the DB matching the request */
@@ -22,10 +21,12 @@ public abstract class PaginatedResults {
 	/** the requested offset */
 	private int offset;
 	
-	public PaginatedResults() {};
+	public PaginatedResults() {
+		
+	};
 	
 	public PaginatedResults(int totalNumberOfResults, 
-			int limit, int offset) {
+	int limit, int offset) {
 		this.totalNumberOfResults = totalNumberOfResults;
 		this.limit = limit;
 		this.offset = offset;
@@ -57,19 +58,25 @@ public abstract class PaginatedResults {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass().equals(obj.getClass())) {
 			return false;
+		}
 		PaginatedResults other = (PaginatedResults) obj;
-		if (limit != other.limit)
+		if (limit != other.limit) {
 			return false;
-		if (offset != other.offset)
+		}
+		if (offset != other.offset) {
 			return false;
-		if (totalNumberOfResults != other.totalNumberOfResults)
+		}
+		if (totalNumberOfResults != other.totalNumberOfResults) {
 			return false;
+		}
 		return true;
 	}
 	
