@@ -5,6 +5,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import junit.framework.TestCase;
@@ -37,7 +38,7 @@ public class QuestionServiceTest extends TestCase {
 	}
 	
 	@Test
-	public void testGetAllQuestions() throws NetworkException, JSONException {
+	public void testGetAllQuestions() throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = questionService.getQuestions(null, null, 10, 0);
 		// System.out.println(questions);
 	}
