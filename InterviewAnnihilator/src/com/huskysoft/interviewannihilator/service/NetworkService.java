@@ -69,7 +69,7 @@ public class NetworkService {
 		}
 		if (categories != null && categories.size() != 0) {
 			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY, 
-			categories.toString(), true);
+			categories.toString(), false);
 		}
 		return dispatchGetRequest(urlToSend);
 	}
@@ -93,7 +93,7 @@ public class NetworkService {
 		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
 		String.valueOf(limit));
 		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
-		String.valueOf(offset), true);
+		String.valueOf(offset), false);
 		return dispatchGetRequest(urlToSend);
 	}
 	
@@ -107,7 +107,7 @@ public class NetworkService {
 	 */
 	private String appendParameter(String url, String paramName,
 	String paramVal) {
-		return appendParameter(url, paramName, paramVal, false);
+		return appendParameter(url, paramName, paramVal, true);
 	}
 	
 	/**
@@ -116,19 +116,19 @@ public class NetworkService {
 	 * @param url the url to which the parameters will be appended to
 	 * @param paramName the name of the parameter appended to the url
 	 * @param paramVal the value of the parameter appended to the url
-	 * @param omitAmpersand should be set to true if this is the last param
+	 * @param addAmpersand should be set to false if this is the last param
 	 * that is to be appended
 	 * @return a new String with the parameter appended. Returns null if any
 	 * of the Strings passed in were null
 	 */
 	private String appendParameter(String url, String paramName,
-	String paramVal, boolean omitAmpersand) {
+	String paramVal, boolean addAmpersand) {
 		if (url == null || paramName == null || paramVal == null) {
 			return null;
 		}
 		String completeUrl = url;
 		completeUrl += (paramName + "=" + paramVal);
-		if (!omitAmpersand) {
+		if (addAmpersand) {
 			completeUrl += "?";
 		}
 		return completeUrl;
