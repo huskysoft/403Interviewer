@@ -21,9 +21,9 @@ import android.content.Intent;
 import android.os.Build;
 
 public class SolutionActivity extends Activity {
-
 	private Question question;
 	private LinearLayout solutionll;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,12 @@ public class SolutionActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/** Called when the user clicks the post solution button */
+	public void postSolution(View view) {
+	    Intent intent = new Intent(this, PostSolutionActivity.class);
+		startActivity(intent);
 	}
 
 }
