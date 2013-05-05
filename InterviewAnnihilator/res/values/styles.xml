@@ -16,11 +16,15 @@
 	
     <color name="white_opaque">#999999</color>
 	<color name="pitch_black">#FF000000</color>
+	<color name="light_purple">#D166FF</color>
+	<color name="gold">#FFCC00</color>
+	
+	
 
     <style name="AppTheme" parent="android:Theme.Light">
-      <item name="android:background">@color/white_opaque</item>
-      <item name="android:windowBackground">@color/white_opaque</item>
-      <item name="android:colorBackground">@color/white_opaque</item>
-
+      <item name="android:background">@color/light_purple</item>
+      <item name="android:windowBackground">@color/light_purple</item>
+      <item name="android:colorBackground">@color/light_purple</item>
     </style>
+
 </resources>

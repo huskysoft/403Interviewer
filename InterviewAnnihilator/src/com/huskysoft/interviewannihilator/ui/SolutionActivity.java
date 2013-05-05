@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
@@ -46,7 +47,7 @@ public class SolutionActivity extends Activity {
 			return;
 		}
 		
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
 		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
 
 		llp.gravity = 1; // Horizontal Center
@@ -68,9 +69,7 @@ public class SolutionActivity extends Activity {
 				
 				t.setText(solutionText);
 				t.setTextSize(20);
-				
-				t.setBackgroundColor(0xfff00000);
-				
+				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
 			    t.setLayoutParams(llp);
 				
 				t.setId(solution.getId());

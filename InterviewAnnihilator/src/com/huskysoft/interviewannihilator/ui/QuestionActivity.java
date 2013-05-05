@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
@@ -36,13 +37,16 @@ public class QuestionActivity extends Activity {
 		
 		// Create TextView that holds Question
 		LinearLayout.LayoutParams llp =  new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
 		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
 
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = new TextView(this);
+		textview.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
 		textview.setTextSize(20);
+		
+		
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
