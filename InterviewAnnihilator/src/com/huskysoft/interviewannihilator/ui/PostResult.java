@@ -6,22 +6,29 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 
-public class SolutionActivity extends Activity {
-	
-	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+public class PostResult extends Activity {
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_solution);
-		// Show the Up button in the action bar.
-		// setupActionBar();
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	
+	    // Get the message from the intent
+	    Intent intent = getIntent();
+	    String message = intent.getStringExtra(PostSolution.EXTRA_MESSAGE);
+	
+	    // Create the text view
+	    TextView textView = new TextView(this);
+	    textView.setTextSize(40);
+	    textView.setText(message);
+	
+	    // Set the text view as the activity layout
+	    setContentView(textView);
 	}
 
 	/**
@@ -37,7 +44,7 @@ public class SolutionActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.solution, menu);
+		getMenuInflater().inflate(R.menu.post_result, menu);
 		return true;
 	}
 
@@ -56,12 +63,6 @@ public class SolutionActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-	
-	/** Called when the user clicks the post solution button */
-	public void postSolution(View view) {
-	    Intent intent = new Intent(this, PostSolution.class);
-		startActivity(intent);
 	}
 
 }
