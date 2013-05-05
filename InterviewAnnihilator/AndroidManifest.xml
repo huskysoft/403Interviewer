@@ -55,7 +55,7 @@
             android:parentActivityName="com.huskysoft.interviewannihilator.ui.PostSolutionActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huskysoft.interviewannihilator.ui.PostSolution" />
+                android:value="com.huskysoft.interviewannihilator.ui.PostSolutionActivity" />
         </activity>
     </application>
 
