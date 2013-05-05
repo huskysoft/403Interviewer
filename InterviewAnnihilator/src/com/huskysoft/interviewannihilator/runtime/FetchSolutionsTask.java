@@ -11,9 +11,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
-import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.ui.SolutionActivity;
-import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
 /**
@@ -50,7 +48,7 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
     	
 		try {
 			PaginatedSolutions paginatedSolutions =
-					questionService.getSolutions(question.getId(), 10, 0);
+					questionService.getSolutions(question.getQuestionId(), 10, 0);
 			
 			solutionList = paginatedSolutions.getSolutions();
 		} catch (NetworkException e) {
@@ -70,8 +68,6 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
      */
     @Override
     protected void onPostExecute(Void result){
-		for (int i = 0; i < solutionList.size(); i++) {
-			context.displaySolution(solutionList.get(i));
-		}
+		context.displaySolutions(solutionList);
     }
  }

@@ -55,7 +55,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	
 		return null;
     }
     
@@ -65,8 +65,6 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
      */
     @Override
     protected void onPostExecute(Void result){
-		for (int i = 0; i < questionList.size(); i++) {
-			context.displayQuestion(questionList.get(i));
-		}
+		context.displayQuestions(questionList);
     }
  }

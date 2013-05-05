@@ -23,7 +23,6 @@ import android.os.Build;
 public class SolutionActivity extends Activity {
 
 	private Question question;
-	private List<Solution> solutions;
 	private LinearLayout solutionll;
 	
 	@Override
@@ -39,36 +38,52 @@ public class SolutionActivity extends Activity {
 	}
 	
 	/**
-	 * Displays a single solution
-	 * @param solution
+	 * Displays a formatted list of solutions
+	 * @param solutions
 	 */
-	public void displaySolution(Solution solution){
-		//TODO: Change this to getText(), but it currently isn't populated
-		String solutionText = solution.getText();
-		
-		TextView t = new TextView(this);
-		
-		t.setText(solutionText);
-		t.setTextSize(40);
-		
-		t.setBackgroundColor(0xfff00000);
+	public void displaySolutions(List<Solution> solutions){
+		if(solutions == null){
+			return;
+		}
 		
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
 	   
 	    llp.gravity = 1; // Horizontal Center
-	    
-	    t.setLayoutParams(llp);
 		
-		t.setId(solution.getId());
-		t.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//do nothing at the moment
+		if(solutions.size() <= 0){
+			TextView t = new TextView(this);
+			
+			t.setText("There doesn't seem to be any solutions");
+			t.setTextSize(20);
+			t.setLayoutParams(llp);
+			solutionll.addView(t);
+		}
+		for(int i = 0; i < solutions.size(); i++){
+			Solution solution = solutions.get(i);
+			if(solution != null && solution.getText() != null){
+				String solutionText = solution.getText();
+				
+				TextView t = new TextView(this);
+				
+				t.setText(solutionText);
+				t.setTextSize(20);
+				
+				t.setBackgroundColor(0xfff00000);
+				
+			    t.setLayoutParams(llp);
+				
+				t.setId(solution.getId());
+				t.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//do nothing at the moment
+					}
+				});
+		
+				solutionll.addView(t);
 			}
-		});
-
-		solutionll.addView(t);
+		}
 	}
 
 	/**

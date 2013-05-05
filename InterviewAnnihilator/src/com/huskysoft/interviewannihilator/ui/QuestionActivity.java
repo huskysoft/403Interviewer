@@ -14,6 +14,7 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ActionBar.LayoutParams;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +44,15 @@ public class QuestionActivity extends Activity {
 		LinearLayout singleQuestionll = (LinearLayout)findViewById(R.id.linear_layout);
 		
 		// Create TextView that holds Question
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+	   
+	    llp.gravity = 1; // Horizontal Center
+	    
 		TextView textview = new TextView(this);
-		textview.setTextSize(40);
-		textview.setText(question.getTitle()); //TODO: change to getText();
+		textview.setTextSize(20);
+		textview.setText(question.getText());
+		textview.setLayoutParams(llp);
 		
 		singleQuestionll.addView(textview, 0);
 		

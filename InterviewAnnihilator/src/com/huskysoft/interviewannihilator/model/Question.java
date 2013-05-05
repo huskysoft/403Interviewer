@@ -16,7 +16,7 @@ public class Question implements Likeable, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int id;
+	private int questionsId;
 	private String text;
 	private String title;
 	private int authorId;
@@ -47,8 +47,8 @@ public class Question implements Likeable, Serializable {
 		this.category = category;
 	}
 
-	public int getId() {
-		return id;
+	public int getQuestionId() {
+		return questionsId;
 	}
 	
 	public String getText() {
@@ -83,8 +83,8 @@ public class Question implements Likeable, Serializable {
 		return dislikes;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setQuestionId(int id) {
+		this.questionsId = id;
 	}
 
 	public void setText(String text) {
@@ -131,7 +131,7 @@ public class Question implements Likeable, Serializable {
 		result = prime * result
 				+ ((difficulty == null) ? 0 : difficulty.hashCode());
 		result = prime * result + dislikes;
-		result = prime * result + id;
+		result = prime * result + questionsId;
 		result = prime * result + likes;
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -160,7 +160,7 @@ public class Question implements Likeable, Serializable {
 			return false;
 		if (dislikes != other.dislikes)
 			return false;
-		if (id != other.id)
+		if (questionsId != other.questionsId)
 			return false;
 		if (likes != other.likes)
 			return false;
@@ -179,7 +179,7 @@ public class Question implements Likeable, Serializable {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", text=" + text + ", title=" + title
+		return "Question [id=" + questionsId + ", text=" + text + ", title=" + title
 				+ ", authorId=" + authorId + ", dateCreated=" + dateCreated
 				+ ", category=" + category + ", difficulty=" + difficulty
 				+ ", likes=" + likes + ", dislikes=" + dislikes + "]";
