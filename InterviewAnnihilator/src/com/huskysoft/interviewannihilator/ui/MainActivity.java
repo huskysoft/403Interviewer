@@ -34,7 +34,6 @@ public class MainActivity extends Activity {
 	/** Service that interacts with database */
 	private QuestionService databaseService;
 	
-	
 	/**
 	 * Method that populates the app when the MainActivity is created.
 	 * Initializes the questions and questionll fields. Also calls

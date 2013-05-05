@@ -40,7 +40,7 @@ public class QuestionServiceTest extends TestCase {
 	@Test
 	public void testGetAllQuestions() throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = questionService.getQuestions(null, null, 10, 0);
-		// System.out.println(questions);
+		System.out.println(questions);
 	}
 
 }
