@@ -1,5 +1,7 @@
 package com.huskysoft.interviewannihilator.service;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 import org.json.JSONException;
@@ -21,14 +23,14 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	}
 	
 	@Test
-	public void testGetAllQuestions() throws NetworkException, JSONException {
+	public void testGetAllQuestions() throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = questionService.getQuestions(null, null, 10, 0);
 		System.out.println(questions);
 	}
 	
 	@Test
-	public void testGetSolutions() throws NetworkException, JSONException {
-		PaginatedSolutions solutions = questionService.getSolutions(6, 10, 0);
+	public void testGetSolutions() throws NetworkException, JSONException, IOException {
+		PaginatedSolutions solutions = questionService.getSolutions(10, 10, 0);
 		System.out.println(solutions);
 	}
 
