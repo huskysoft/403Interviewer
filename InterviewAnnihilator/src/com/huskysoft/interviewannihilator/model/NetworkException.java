@@ -1,3 +1,10 @@
+/**
+ * An exception our application throws when failing to retrieve data from
+ * the external server
+ * 
+ * @author Dan Sanders, 5/4/2013
+ */
+
 package com.huskysoft.interviewannihilator.model;
 
 public class NetworkException extends Exception {
