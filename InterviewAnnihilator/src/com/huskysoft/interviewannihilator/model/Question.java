@@ -8,10 +8,12 @@
  */
 package com.huskysoft.interviewannihilator.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Question implements Likeable {
+public class Question implements Likeable, Serializable {
 	
+	private static final long serialVersionUID = 5304505688702584930L;
 	private int questionId;
 	private String text;
 	private String title;
