@@ -107,8 +107,7 @@ public class Solution implements Likeable {
 		else {
 			i = dateCreated.hashCode();
 		}
-		result = prime * result
-		+ i;
+		result = prime * result + i;
 		result = prime * result + dislikes;
 		result = prime * result + id;
 		result = prime * result + likes;

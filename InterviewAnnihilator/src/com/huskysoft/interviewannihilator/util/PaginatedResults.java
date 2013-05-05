@@ -23,7 +23,7 @@ public abstract class PaginatedResults {
 	
 	public PaginatedResults() {
 		
-	};
+	}
 	
 	public PaginatedResults(int totalNumberOfResults, 
 	int limit, int offset) {
