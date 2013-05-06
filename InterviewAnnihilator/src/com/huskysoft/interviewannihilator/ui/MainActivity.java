@@ -39,7 +39,6 @@ public class MainActivity extends Activity {
 	 * Initializes the questions and questionll fields. Also calls
 	 * the displayQuestions function.
 	 */
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,13 +52,15 @@ public class MainActivity extends Activity {
 	 * Displays a formatted list of questions
 	 * @param questions
 	 */
+	@SuppressLint("NewApi")
 	public void displayQuestions(List<Question> questions) {
 		if(questions == null){
 			return;
 		}
 		
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 
+				LayoutParams.WRAP_CONTENT, 0.75f);
+		llp.setMargins(40, 10, 40, 10);
 		
 		llp.gravity = 1;  // Horizontal Center
 		
@@ -68,6 +69,7 @@ public class MainActivity extends Activity {
 			
 			t.setText("There doesn't seem to be any questions.");
 			t.setTextSize(20);
+			// special look?
 			t.setLayoutParams(llp);
 			questionll.addView(t);
 		}
@@ -81,12 +83,9 @@ public class MainActivity extends Activity {
 				
 				t.setTag(question);
 				t.setText(questionText);
-				t.setTextSize(20);
-				
-				t.setBackgroundColor(0xfff00000);
-				
-
-
+				t.setTextSize(20);			
+				// to make it work on older versions use this instead of setBackground() 
+				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
 				t.setLayoutParams(llp);
 				
 				t.setId(question.getQuestionId());
