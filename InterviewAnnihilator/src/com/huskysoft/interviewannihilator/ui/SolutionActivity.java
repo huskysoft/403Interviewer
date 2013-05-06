@@ -16,10 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 
 public class SolutionActivity extends Activity {
 	private Question question;
@@ -47,8 +44,9 @@ public class SolutionActivity extends Activity {
 			return;
 		}
 		
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+		llp.setMargins(40, 10, 40, 10);
 
 		llp.gravity = 1; // Horizontal Center
 		
@@ -70,28 +68,18 @@ public class SolutionActivity extends Activity {
 				t.setText(solutionText);
 				t.setTextSize(20);
 				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
-			    t.setLayoutParams(llp);
+				t.setLayoutParams(llp);
 				
 				t.setId(solution.getId());
 				t.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						//do nothing at the moment
+						// do nothing at the moment
 					}
 				});
 		
 				solutionll.addView(t);
 			}
-		}
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
 
@@ -121,7 +109,7 @@ public class SolutionActivity extends Activity {
 	
 	/** Called when the user clicks the post solution button */
 	public void postSolution(View view) {
-	    Intent intent = new Intent(this, PostSolutionActivity.class);
+		Intent intent = new Intent(this, PostSolutionActivity.class);
 		startActivity(intent);
 	}
 

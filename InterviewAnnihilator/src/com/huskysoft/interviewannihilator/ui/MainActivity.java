@@ -58,8 +58,9 @@ public class MainActivity extends Activity {
 			return;
 		}
 		
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
-		llp.setMargins(40, 10, 40, 10); // llp.setMargins(left, top, right, bottom);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 
+				LayoutParams.WRAP_CONTENT, 0.75f);
+		llp.setMargins(40, 10, 40, 10);
 		
 		llp.gravity = 1;  // Horizontal Center
 		
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
 			
 			t.setText("There doesn't seem to be any questions.");
 			t.setTextSize(20);
-			//special look?
+			// special look?
 			t.setLayoutParams(llp);
 			questionll.addView(t);
 		}
@@ -83,7 +84,7 @@ public class MainActivity extends Activity {
 				t.setTag(question);
 				t.setText(questionText);
 				t.setTextSize(20);			
-				//to make it work on older versions use this instead of setBackground() 
+				// to make it work on older versions use this instead of setBackground() 
 				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
 				t.setLayoutParams(llp);
 				
