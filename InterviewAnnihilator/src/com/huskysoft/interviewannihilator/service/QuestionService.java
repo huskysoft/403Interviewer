@@ -32,7 +32,7 @@ public class QuestionService {
 	private static final String RESULTS_KEY = "results";
 	private static QuestionService instance;
 	private NetworkService networkService;
-	private ObjectMapper mapper; // test mergy
+	private ObjectMapper mapper;
 
 	private QuestionService() {
 		this(NetworkService.getInstance());
