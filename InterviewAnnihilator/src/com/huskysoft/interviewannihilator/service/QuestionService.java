@@ -32,7 +32,7 @@ public class QuestionService {
 	private static final String RESULTS_KEY = "results";
 	private static QuestionService instance;
 	private NetworkService networkService;
-	private ObjectMapper mapper;
+	private ObjectMapper mapper; // test merge
 
 	private QuestionService() {
 		this(NetworkService.getInstance());
