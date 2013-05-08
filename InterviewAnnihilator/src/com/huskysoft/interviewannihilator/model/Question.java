@@ -177,7 +177,7 @@ public class Question implements Likeable, Serializable {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof Question)) {
 			return false;
 		}
 		if (!(getClass().equals(obj.getClass()))) {
