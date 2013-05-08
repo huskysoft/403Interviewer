@@ -12,6 +12,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.ui.SolutionActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
@@ -25,7 +26,7 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	
 	private QuestionService questionService;
-	private SolutionActivity context;
+	private QuestionActivity context;
 	private List<Solution> solutionList;
 	private Question question;
 	
@@ -34,8 +35,8 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	 * @param context reference to SolutionActivity
 	 * @param question question to find solutions for
 	 */
-	public FetchSolutionsTask(Activity context, Question question){
-		this.context = (SolutionActivity) context;
+	public FetchSolutionsTask(QuestionActivity context, Question question){
+		this.context = (QuestionActivity) context;
 		this.question = question;
 	}
 	
@@ -72,6 +73,6 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	 */
 	@Override
 	protected void onPostExecute(Void result){
-		context.displaySolutions(solutionList);
+		context.addSolutions(solutionList);
 	}
 }
