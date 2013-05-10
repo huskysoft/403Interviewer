@@ -149,8 +149,7 @@ public class QuestionActivity extends Activity {
 		if(!showSolutionsPressed){
 			if(solutionsLoaded){
 				revealSolutions();
-			}
-			else{
+			}else{
 				LinearLayout loadingText =
 						(LinearLayout) findViewById(R.id.loading_text_layout);
 				loadingText.setVisibility(View.VISIBLE);

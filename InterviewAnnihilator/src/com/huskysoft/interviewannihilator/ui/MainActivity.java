@@ -92,8 +92,7 @@ public class MainActivity extends Activity {
 			// special look?
 			t.setLayoutParams(llp);
 			questionll.addView(t);
-		}
-		else{
+		}else{
 			for(int i = 0; i < questions.size(); i++){
 				Question question = questions.get(i);
 				if(question != null && question.getText() != null){
