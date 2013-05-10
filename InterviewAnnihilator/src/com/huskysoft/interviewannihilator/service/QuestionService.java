@@ -8,6 +8,7 @@
 
 package com.huskysoft.interviewannihilator.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
+import com.huskysoft.interviewannihilator.util.Utility;
 
 public class QuestionService {
 
@@ -33,17 +35,13 @@ public class QuestionService {
 	private static QuestionService instance;
 	private NetworkService networkService;
 	private ObjectMapper mapper;
-
+	private UserInfo userInfo;
+	
 	private QuestionService() {
-		this(NetworkService.getInstance());
-	}
-
-	protected QuestionService(NetworkService networkService) {
-		this.networkService = networkService;
+		this.networkService = NetworkService.getInstance();
 		mapper = new ObjectMapper();
-		mapper.configure(
-				DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
-				false);
+		mapper.configure(DeserializationConfig.
+				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	/**
@@ -54,6 +52,34 @@ public class QuestionService {
 			instance = new QuestionService();
 		}
 		return instance;
+	}
+
+	public void initializeUserInfo(File baseDir) throws IOException {
+		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
+		String json = Utility.getStringFromFile(file);
+		try {
+			json = Utility.getStringFromFile(file);
+			userInfo = mapper.readValue(json, UserInfo.class);
+		} catch (IOException e) {
+			// failed to read userInfo; create a new one
+			userInfo = new UserInfo();
+		}
+		
+		
+	}
+	
+	public void writeUserInfo() {
+		
+	}
+	
+	public Question getQuestion(String questionId) {
+		// TODO
+		return null;
+	}
+	
+	public Solution getSolution(String solutionId) {
+		// TODO
+		return null;
 	}
 
 	/**
@@ -121,9 +147,8 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(
-			int questionId, int limit, int offset)
-			throws NetworkException, JSONException, IOException {
+	public PaginatedSolutions getSolutions(int questionId, int limit,
+			int offset)	throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IOException("Invalid limit or offset parameter");
 		}
@@ -146,18 +171,21 @@ public class QuestionService {
 		}
 		return databaseSolutions;
 	}
-	
-	public int postQuestion(Question toPost) {
+
+	public int postQuestion(Question toPost) throws NetworkException, 
+			JSONException, IOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int postSolution(Solution toPost) {
+	public int postSolution(Solution toPost) throws NetworkException, 
+			JSONException, IOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public boolean upvoteSolution(int solutionId) {
+	public boolean upvoteSolution(int solutionId) throws NetworkException, 
+			IOException {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -167,9 +195,19 @@ public class QuestionService {
 		return false;
 	}
 
-	public PaginatedQuestions getFavorites(int limit, int offset) {
+	public PaginatedQuestions getFavorites(int limit, int offset) 
+			throws NetworkException, IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public String getUserId(String userEmail) throws NetworkException, 
+			IOException {
+		// TODO Auto-generated method stub
+		return null;		
+	}
+	
+	protected void setNetworkService(NetworkService networkService) {
+		this.networkService = networkService;
+	}
 }
