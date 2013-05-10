@@ -12,5 +12,11 @@
     <string name="edit_solution">Enter a solution</string>
     <string name="button_post">Post</string>
     <string name="title_activity_post_result">PostResult</string>
+    
+    <string name="retryDialog_title">A network error has occurred</string>
+    <string name="retryDialog_retry">Retry</string>
+    <string name="retryDialog_cancel">Cancel</string>
+    
+    <string name="loading_text">loading&#8230;</string>
 
 </resources>

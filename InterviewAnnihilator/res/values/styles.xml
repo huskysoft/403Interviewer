@@ -1,14 +1,10 @@
 <resources>
-    <!-- Application theme. -->
-	
     <color name="white_opaque">#999999</color>
 	<color name="pitch_black">#FF000000</color>
 	<color name="light_purple">#D166FF</color>
 	<color name="gold">#FFCC00</color>
 	
-	<!-- 
-		Default theme for the App
-	-->
+	<!-- Default theme for the App -->
     <style name="AppTheme" parent="android:Theme.Light">
       <item name="android:background">@color/light_purple</item>
       <item name="android:windowBackground">@color/light_purple</item>
@@ -16,4 +12,11 @@
 	  <item name="android:textColor">@color/pitch_black</item>
       <item name="android:textSize">@dimen/default_text_size</item>
     </style>
+    
+    <!-- Loading indicator -->
+	<style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+	    <item name="android:layout_width">wrap_content</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:indeterminate">true</item> 
+	</style>
 </resources>

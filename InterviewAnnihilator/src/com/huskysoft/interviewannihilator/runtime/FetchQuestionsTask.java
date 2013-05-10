@@ -1,14 +1,18 @@
+/**
+ * Asynchronous thread designed to load questions from the database.
+ * On completion, populates MainActivity with TextViews containing questions.
+ * 
+ * @author Cody Andrews
+ */
+
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.io.IOException;
 import java.util.List;
-
-import org.json.JSONException;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
@@ -27,6 +31,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	private QuestionService questionService;
 	private MainActivity context;
 	private List<Question> questionList;
+	private Exception exception;
 	
 	/**
 	 * 
@@ -49,18 +54,21 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			PaginatedQuestions currentQuestions =
 					questionService.getQuestions(null, null, 20, 0);
 			questionList = currentQuestions.getQuestions();
-		} catch (NetworkException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e){
+			Log.e("FetchSolutionsTask", e.getMessage());
+			exception = e;
+			this.cancel(true);
 		}
 	
 		return null;
+	}
+	
+	@Override
+	protected void onCancelled(){
+		//TODO: handle specific error cases
+		if(exception != null){
+			context.onNetworkError();
+		}
 	}
 	
 	/**
