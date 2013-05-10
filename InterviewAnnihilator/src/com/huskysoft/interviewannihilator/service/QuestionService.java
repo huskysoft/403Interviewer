@@ -54,7 +54,8 @@ public class QuestionService {
 		return instance;
 	}
 
-	public void initializeUserInfo(File baseDir) throws IOException {
+	public void initializeUserInfo(File baseDir, String userEmail)
+			throws IOException {
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
 		String json = Utility.getStringFromFile(file);
 		try {
@@ -201,7 +202,7 @@ public class QuestionService {
 		return null;
 	}
 	
-	public String getUserId(String userEmail) throws NetworkException, 
+	private String getUserId(String userEmail) throws NetworkException, 
 			IOException {
 		// TODO Auto-generated method stub
 		return null;		
