@@ -22,8 +22,7 @@
 	        android:text="@string/button_solutions"
 	        android:layout_gravity="center_horizontal"
 	        android:onClick="onShowSolutions">	        
-	    </Button>
-	    
+	    </Button>    
 	    <include layout="@layout/loading_anim" />
 	</LinearLayout>
 </ScrollView>
