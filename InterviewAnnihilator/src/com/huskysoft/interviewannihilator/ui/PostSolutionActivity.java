@@ -1,27 +1,48 @@
+/**
+ * Post a solution.
+ * 
+ * @author Justin Robb
+ */
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 
 public class PostSolutionActivity extends Activity {
-	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+	/** The question being answered **/
+	private Question question;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
-		// Show the Up button in the action bar.
-		//setupActionBar();
+		
+		// Get intent
+		Intent intent = getIntent();
+		question = (Question) intent.getSerializableExtra(
+				SolutionActivity.EXTRA_MESSAGE);
+		
+		//setup question view
+		TextView tv = (TextView) findViewById(R.id.question_view);
+		tv.setText(question.getText());
 	}
 
 	/**
@@ -59,12 +80,93 @@ public class PostSolutionActivity extends Activity {
 	}
 	
 	/** Called when the user clicks the post button */
-   public void sendSolution(View view) {
-    Intent intent = new Intent(this, PostResultActivity.class);
-    EditText editText = (EditText) findViewById(R.id.edit_solution);
-    String message = editText.getText().toString();
-    intent.putExtra(EXTRA_MESSAGE, message);
-    startActivity(intent);
-}
+	public void sendSolution(View view) {
+		sendSolution();
+	}
 
+	/**
+	* Attempts to post a solution to the database.
+	*/
+	private void sendSolution() {
+		if (question == null)
+			throw new IllegalStateException();
+	
+		EditText editText = (EditText) findViewById(R.id.edit_solution);
+		String message = editText.getText().toString();
+		int outcome = 1;   
+		if (message.trim().equals("")){
+			// Fail due to bad solution
+			outcome = 0;
+		}
+		Solution solution = new Solution(question.getQuestionId(), message);
+		QuestionService qs = QuestionService.getInstance();
+		try{
+			qs.postSolution(solution);
+		} catch (NetworkException e){
+			// Retry or cancel
+			outcome= -1;
+		} 
+		alertMessage(outcome);
+		if (outcome == 1){
+
+		}
+	}
+
+	/**
+	* Pops up a window for the user to interact with the 
+    * results of posting their solution.
+    * 
+    * @param state The state of the solution, which should 
+    * 		 be passed as one of the following:
+    *              1 if the solution was successfully posted
+    *              0 if the solution was not valid upon trying to post
+    *              Any other number to indicate a network error
+    */
+	public void alertMessage(int state) {
+		DialogInterface.OnClickListener dialogClickListener = 
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+							case DialogInterface.BUTTON_POSITIVE:
+								// Success
+								Toast.makeText(PostSolutionActivity.this, 
+										"Redirecting back to solutions...", 
+										Toast.LENGTH_LONG).show();			
+								finish();       // Go back to solutions page 
+												// Maybe attempt to update solutions
+												// That would look really cool
+								break;
+							case DialogInterface.BUTTON_NEUTRAL:
+								// Retry
+								Toast.makeText(PostSolutionActivity.this, 
+										"Trying again...", 
+										Toast.LENGTH_LONG).show();
+								sendSolution();
+								break;
+							case DialogInterface.BUTTON_NEGATIVE:
+								// Cancel or Return
+								Toast.makeText(PostSolutionActivity.this, 
+										"Returning...", 
+										Toast.LENGTH_LONG).show();
+								break;
+						}
+					}
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		if (state == 1){
+			// Success
+			builder.setMessage("Post Successful.")
+			.setPositiveButton("Ok", dialogClickListener).show();
+		} else if (state == 0){
+			// Bad input
+			builder.setMessage("Please submit a valid solution.")
+			.setNegativeButton("Return to editor", dialogClickListener)
+			.show();
+		} else {
+			// Network error
+			builder.setMessage("Network error.")
+			.setNeutralButton("Retry", dialogClickListener)
+			.setNegativeButton("Cancel", dialogClickListener).show();
+		}
+	}
 }

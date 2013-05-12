@@ -13,5 +13,6 @@
     <string name="edit_solution">Enter a solution</string>
     <string name="button_post">Post</string>
     <string name="title_activity_post_result">PostResult</string>
+    <string name="error_displaying_question">Error Displaying Question!</string>
 
 </resources>

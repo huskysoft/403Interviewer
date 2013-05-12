@@ -117,7 +117,6 @@ public class MainActivity extends Activity {
 	 */
 	public void openQuestion(View view){
 		Intent intent = new Intent(this, QuestionActivity.class);
-		TextView tv = (TextView) view;
 		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
 		startActivity(intent);
 	}

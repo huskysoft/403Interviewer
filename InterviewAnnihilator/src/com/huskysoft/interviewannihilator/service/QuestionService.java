@@ -138,12 +138,12 @@ public class QuestionService {
 		return databaseSolutions;
 	}
 
-	public int postQuestion(Question toPost) {
+	public int postQuestion(Question toPost) throws NetworkException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int postSolution(Solution toPost) {
+	public int postSolution(Solution toPost) throws NetworkException{
 		// TODO Auto-generated method stub
 		return 0;
 	}

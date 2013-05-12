@@ -13,12 +13,20 @@ import android.app.ActionBar.LayoutParams;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.content.Intent;
 
 public class SolutionActivity extends Activity {
+	
+	/*
+	 * Used to pass the String question to the child activity.
+	 * Will pass a Question object.
+	 */
+	public final static String EXTRA_MESSAGE = "com.huskysoft.interviewannihilator.QUESTION";
 	private Question question;
 	private LinearLayout solutionll;
 
@@ -33,6 +41,24 @@ public class SolutionActivity extends Activity {
 		
 		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
 		new FetchSolutionsTask(this, question).execute();
+		
+		/*/ Add button to end of list
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+		llp.setMargins(40, 10, 40, 10);
+
+		llp.gravity = 1; // Horizontal Center
+		
+		Button postSolutions = new Button(this);
+		postSolutions.setText(R.string.post_solution);
+		postSolutions.setLayoutParams(llp);
+		postSolutions.setOnClickListener(new OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                           postSolution(v);
+                     }
+              });
+		solutionll.addView(postSolutions);*/
 	}
 	
 	/**
@@ -110,6 +136,7 @@ public class SolutionActivity extends Activity {
 	/** Called when the user clicks the post solution button */
 	public void postSolution(View view) {
 		Intent intent = new Intent(this, PostSolutionActivity.class);
+		intent.putExtra(EXTRA_MESSAGE, question);
 		startActivity(intent);
 	}
 
