@@ -32,7 +32,7 @@ public class SolutionActivity extends Activity {
 		question = (Question) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
 		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
-		new FetchSolutionsTask(this, question).execute();
+		//new FetchSolutionsTask(this, question).execute();
 	}
 	
 	/**
@@ -54,7 +54,6 @@ public class SolutionActivity extends Activity {
 			TextView t = new TextView(this);
 			
 			t.setText("There doesn't seem to be any solutions");
-			t.setTextSize(20);
 			t.setLayoutParams(llp);
 			solutionll.addView(t);
 		}
@@ -66,7 +65,6 @@ public class SolutionActivity extends Activity {
 				TextView t = new TextView(this);
 				
 				t.setText(solutionText);
-				t.setTextSize(20);
 				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
 				t.setLayoutParams(llp);
 				
