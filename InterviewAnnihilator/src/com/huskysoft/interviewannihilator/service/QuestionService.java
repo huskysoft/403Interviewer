@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
@@ -36,6 +38,7 @@ public class QuestionService {
 	private NetworkService networkService;
 	private ObjectMapper mapper;
 	private UserInfo userInfo;
+	private File baseDir;
 	
 	private QuestionService() {
 		this.networkService = NetworkService.getInstance();
@@ -54,23 +57,56 @@ public class QuestionService {
 		return instance;
 	}
 
+	/**
+	 * Load the local UserInfo, or create it if not found.
+	 * 
+	 * @param baseDir	the app's private file directory, from Context
+	 * @param userEmail	the user's Email address
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
 	public void initializeUserInfo(File baseDir, String userEmail)
-			throws IOException {
+			throws IOException, NetworkException {
+		// open file
+		this.baseDir = baseDir;
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
-		String json = Utility.getStringFromFile(file);
 		try {
-			json = Utility.getStringFromFile(file);
+			// parse JSON
+			String json = Utility.readStringFromFile(file);
 			userInfo = mapper.readValue(json, UserInfo.class);
 		} catch (IOException e) {
 			// failed to read userInfo; create a new one
 			userInfo = new UserInfo();
 		}
-		
-		
+		if (userInfo.getUserId() == null || 
+				!userEmail.equals(userInfo.getUserEmail())) {
+			// new or non-matching UserInfo; clear history
+			userInfo.setUserEmail(userEmail);
+			userInfo.setUserId(getUserId(userEmail));
+			userInfo.clear();
+		}		
 	}
 	
-	public void writeUserInfo() {
+	/**
+	 * Write the local UserInfo to storage. Will use the same File directory
+	 * from which the UserInfo was initialized.
+	 * 
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
+	public void writeUserInfo() throws JsonGenerationException, 
+			JsonMappingException, IOException {
+		// open file
+		if (baseDir == null || userInfo == null) {
+			throw new IllegalStateException(
+					"UserInfo has not yet been initialized!");
+		}
+		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
 		
+		// write UserInfo to file as JSON
+		String json = mapper.writeValueAsString(userInfo);
+		Utility.writeStringToFile(file, json);
 	}
 	
 	public Question getQuestion(String questionId) {
@@ -170,6 +206,7 @@ public class QuestionService {
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
+		userInfo.markViewedQuestion(questionId);
 		return databaseSolutions;
 	}
 
@@ -208,6 +245,11 @@ public class QuestionService {
 		return null;		
 	}
 	
+	/**
+	 * Set the NetworkService, for mock testing.
+	 * 
+	 * @param networkService
+	 */
 	protected void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}

@@ -11,6 +11,7 @@ package com.huskysoft.interviewannihilator.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -72,10 +73,27 @@ public class Utility {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public static String getStringFromFile(File file) throws IOException {
+	public static String readStringFromFile(File file) throws IOException {
 	    FileInputStream fin = new FileInputStream(file);
 	    String ret = convertStreamToString(fin);
 	    fin.close();        
 	    return ret;
+	}
+	
+	/**
+	 * Write a String to a text file. Will overwrite existing file contents.
+	 * 
+	 * @param file
+	 * @param string
+	 * @throws IOException
+	 */
+	public static void writeStringToFile(File file, String string) 
+			throws IOException {
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		FileOutputStream fout = new FileOutputStream(file);
+		fout.write(string.getBytes());
+		fout.close();
 	}
 }
