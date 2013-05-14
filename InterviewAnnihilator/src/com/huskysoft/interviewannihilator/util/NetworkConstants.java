@@ -26,6 +26,11 @@ public class NetworkConstants {
 	public static final String GET_SOLUTIONS_URL = 
 	BASE_URI + SOLUTION + "getSolutions.php";
 
+	/** If a request for multiple categories happens, this token
+	    separates out the categories */
+	public static final String CATEGORY_DELIMITER = 
+	"-";
+	
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
 	public static final String PARAM_OFFSET = "offset";	
