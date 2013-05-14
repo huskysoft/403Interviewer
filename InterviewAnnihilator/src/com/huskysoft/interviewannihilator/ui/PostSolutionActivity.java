@@ -109,7 +109,7 @@ public class PostSolutionActivity extends Activity {
 			// not sure how to do that
 			outcome= -1;
 		} catch (Exception e){
-			// probably should do something useful here
+			// TODO: probably should do something useful here
 			finish();
 		}
 		displayMessage(outcome);

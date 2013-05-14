@@ -6,16 +6,21 @@
     <string name="edit_message">Enter Message</string>
     <string name="button_solutions">Solutions</string>
     <string name="title_activity_question">Question</string>
-    <string name="title_activity_solution">Solution</string>
-    <string name="post_solution">Post Solution</string>
     <string name="title_activity_post_solution">PostSolution</string>
     <string name="edit_solution">Enter a solution</string>
     <string name="button_post">Post</string>
-    <string name="title_activity_post_result">PostResult</string>    
-    <string name="retryDialog_title">A network error has occurred</string>
-    <string name="retryDialog_retry">Retry</string>
-    <string name="retryDialog_cancel">Cancel</string>    
-    <string name="loading_text">loading&#8230;</string>
+    <string name="button_post_solution">Submit a Solution</string>
     <string name="error_displaying_question">Error Displaying Question!</string>
+    <string name="retryDialog_title">A network error has occurred</string>
+    <string name="retryDialog_retry">  Retry  </string>
+    <string name="retryDialog_cancel"> Cancel </string>
+    <string name="successDialog_title">Your solution was successfully posted.</string>
+    <string name="badInputDialog_title">Please provide a valid solution.</string>
+    <string name="badInputDialog_return">Return to editor</string>
+    <string name="button_ok"> OK </string>
+    <string name="loading_text">Loading&#8230;</string>
+    <string name="toast_return">Returning&#8230;</string>
+    <string name="toast_retry">Trying again&#8230;</string>
+    <string name="title_activity_post_result">PostResult</string> 
 
 </resources>
