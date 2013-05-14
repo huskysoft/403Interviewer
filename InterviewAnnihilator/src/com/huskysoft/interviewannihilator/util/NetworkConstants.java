@@ -10,7 +10,7 @@ package com.huskysoft.interviewannihilator.util;
 public class NetworkConstants {
 	/** The URI of our server for both solution and question. */
 	public static final String BASE_URI = 
-	"http://students.washington.edu/bkng/cse403/403Interviewer-php/";
+	"http://students.washington.edu/dcs24/403Interviewer-php/";
 
 	/** The 'question' directory */
 	public static final String QUESTION = "question/";
