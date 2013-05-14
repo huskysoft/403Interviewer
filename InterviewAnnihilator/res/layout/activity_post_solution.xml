@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-	    <TextView
-	        android:id="@+id/question_view"
+	    <TextView android:id="@+id/question_view"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -15,8 +14,7 @@
 	        android:text="@string/error_displaying_question"
 	        android:textSize="8pt" />
 	
-	    <EditText
-	        android:id="@+id/edit_solution"
+	    <EditText android:id="@+id/edit_solution"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignLeft="@+id/question_view"
@@ -29,8 +27,7 @@
 	        <requestFocus />
 	    </EditText>
 	
-	    <Button
-	        android:id="@+id/send_solution"
+	    <Button android:id="@+id/send_solution"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/edit_solution"

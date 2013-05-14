@@ -13,16 +13,16 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 
@@ -38,7 +38,7 @@ public class PostSolutionActivity extends Activity {
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
-				SolutionActivity.EXTRA_MESSAGE);
+				QuestionActivity.EXTRA_MESSAGE);
 		
 		//setup question view
 		TextView tv = (TextView) findViewById(R.id.question_view);
@@ -104,69 +104,78 @@ public class PostSolutionActivity extends Activity {
 			qs.postSolution(solution);
 		} catch (NetworkException e){
 			// Retry or cancel
+			// Complains that i need to log the error, 
+			// not sure how to do that
 			outcome= -1;
 		} 
-		alertMessage(outcome);
-		if (outcome == 1){
-
-		}
+		displayMessage(outcome);
 	}
-
+	
 	/**
 	* Pops up a window for the user to interact with the 
     * results of posting their solution.
     * 
-    * @param state The state of the solution, which should 
+    * @param status The state of the solution, which should 
     * 		 be passed as one of the following:
     *              1 if the solution was successfully posted
     *              0 if the solution was not valid upon trying to post
     *              Any other number to indicate a network error
     */
-	public void alertMessage(int state) {
-		DialogInterface.OnClickListener dialogClickListener = 
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						switch (which) {
-							case DialogInterface.BUTTON_POSITIVE:
-								// Success
-								Toast.makeText(PostSolutionActivity.this, 
-										"Redirecting back to solutions...", 
-										Toast.LENGTH_LONG).show();			
-								finish();       // Go back to solutions page 
-												// Maybe attempt to update solutions
-												// That would look really cool
-								break;
-							case DialogInterface.BUTTON_NEUTRAL:
-								// Retry
-								Toast.makeText(PostSolutionActivity.this, 
-										"Trying again...", 
-										Toast.LENGTH_LONG).show();
-								sendSolution();
-								break;
-							case DialogInterface.BUTTON_NEGATIVE:
-								// Cancel or Return
-								Toast.makeText(PostSolutionActivity.this, 
-										"Returning...", 
-										Toast.LENGTH_LONG).show();
-								break;
-						}
-					}
-		};
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		if (state == 1){
-			// Success
-			builder.setMessage("Post Successful.")
-			.setPositiveButton("Ok", dialogClickListener).show();
-		} else if (state == 0){
-			// Bad input
-			builder.setMessage("Please submit a valid solution.")
-			.setNegativeButton("Return to editor", dialogClickListener)
-			.show();
-		} else {
-			// Network error
-			builder.setMessage("Network error.")
-			.setNeutralButton("Retry", dialogClickListener)
-			.setNegativeButton("Cancel", dialogClickListener).show();
+	private void displayMessage(int status){
+		// custom dialog
+		final Dialog dialog = new Dialog(this);
+		if (status == 1 || status == 0){
+			dialog.setContentView(R.layout.alertdialogcustom);
+		}else{
+			dialog.setContentView(R.layout.retrydialogcustom);
 		}
+
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		if (status == 1){
+			text.setText(R.string.successDialog_title);
+			Button dialogButton = (Button) 
+					dialog.findViewById(R.id.dialogButtonOK);
+			// if button is clicked, close the custom dialog
+			dialogButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();   //It would look really cool for the solutions
+								//to update b4 the user returns
+				}
+			});
+		}else if (status == 0){
+			text.setText(R.string.badInputDialog_title);
+			Button dialogButton = (Button) 
+					dialog.findViewById(R.id.dialogButtonOK);
+			// if button is clicked, close the custom dialog
+			dialogButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+		}else{
+			text.setText(R.string.retryDialog_title);
+			Button dialogButton = (Button) 
+					dialog.findViewById(R.id.button_retry);
+			// if button is clicked, close the custom dialog
+			dialogButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					sendSolution();
+				}
+			});
+			dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+			// if button is clicked, close the custom dialog
+			dialogButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+		}
+		dialog.show();
+		
 	}
 }
