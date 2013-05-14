@@ -68,8 +68,17 @@ public class NetworkService {
 					difficulty.name());
 		}
 		if (categories != null && categories.size() != 0) {
-			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY,
-					categories.toString(), false);
+			Object[] categoryObj = categories.toArray();
+			StringBuilder categoryList = new StringBuilder();
+			for (int i = 0; i < categories.size(); i++) {
+				categoryList.append(categoryObj[i].toString());
+				// if this is the last element, we don't put a dash in the URL
+				if ((i + 1) < categories.size()) {
+					categoryList.append(CATEGORY_DELIMITER);
+				}
+			}
+			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY, 
+			categoryList.toString(), false);
 		}
 		return dispatchGetRequest(urlToSend);
 	}
