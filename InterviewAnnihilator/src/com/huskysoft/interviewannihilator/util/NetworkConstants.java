@@ -10,7 +10,7 @@ package com.huskysoft.interviewannihilator.util;
 public class NetworkConstants {
 	/** The URI of our server for both solution and question. */
 	public static final String BASE_URI = 
-	"http://students.washington.edu/dcs24/403Interviewer-php/";
+	"http://students.washington.edu/bkng/cse403/403Interviewer-php/";
 
 	/** The 'question' directory */
 	public static final String QUESTION = "question/";
@@ -26,6 +26,11 @@ public class NetworkConstants {
 	public static final String GET_SOLUTIONS_URL = 
 	BASE_URI + SOLUTION + "getSolutions.php";
 
+	/** If a request for multiple categories happens, this token
+	    separates out the categories */
+	public static final String CATEGORY_DELIMITER = 
+	"-";
+	
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
 	public static final String PARAM_OFFSET = "offset";	
