@@ -36,6 +36,5 @@ public class UserInfoTest extends TestCase {
 		UserInfo clone = mapper.readValue(json, UserInfo.class);
 		assertEquals(userInfo, clone);
 	}
-
 	
 }

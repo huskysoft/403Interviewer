@@ -10,6 +10,7 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -110,12 +111,14 @@ public class QuestionService {
 		Utility.writeStringToFile(file, json);
 	}
 	
-	public Question getQuestion(String questionId) {
-		// TODO
-		return null;
-	}
-	
-	public Solution getSolution(String solutionId) {
+	/**
+	 * Get a specific list of Questions from the remote server. NetworkException
+	 * if one or more QuestionID does not exist.
+	 * 
+	 * @param questionIds
+	 * @return
+	 */
+	public Question getQuestionsById(Collection<String> questionIds) {
 		// TODO
 		return null;
 	}
@@ -225,13 +228,36 @@ public class QuestionService {
 		return 0;
 	}
 
+	/**
+	 * Upvote a given Solution. Returns true if upvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param solutionId
+	 * @return
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
 	public boolean upvoteSolution(int solutionId) throws NetworkException, 
 			IOException {
+		if (userInfo != null) {
+			userInfo.upvoteSolution(solutionId);
+		}
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean downvoteSolution(int solutionId) {
+	/**
+	 * Downvote a given Solution. Returns true if downvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param solutionId
+	 * @return
+	 */
+	public boolean downvoteSolution(int solutionId) throws NetworkException, 
+		IOException {
+		if (userInfo != null) {
+			userInfo.downvoteSolution(solutionId);
+		}
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -241,8 +267,12 @@ public class QuestionService {
 		if (userInfo == null) {
 			throw new IllegalStateException("UserInfo has not been initialized!");
 		}
-		
+		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void clearAllFavorites() {
+		userInfo.getFavoriteQuestions().clear();
 	}
 	
 	private String getUserId(String userEmail) throws NetworkException, 
