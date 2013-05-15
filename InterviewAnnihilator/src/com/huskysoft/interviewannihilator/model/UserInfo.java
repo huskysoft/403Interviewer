@@ -10,11 +10,8 @@ import android.annotation.SuppressLint;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 @SuppressLint("UseSparseArrays")
 public class UserInfo {
@@ -24,14 +21,16 @@ public class UserInfo {
 	
 	private String userEmail;
 	private String userId;
-	private SortedMap<Integer, Date> viewedQuestions;
-	private SortedMap<Integer, Date> favoriteQuestions;
+	private Map<Integer, Date> viewedQuestions;
+	private Map<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
 	private Map<Integer, Boolean> votedSolutions;
 	
 	public UserInfo() {
-		viewedQuestions = new TreeMap<Integer, Date>();
-		favoriteQuestions = new TreeMap<Integer, Date>();
+		// how to sort a map on values:
+		// http://stackoverflow.com/questions/2864840/treemap-sort-by-value
+		viewedQuestions = new HashMap<Integer, Date>();
+		favoriteQuestions = new HashMap<Integer, Date>();
 		votedQuestions = new HashMap<Integer, Boolean>();
 		votedSolutions = new HashMap<Integer, Boolean>();
 	}
@@ -52,7 +51,7 @@ public class UserInfo {
 		this.userId = userId;
 	}
 	
-	public SortedMap<Integer, Date> getViewedQuestions() {
+	public Map<Integer, Date> getViewedQuestions() {
 		return viewedQuestions;
 	}
 	
@@ -60,7 +59,7 @@ public class UserInfo {
 		this.viewedQuestions = viewedQuestions;
 	}
 	
-	public SortedMap<Integer, Date> getFavoriteQuestions() {
+	public Map<Integer, Date> getFavoriteQuestions() {
 		return favoriteQuestions;
 	}
 	
