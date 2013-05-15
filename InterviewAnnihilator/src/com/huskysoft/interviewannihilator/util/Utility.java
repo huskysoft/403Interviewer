@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import com.huskysoft.interviewannihilator.model.Likeable;
 
@@ -24,6 +25,11 @@ public class Utility {
 	 * The name of the file in which user info is stored
 	 */
 	public static final String USER_INFO_FILENAME = "userInfo.txt";
+	
+	/**
+	 * Default encoding for File I/O
+	 */
+	public static final String ASCII_ENCODING = "ASCII";
 	
 	/** The minimum number of likes needed to have to have a valid positive 
 	 * rating */
@@ -55,7 +61,8 @@ public class Utility {
 	
 	private static String convertStreamToString(InputStream is) 
 			throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		InputStreamReader isReader = new InputStreamReader(is, ASCII_ENCODING);
+		BufferedReader reader = new BufferedReader(isReader);
 		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -82,18 +89,23 @@ public class Utility {
 
 	/**
 	 * Write a String to a text file. Will overwrite existing file contents.
+	 * Returns true if a new file was created, false if one was already present.
 	 * 
 	 * @param file
 	 * @param string
 	 * @throws IOException
 	 */
-	public static void writeStringToFile(File file, String string) 
+	public static boolean writeStringToFile(File file, String string) 
 			throws IOException {
-		if (!file.exists()) {
-			file.createNewFile();
-		}
+		boolean newFile = file.createNewFile();
 		FileOutputStream fout = new FileOutputStream(file);
-		fout.write(string.getBytes());
-		fout.close();
+        OutputStreamWriter out 
+        		= new OutputStreamWriter(fout, ASCII_ENCODING);
+		try {
+			out.write(string);
+		} finally {
+			out.close();
+		}
+		return newFile;
 	}
 }
