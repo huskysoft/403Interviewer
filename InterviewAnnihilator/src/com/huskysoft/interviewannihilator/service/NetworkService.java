@@ -23,6 +23,7 @@ import android.accounts.NetworkErrorException;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.util.Utility;
 
 import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
 
@@ -162,7 +163,7 @@ public class NetworkService {
 						+ " failed with response code " + statusCode);
 			}
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
+					response.getEntity().getContent(), Utility.ASCII_ENCODING));
 
 			StringBuilder serverString = new StringBuilder();
 			String line = rd.readLine();
@@ -170,6 +171,7 @@ public class NetworkService {
 				serverString.append(line);
 				line = rd.readLine();
 			}
+			rd.close();
 			return serverString.toString();
 		} catch (Exception e) {
 			throw new NetworkException("Request to " + url + " failed", e);
@@ -177,7 +179,7 @@ public class NetworkService {
 	}
 
 	@Override
-	public void finalize() {
+	protected void finalize() {
 		httpClient.getConnectionManager().shutdown();
 	}
 
