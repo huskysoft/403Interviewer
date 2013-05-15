@@ -1,3 +1,9 @@
+/**
+ * Local object to keep track of user history, favorites, and upvotes/downvotes
+ * 
+ * @author Bennett Ng, 5/10/13
+ *
+ */
 package com.huskysoft.interviewannihilator.model;
 
 import android.annotation.SuppressLint;

@@ -1,5 +1,4 @@
 /**
- * 
  * Governs the fields and behavior of a solution in our application
  * to a question. The solution "references" the question that it is
  * answering by storing the id of the question

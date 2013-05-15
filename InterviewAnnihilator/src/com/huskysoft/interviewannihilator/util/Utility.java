@@ -55,13 +55,13 @@ public class Utility {
 	
 	private static String convertStreamToString(InputStream is) 
 			throws IOException {
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-	    StringBuilder sb = new StringBuilder();
-	    String line = null;
-	    while ((line = reader.readLine()) != null) {
-	      sb.append(line).append("\n");
-	    }
-	    return sb.toString();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line).append("\n");
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -74,12 +74,12 @@ public class Utility {
 	 * @throws Exception
 	 */
 	public static String readStringFromFile(File file) throws IOException {
-	    FileInputStream fin = new FileInputStream(file);
-	    String ret = convertStreamToString(fin);
-	    fin.close();        
-	    return ret;
+		FileInputStream fin = new FileInputStream(file);
+		String ret = convertStreamToString(fin);
+		fin.close();        
+		return ret;
 	}
-	
+
 	/**
 	 * Write a String to a text file. Will overwrite existing file contents.
 	 * 

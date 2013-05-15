@@ -23,6 +23,8 @@ import org.codehaus.jackson.type.JavaType;
 
 import org.json.JSONException;
 
+import android.util.Log;
+
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
@@ -36,6 +38,7 @@ import com.huskysoft.interviewannihilator.util.Utility;
 public class QuestionService {
 
 	private static final String RESULTS_KEY = "results";
+	private static final String TAG = "QUESTION_SERVICE";
 	private static QuestionService instance;
 	private NetworkService networkService;
 	private ObjectMapper mapper;
@@ -78,6 +81,7 @@ public class QuestionService {
 			userInfo = mapper.readValue(json, UserInfo.class);
 		} catch (IOException e) {
 			// failed to read userInfo; create a new one
+			Log.w(TAG, e.getMessage());
 			userInfo = new UserInfo();
 		}
 		if (userInfo.getUserId() == null || 
@@ -265,7 +269,8 @@ public class QuestionService {
 	public PaginatedQuestions getFavorites(int limit, int offset) 
 			throws NetworkException, IOException {
 		if (userInfo == null) {
-			throw new IllegalStateException("UserInfo has not been initialized!");
+			throw new IllegalStateException(
+					"UserInfo has not been initialized!");
 		}
 		// TODO Auto-generated method stub
 		return null;

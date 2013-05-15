@@ -1,3 +1,9 @@
+/**
+ * This class contains assorted helper methods for other test classes
+ * 
+ * @author Bennett Ng, 5/9/2013
+ */
+
 package com.huskysoft.interviewannihilator.util;
 
 import java.util.Date;
@@ -18,7 +24,7 @@ public class TestHelpers {
 	
 	public static Question createDummyQuestion(int i) {
 		Question q = new Question();
-		q.setAuthorId(i+1);
+		q.setAuthorId(i + 1);
 		q.setCategory(Category.BRAINTEASER);
 		q.setDateCreated(new Date());
 		q.setDifficulty(Difficulty.MEDIUM);
@@ -30,7 +36,7 @@ public class TestHelpers {
 	
 	public static Solution createDummySolution(int i) {
 		Solution s = new Solution();
-		s.setAuthorId(i+1);
+		s.setAuthorId(i + 1);
 		s.setDateCreated(new Date());
 		s.setId(i);
 		s.setQuestionId(i);
