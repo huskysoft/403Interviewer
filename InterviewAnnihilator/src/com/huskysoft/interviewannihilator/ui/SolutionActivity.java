@@ -1,3 +1,9 @@
+/**
+ * The screen for when users are looking at solutions
+ * 
+ * @author Cody Andrews, 05/14/2013
+ */
+
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.List;
@@ -29,10 +35,11 @@ public class SolutionActivity extends Activity {
 		setContentView(R.layout.activity_solution);
 		
 		Intent intent = getIntent();
-		question = (Question) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+		question = (Question) intent.
+				getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
 		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
-		//new FetchSolutionsTask(this, question).execute();
+		// new FetchSolutionsTask(this, question).execute();
 	}
 	
 	/**
@@ -65,7 +72,8 @@ public class SolutionActivity extends Activity {
 				TextView t = new TextView(this);
 				
 				t.setText(solutionText);
-				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
+				t.setBackgroundDrawable(getResources().
+						getDrawable( R.drawable.listitem));
 				t.setLayoutParams(llp);
 				
 				t.setId(solution.getId());
