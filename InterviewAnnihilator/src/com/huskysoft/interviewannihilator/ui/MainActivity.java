@@ -1,7 +1,7 @@
 /**
  * Main UI for the application. Displays a list of questions.
  * 
- * @author Cody Andrews, Phillip Leland
+ * @author Cody Andrews, Phillip Leland, 05/01/2013
  * 
  */
 
@@ -106,10 +106,10 @@ public class MainActivity extends Activity {
 					t.setTag(question);
 					t.setText(questionText);	
 					
-					
-					// to make it work on older versions use this instead of setBackground() 
-					t.setBackgroundDrawable(
-							getResources().getDrawable( R.drawable.listitem));
+					// to make it work on older versions use this instead of
+					// setBackground
+					t.setBackgroundDrawable(getResources().
+							getDrawable(R.drawable.listitem));
 					
 					t.setOnClickListener(new View.OnClickListener() {
 						@Override

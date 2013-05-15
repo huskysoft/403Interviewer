@@ -1,8 +1,9 @@
-/**
- * Post a solution.
+/*
+ * The screen for when users attempt to post a solution
  * 
- * @author Justin Robb
+ * @author Cody Andrews, 05/14/2013
  */
+
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
@@ -176,6 +177,5 @@ public class PostSolutionActivity extends Activity {
 			});
 		}
 		dialog.show();
-		
 	}
 }

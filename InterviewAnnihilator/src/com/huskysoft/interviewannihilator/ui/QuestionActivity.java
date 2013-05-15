@@ -4,7 +4,7 @@
  * It display the question clicked, and a hidden list of solutions that pop
  * up when a "Solutions" button is clicked.
  * 
- * @author Cody Andrews, Phillip Leland
+ * @author Cody Andrews, Phillip Leland, 05/01/2013
  * 
  */
 
@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 public class QuestionActivity extends Activity {
@@ -76,8 +77,8 @@ public class QuestionActivity extends Activity {
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = new TextView(this);
-		textview.setBackgroundDrawable(
-				getResources().getDrawable( R.drawable.listitem));
+		textview.setBackgroundDrawable(getResources().
+				getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
@@ -92,6 +93,7 @@ public class QuestionActivity extends Activity {
 		//Start loading solutions. This makes a network call.
 		loadSolutions();
 	}
+
 	
 	/**
 	 * Appends a list of solutions to a hidden list.

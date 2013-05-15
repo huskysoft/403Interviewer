@@ -26,10 +26,19 @@ public class NetworkConstants {
 	public static final String GET_SOLUTIONS_URL = 
 	BASE_URI + SOLUTION + "getSolutions.php";
 
+	/** If a request for multiple categories happens, this token
+	    separates out the categories */
+	public static final String CATEGORY_DELIMITER = 
+	"-";
+	
+	/** Ampersand for get URL requests */
+	public static final String AMPERSAND = "&";
+	
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
 	public static final String PARAM_OFFSET = "offset";	
 	public static final String PARAM_DIFFICULTY = "difficulty";
 	public static final String PARAM_CATEGORY = "category";
 	public static final String PARAM_QUESTIONID = "questionId";
+	public static final String PARAM_RANDOM = "random";
 }
