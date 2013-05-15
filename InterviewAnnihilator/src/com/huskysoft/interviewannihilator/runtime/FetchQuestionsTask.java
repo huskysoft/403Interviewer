@@ -2,7 +2,7 @@
  * Asynchronous thread designed to load questions from the database.
  * On completion, populates MainActivity with TextViews containing questions.
  * 
- * @author Cody Andrews
+ * @author Cody Andrews, 05/01/2013
  */
 
 package com.huskysoft.interviewannihilator.runtime;
@@ -52,7 +52,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		
 		try {
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(null, null, 20, 0);
+					questionService.getQuestions(null, null, 20, 0, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());
