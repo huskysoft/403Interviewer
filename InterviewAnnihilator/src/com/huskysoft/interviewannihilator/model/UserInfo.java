@@ -7,10 +7,14 @@
 package com.huskysoft.interviewannihilator.model;
 
 import android.annotation.SuppressLint;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @SuppressLint("UseSparseArrays")
 public class UserInfo {
@@ -20,87 +24,178 @@ public class UserInfo {
 	
 	private String userEmail;
 	private String userId;
-	private Set<Integer> viewedQuestions;
-	private Set<Integer> favoriteQuestions;
+	private SortedMap<Integer, Date> viewedQuestions;
+	private SortedMap<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
 	private Map<Integer, Boolean> votedSolutions;
 	
 	public UserInfo() {
-		viewedQuestions = new HashSet<Integer>();
-		favoriteQuestions = new HashSet<Integer>();
+		viewedQuestions = new TreeMap<Integer, Date>();
+		favoriteQuestions = new TreeMap<Integer, Date>();
 		votedQuestions = new HashMap<Integer, Boolean>();
 		votedSolutions = new HashMap<Integer, Boolean>();
 	}
+	
 	public String getUserEmail() {
 		return userEmail;
 	}
+	
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
+	
 	public String getUserId() {
 		return userId;
 	}
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public Set<Integer> getViewedQuestions() {
+	
+	public SortedMap<Integer, Date> getViewedQuestions() {
 		return viewedQuestions;
 	}
-	public void setViewedQuestions(Set<Integer> viewedQuestions) {
+	
+	public void setViewedQuestions(SortedMap<Integer, Date> viewedQuestions) {
 		this.viewedQuestions = viewedQuestions;
 	}
-	public Set<Integer> getFavoriteQuestions() {
+	
+	public SortedMap<Integer, Date> getFavoriteQuestions() {
 		return favoriteQuestions;
 	}
-	public void setFavoriteQuestions(Set<Integer> favoriteQuestions) {
+	
+	public void setFavoriteQuestions(
+			SortedMap<Integer, Date> favoriteQuestions) {
 		this.favoriteQuestions = favoriteQuestions;
 	}
+	
 	public Map<Integer, Boolean> getVotedQuestions() {
 		return votedQuestions;
 	}
+	
 	public void setVotedQuestions(Map<Integer, Boolean> votedQuestions) {
 		this.votedQuestions = votedQuestions;
 	}
+	
 	public Map<Integer, Boolean> getVotedSolutions() {
 		return votedSolutions;
 	}
+	
 	public void setVotedSolutions(Map<Integer, Boolean> votedSolutions) {
 		this.votedSolutions = votedSolutions;
 	}
 	
+	/**
+	 * Mark a Question as viewed
+	 * 
+	 * @param questionId
+	 */
 	public void markViewedQuestion(int questionId) {
-		viewedQuestions.add(questionId);
+		viewedQuestions.put(questionId, new Date());
 	}
-	public boolean haveViewedQuestion(int questionId) {
-		return viewedQuestions.contains(questionId);
+	
+	/**
+	 * Get the Date at which this Question was marked viewed. Returns null if
+	 * Question has never been marked viewed.
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	public Date whenViewedQuestion(int questionId) {
+		return viewedQuestions.get(questionId);
 	}
+	
+	/**
+	 * Mark a Question as a favorite
+	 * 
+	 * @param questionId
+	 */
 	public void markFavoriteQuestion(int questionId) {
-		favoriteQuestions.add(questionId);
+		favoriteQuestions.put(questionId, new Date());
 	}
+	
+	/**
+	 * Clear all favorite Questions
+	 * 
+	 * @param questionId
+	 * @return
+	 */
 	public boolean clearFavoriteQuestion(int questionId) {
-		return favoriteQuestions.remove(questionId);
+		return (favoriteQuestions.remove(questionId) != null);
 	}
-	public boolean isFavoriteQuestion(int questionId) {
-		return favoriteQuestions.contains(questionId);
+	
+	/**
+	 * Get the Date at which this Question was marked favorite. Returns null if
+	 * Question has never been marked favorite.
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	public Date whenFavoriteQuestion(int questionId) {
+		return favoriteQuestions.get(questionId);
 	}
+	
+	/**
+	 * Upvote a Question. Will overwrite a downvote.
+	 * 
+	 * @param questionId
+	 */
 	public void upvoteQuestion(int questionId) {
 		votedQuestions.put(questionId, UPVOTE);
 	}
+	
+	/**
+	 * Downvote a Question. Will overwrite an upvote.
+	 * 
+	 * @param questionId
+	 */
 	public void downvoteQuestion(int questionId) {
 		votedQuestions.put(questionId, DOWNVOTE);
 	}
+	
+	/**
+	 * Clear any votes for a Question.
+	 * 
+	 * @param questionId
+	 */
+	public void novoteQuestion(int questionId) {
+		votedQuestions.remove(questionId);
+	}
+	
+	/**
+	 * Upvote a Solution. Will overwrite a downvote.
+	 * 
+	 * @param solutionId
+	 */
 	public void upvoteSolution(int solutionId) {
 		votedSolutions.put(solutionId, UPVOTE);
 	}
+	
+	/**
+	 * Downvote a Solution. Will overwrite an upvote.
+	 * 
+	 * @param solutionId
+	 */
 	public void downvoteSolution(int solutionId) {
 		votedSolutions.put(solutionId, DOWNVOTE);
 	}
+	
+	/**
+	 * Clear any votes for a Question.
+	 * 
+	 * @param solutionId
+	 */
+	public void novoteSolution(int solutionId) {
+		votedQuestions.remove(solutionId);
+	}
+	
 	public void clear() {
 		viewedQuestions.clear();
 		favoriteQuestions.clear();
 		votedQuestions.clear();
 		votedSolutions.clear();
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -120,6 +215,7 @@ public class UserInfo {
 				+ ((votedSolutions == null) ? 0 : votedSolutions.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

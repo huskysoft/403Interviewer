@@ -8,9 +8,9 @@ package com.huskysoft.interviewannihilator.util;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
 import com.huskysoft.interviewannihilator.model.Category;
@@ -48,8 +48,8 @@ public class TestHelpers {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail("johndoe@email.com");
 		userInfo.setUserId("1234");
-		userInfo.setFavoriteQuestions(createIntegerSet(10, 0));
-		userInfo.setViewedQuestions(createIntegerSet(20, 1024));
+		userInfo.setFavoriteQuestions(createIntegerDateMap(10, 0));
+		userInfo.setViewedQuestions(createIntegerDateMap(20, 1024));
 		userInfo.setVotedQuestions(createIntegerBooleanMap(10, 0));
 		userInfo.setVotedSolutions(createIntegerBooleanMap(10, 50));
 		return userInfo;
@@ -63,12 +63,13 @@ public class TestHelpers {
 		}
 		return m;
 	}
-
-	private static Set<Integer> createIntegerSet(int size, int initial) {
-		Set<Integer> s = new HashSet<Integer>();
+	
+	private static SortedMap<Integer, Date> createIntegerDateMap(
+			int size, int initial) {
+		SortedMap<Integer, Date> m = new TreeMap<Integer, Date>();
 		for (int i = 0; i < size; i++) {
-			s.add(initial + i);
+			m.put(i + initial, new Date());
 		}
-		return s;
+		return m;
 	}
 }
