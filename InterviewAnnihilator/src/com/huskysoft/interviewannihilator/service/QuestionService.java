@@ -220,22 +220,14 @@ public class QuestionService {
 		return databaseSolutions;
 	}
 
-<<<<<<< HEAD
-	public int postQuestion(Question toPost) throws NetworkException{
-=======
 	public int postQuestion(Question toPost) throws NetworkException, 
 			JSONException, IOException {
->>>>>>> 35bc041a07f0e25aaa9e14bb8edd853f2af4ec8d
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-<<<<<<< HEAD
-	public int postSolution(Solution toPost) throws NetworkException{
-=======
 	public int postSolution(Solution toPost) throws NetworkException, 
 			JSONException, IOException {
->>>>>>> 35bc041a07f0e25aaa9e14bb8edd853f2af4ec8d
 		// TODO Auto-generated method stub
 		return 0;
 	}

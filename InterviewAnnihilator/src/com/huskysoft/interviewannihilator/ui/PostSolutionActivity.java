@@ -108,7 +108,10 @@ public class PostSolutionActivity extends Activity {
 			// Complains that i need to log the error, 
 			// not sure how to do that
 			outcome= -1;
-		} 
+		} catch (Exception e){
+			// probably should do something useful here
+			finish();
+		}
 		displayMessage(outcome);
 	}
 	
