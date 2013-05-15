@@ -1,7 +1,7 @@
 /**
  * The screen for when users attempt to post a question or a solution
  * 
- * @author dcs24, 05/14/2013
+ * @author Cody Andrews, 05/14/2013
  */
 
 package com.huskysoft.interviewannihilator.ui;

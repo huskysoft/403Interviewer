@@ -2,7 +2,7 @@
  * Asynchronous thread designed to load questions from the database.
  * On completion, populates MainActivity with TextViews containing questions.
  * 
- * @author Cody Andrews
+ * @author Cody Andrews, 05/01/2013
  */
 
 package com.huskysoft.interviewannihilator.runtime;

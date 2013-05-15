@@ -1,7 +1,7 @@
 /**
  * The screen for when users are looking at solutions
  * 
- * @author dcs24, 05/14/2013
+ * @author Cody Andrews, 05/14/2013
  */
 
 package com.huskysoft.interviewannihilator.ui;
@@ -39,7 +39,7 @@ public class SolutionActivity extends Activity {
 				getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
 		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
-		// temp: new FetchSolutionsTask this, question . execute()
+		// new FetchSolutionsTask(this, question).execute();
 	}
 	
 	/**

@@ -4,7 +4,7 @@
  * It display the question clicked, and a hidden list of solutions that pop
  * up when a "Solutions" button is clicked.
  * 
- * @author Cody Andrews, Phillip Leland
+ * @author Cody Andrews, Phillip Leland, 05/01/2013
  * 
  */
 

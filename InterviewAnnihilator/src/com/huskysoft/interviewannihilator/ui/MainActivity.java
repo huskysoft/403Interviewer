@@ -1,7 +1,7 @@
 /**
  * Main UI for the application. Displays a list of questions.
  * 
- * @author Cody Andrews, Phillip Leland
+ * @author Cody Andrews, Phillip Leland, 05/01/2013
  * 
  */
 

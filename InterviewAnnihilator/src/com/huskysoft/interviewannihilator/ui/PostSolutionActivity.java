@@ -1,7 +1,7 @@
 /**
  * The screen for when users attempt to post a solution
  * 
- * @author dcs24, 05/14/2013
+ * @author Cody Andrews, 05/14/2013
  */
 
 package com.huskysoft.interviewannihilator.ui;
@@ -27,7 +27,7 @@ public class PostSolutionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
 		// Show the Up button in the action bar.
-		// setupActionBar
+		// setupActionBar();
 	}
 
 	/**
