@@ -55,7 +55,7 @@ public class Solution implements Likeable {
 	}
 	
 	public Date getDateCreated() {
-		return dateCreated;
+		return (Date) dateCreated.clone();
 	}
 	
 	public int getLikes() {
@@ -83,7 +83,7 @@ public class Solution implements Likeable {
 	}
 
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.dateCreated = (Date) dateCreated.clone();
 	}
 
 	public void setLikes(int likes) {
