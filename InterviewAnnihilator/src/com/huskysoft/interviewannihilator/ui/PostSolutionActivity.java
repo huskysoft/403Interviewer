@@ -1,3 +1,9 @@
+/**
+ * The screen for when users attempt to post a solution
+ * 
+ * @author dcs24, 05/14/2013
+ */
+
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
@@ -21,7 +27,7 @@ public class PostSolutionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
 		// Show the Up button in the action bar.
-		//setupActionBar();
+		// setupActionBar
 	}
 
 	/**
@@ -59,12 +65,11 @@ public class PostSolutionActivity extends Activity {
 	}
 	
 	/** Called when the user clicks the post button */
-   public void sendSolution(View view) {
-    Intent intent = new Intent(this, PostResultActivity.class);
-    EditText editText = (EditText) findViewById(R.id.edit_solution);
-    String message = editText.getText().toString();
-    intent.putExtra(EXTRA_MESSAGE, message);
-    startActivity(intent);
-}
-
+	public void sendSolution(View view) {
+		Intent intent = new Intent(this, PostResultActivity.class);
+		EditText editText = (EditText) findViewById(R.id.edit_solution);
+		String message = editText.getText().toString();
+		intent.putExtra(EXTRA_MESSAGE, message);
+		startActivity(intent);
+	}
 }

@@ -107,8 +107,10 @@ public class MainActivity extends Activity {
 					t.setText(questionText);	
 					
 					
-					// to make it work on older versions use this instead of setBackground() 
-					t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
+					// to make it work on older versions use this instead of
+					// setBackground
+					t.setBackgroundDrawable(getResources().
+							getDrawable(R.drawable.listitem));
 					
 					t.setOnClickListener(new View.OnClickListener() {
 						@Override

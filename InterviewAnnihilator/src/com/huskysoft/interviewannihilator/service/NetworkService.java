@@ -49,23 +49,22 @@ public class NetworkService {
 	}
 
 	/**
-	 * Request all the questions on the server.
+	 * Request questions from the server.
 	 * 
 	 * @return a string with the form [q_1, q_2, ..., q_n] (each q_i is a JSON
 	 *         String). Null if an exception occurs or the request fails.
 	 * @throws NetworkErrorException
 	 */
 	public String getQuestions(Difficulty difficulty,
-			Collection<Category> categories, int limit, int offset)
+			Collection<Category> categories, int limit, int offset,
+			boolean random)
 			throws NetworkException {
-		String urlToSend = GET_QUESTIONS_URL + "?";
-		urlToSend = appendParameter(urlToSend, PARAM_LIMIT,
-				String.valueOf(limit));
-		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
-				String.valueOf(offset));
+		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
+		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
-			urlToSend = appendParameter(urlToSend, PARAM_DIFFICULTY,
-					difficulty.name());
+			urlToSend.append(appendParameter
+					(PARAM_DIFFICULTY, difficulty.name()));
 		}
 		if (categories != null && categories.size() != 0) {
 			Object[] categoryObj = categories.toArray();
@@ -77,10 +76,17 @@ public class NetworkService {
 					categoryList.append(CATEGORY_DELIMITER);
 				}
 			}
-			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY, 
-			categoryList.toString(), false);
+			urlToSend.append(appendParameter(PARAM_CATEGORY,
+					categoryList.toString()));
 		}
-		return dispatchGetRequest(urlToSend);
+		if (random) {
+			urlToSend.append(appendParameter(PARAM_RANDOM, ""));
+		}
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		
+		return dispatchGetRequest(urlToSend.toString());
 	}
 
 	/**
@@ -98,37 +104,21 @@ public class NetworkService {
 	 */
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
-		String urlToSend = GET_SOLUTIONS_URL + "?";
-		urlToSend = appendParameter(urlToSend, PARAM_QUESTIONID,
-				String.valueOf(questionId));
-		urlToSend = appendParameter(urlToSend, PARAM_LIMIT,
-				String.valueOf(limit));
-		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
-				String.valueOf(offset), false);
-		return dispatchGetRequest(urlToSend);
+		StringBuilder urlToSend = new StringBuilder(GET_SOLUTIONS_URL + "?");
+		urlToSend.append(appendParameter(PARAM_QUESTIONID,
+				String.valueOf(questionId)));
+		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		
+		return dispatchGetRequest(urlToSend.toString());
 	}
 
 	/**
 	 * Append a given parameter to a url string
 	 * 
-	 * @param url
-	 *            the url to which the parameters will be appended to
-	 * @param paramName
-	 *            the name of the parameter appended to the url
-	 * @param paramVal
-	 *            the value of the parameter appended to the url
-	 * @return a new String with the parameter appended
-	 */
-	private String appendParameter(String url, String paramName,
-			String paramVal) {
-		return appendParameter(url, paramName, paramVal, true);
-	}
-
-	/**
-	 * Append a given parameter to a url string
-	 * 
-	 * @param url
-	 *            the url to which the parameters will be appended to
 	 * @param paramName
 	 *            the name of the parameter appended to the url
 	 * @param paramVal
@@ -136,20 +126,14 @@ public class NetworkService {
 	 * @param addAmpersand
 	 *            should be set to false if this is the last param that is to be
 	 *            appended
-	 * @return a new String with the parameter appended. Returns null if any of
-	 *         the Strings passed in were null
+	 * @return a new String with the parameter appended. Returns the empty
+	 *            String if either of the Strings passed in were null
 	 */
-	private String appendParameter(String url, String paramName,
-			String paramVal, boolean addAmpersand) {
-		if (url == null || paramName == null || paramVal == null) {
-			return null;
+	private String appendParameter(String paramName, String paramVal) {
+		if (paramName == null || paramVal == null) {
+			return "";
 		}
-		String completeUrl = url;
-		completeUrl += (paramName + "=" + paramVal);
-		if (addAmpersand) {
-			completeUrl += "&";
-		}
-		return completeUrl;
+		return (paramName + "=" + paramVal + AMPERSAND);
 	}
 
 	/**

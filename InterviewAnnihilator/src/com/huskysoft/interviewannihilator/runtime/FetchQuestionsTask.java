@@ -52,7 +52,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		
 		try {
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(null, null, 20, 0);
+					questionService.getQuestions(null, null, 20, 0, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());

@@ -26,6 +26,6 @@ public class NetworkServiceTest extends TestCase {
 	}
 	
 	public void testGetAllQuestions() throws NetworkException {
-		assertNotNull(networkService.getQuestions(null, null, 10, 0));
+		assertNotNull(networkService.getQuestions(null, null, 10, 0, false));
 	}
 }

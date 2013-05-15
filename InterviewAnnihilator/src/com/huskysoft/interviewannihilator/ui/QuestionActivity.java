@@ -75,7 +75,8 @@ public class QuestionActivity extends Activity {
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = new TextView(this);
-		textview.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
+		textview.setBackgroundDrawable(getResources().
+				getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
@@ -120,7 +121,8 @@ public class QuestionActivity extends Activity {
 				TextView t = new TextView(this);
 				
 				t.setText(solutionText);
-				t.setBackgroundDrawable(getResources().getDrawable( R.drawable.listitem));
+				t.setBackgroundDrawable(getResources().
+						getDrawable( R.drawable.listitem));
 				t.setLayoutParams(llp);
 				t.setId(solution.getId());
 				//Hide solutions

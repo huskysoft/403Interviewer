@@ -58,7 +58,7 @@ public class QuestionService {
 
 	/**
 	 * The method the front-end of the app calls to retrieve questions from the
-	 * database
+	 * database. Retrieves most recent questions first.
 	 * 
 	 * @param categories
 	 *            a list of categories that they want to search for. Can be
@@ -70,19 +70,22 @@ public class QuestionService {
 	 *            the max number of questions they want returned to them
 	 * @param offset
 	 *            the starting offset of the questions in the database to get
+	 * @param random
+	 *            a boolean representing whether the questions to be fetched
+	 *            should be random or not
 	 * @return A PaginatedQuestions object holding up to limit questions
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
-			Difficulty difficulty, int limit, int offset)
+			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IOException("Invalid limit or offset parameter");
 		}
 		String json = networkService.getQuestions(difficulty, categories,
-				limit, offset);
+				limit, offset, random);
 		PaginatedQuestions databaseQuestions;
 		try {
 			// deserialize "flat parameters"
@@ -143,7 +146,7 @@ public class QuestionService {
 		}
 		return databaseSolutions;
 	}
-
+	
 	public int postQuestion(Question toPost) {
 		// TODO Auto-generated method stub
 		return 0;
