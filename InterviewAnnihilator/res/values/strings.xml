@@ -13,5 +13,12 @@
     <string name="edit_solution">Enter a solution</string>
     <string name="button_post">Post</string>
     <string name="title_activity_post_result">PostResult</string>
+    
+    <string-array name="difficulty">
+        <item>All</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
 
 </resources>

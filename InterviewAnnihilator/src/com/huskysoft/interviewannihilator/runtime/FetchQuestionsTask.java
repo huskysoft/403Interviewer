@@ -8,6 +8,7 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.os.AsyncTask;
 
+import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
@@ -27,13 +28,15 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	private QuestionService questionService;
 	private MainActivity context;
 	private List<Question> questionList;
+	private Difficulty diff;
 	
 	/**
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(Activity context){
+	public FetchQuestionsTask(Activity context, Difficulty diff){
 		this.context = (MainActivity) context;
+		this.diff = diff;
 	}
 	
 	
@@ -47,7 +50,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		
 		try {
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(null, null, 20, 0);
+					questionService.getQuestions(null, diff, 20, 0);
 			questionList = currentQuestions.getQuestions();
 		} catch (NetworkException e) {
 			// TODO Auto-generated catch block

@@ -16,6 +16,12 @@ public class Utility {
 	// a valid positive rating
 	private static final int MIN_LIKES = 5;
 	
+	/*
+	 * Used to pass a selected difficulty back to the 
+	 * MainActivity class through the slide-menu.
+	 */
+	public static String DIFFICULTY_MESSAGE = "";
+	
 	/**
 	 * Calculates the rank based on the number of likes and
 	 * dislikes of the question
@@ -39,4 +45,6 @@ public class Utility {
 		}
 		return ((double) likes / dislikes);
 	}
+	
+	
 }

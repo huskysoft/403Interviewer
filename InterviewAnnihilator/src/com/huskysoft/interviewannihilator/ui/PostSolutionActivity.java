@@ -21,7 +21,6 @@ public class PostSolutionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
 		// Show the Up button in the action bar.
-		//setupActionBar();
 	}
 
 	/**
