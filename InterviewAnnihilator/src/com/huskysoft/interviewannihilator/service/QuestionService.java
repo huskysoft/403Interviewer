@@ -27,6 +27,7 @@ import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.model.UserInfo;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.Utility;
@@ -48,7 +49,7 @@ public class QuestionService {
 	}
 
 	/**
-	 * Get the singleton QuestionService
+	 * Get the singleton QuestionService.
 	 */
 	public static QuestionService getInstance() {
 		if (instance == null) {
@@ -197,7 +198,7 @@ public class QuestionService {
 					.readValue(json, PaginatedSolutions.class);
 			JsonNode node = mapper.readTree(json);
 
-			// deserialize nested Questions
+			// deserialize nested Solutions
 			String solutionsJson = node.get(RESULTS_KEY).asText();
 			JavaType jtype = TypeFactory.defaultInstance()
 					.constructParametricType(List.class, Solution.class);
@@ -206,7 +207,9 @@ public class QuestionService {
 		} catch (Exception e) {
 			throw new JSONException("Failed to deserialize JSON :" + json);
 		}
-		userInfo.markViewedQuestion(questionId);
+		if (userInfo != null) {
+			userInfo.markViewedQuestion(questionId);
+		}
 		return databaseSolutions;
 	}
 
@@ -235,7 +238,10 @@ public class QuestionService {
 
 	public PaginatedQuestions getFavorites(int limit, int offset) 
 			throws NetworkException, IOException {
-		// TODO Auto-generated method stub
+		if (userInfo == null) {
+			throw new IllegalStateException("UserInfo has not been initialized!");
+		}
+		
 		return null;
 	}
 	

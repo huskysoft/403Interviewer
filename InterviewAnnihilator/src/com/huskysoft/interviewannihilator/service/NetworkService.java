@@ -115,6 +115,11 @@ public class NetworkService {
 		
 		return dispatchGetRequest(urlToSend.toString());
 	}
+	
+	public String getQuestionsById(Collection<String> questionIds) {
+		// TODO
+		return null;
+	}
 
 	/**
 	 * Append a given parameter to a url string
