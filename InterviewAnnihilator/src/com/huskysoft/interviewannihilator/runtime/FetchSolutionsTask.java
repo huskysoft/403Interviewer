@@ -1,22 +1,24 @@
+/**
+ * Asynchronous thread designed to load solutions from the database.
+ * On completion, populates QuestionActivity with TextViews containing
+ * solutions.
+ * 
+ * @author Cody Andrews, 05/01/2013
+ */
+
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.io.IOException;
 import java.util.List;
-
-import org.json.JSONException;
-
-import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
-import com.huskysoft.interviewannihilator.ui.SolutionActivity;
+import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
 /**
- * 
  * This AsyncTask is used to populate SolutionActivity
  * 
  * @author Cody Andrews
@@ -25,17 +27,18 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	
 	private QuestionService questionService;
-	private SolutionActivity context;
+	private QuestionActivity context;
 	private List<Solution> solutionList;
 	private Question question;
+	private Exception exception;
 	
 	/**
 	 * 
 	 * @param context reference to SolutionActivity
 	 * @param question question to find solutions for
 	 */
-	public FetchSolutionsTask(Activity context, Question question){
-		this.context = (SolutionActivity) context;
+	public FetchSolutionsTask(QuestionActivity context, Question question){
+		this.context = context;
 		this.question = question;
 	}
 	
@@ -49,21 +52,28 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 		
 		try {
 			PaginatedSolutions paginatedSolutions =
-					questionService.getSolutions(question.getQuestionId(), 10, 0);
+					questionService.getSolutions(
+					question.getQuestionId(), 10, 0);
 			
 			solutionList = paginatedSolutions.getSolutions();
-		} catch (NetworkException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e){
+			Log.e("FetchSolutionsTask", e.getMessage());
+			exception = e;
+			this.cancel(true);
 		}
 		
 		return null;
+	}
+	
+	/** 
+	 * This event fires when this AsyncTask is cancelled.
+	 */
+	@Override
+	protected void onCancelled(){
+		//TODO: handle specific error cases
+		if(exception != null){
+			context.onNetworkError();
+		}
 	}
 	
 	/**
@@ -72,6 +82,6 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	 */
 	@Override
 	protected void onPostExecute(Void result){
-		context.displaySolutions(solutionList);
+		context.addSolutions(solutionList);
 	}
 }

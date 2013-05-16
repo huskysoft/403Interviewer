@@ -31,8 +31,7 @@ public class Question implements Likeable, Serializable {
 	/**
 	 * Called when our android application is trying to create a new question
 	 * and load it into the database. The database will populate the rest of
-	 * the fields and return the fleshed-out Question object back to the
-	 * application
+	 * the fields and return the questionId back to the application
 	 * 
 	 * @param text
 	 * @param title
@@ -64,7 +63,7 @@ public class Question implements Likeable, Serializable {
 	}
 	
 	public Date getDateCreated() {
-		return dateCreated;
+		return (Date) dateCreated.clone();
 	}
 	
 	public Category getCategory() {
@@ -100,7 +99,7 @@ public class Question implements Likeable, Serializable {
 	}
 
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.dateCreated = (Date) dateCreated.clone();
 	}
 
 	public void setCategory(Category category) {

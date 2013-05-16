@@ -1,3 +1,9 @@
+/**
+ * The screen for when users attempt to post a question or a solution
+ * 
+ * @author Cody Andrews, 05/14/2013
+ */
+
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
@@ -16,19 +22,20 @@ public class PostResultActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	
-	    // Get the message from the intent
-	    Intent intent = getIntent();
-	    String message = intent.getStringExtra(PostSolutionActivity.EXTRA_MESSAGE);
-	
-	    // Create the text view
-	    TextView textView = new TextView(this);
-	    textView.setTextSize(40);
-	    textView.setText(message);
-	
-	    // Set the text view as the activity layout
-	    setContentView(textView);
+		super.onCreate(savedInstanceState);
+		
+		// Get the message from the intent
+		Intent intent = getIntent();
+		String message = intent.getStringExtra
+				(PostSolutionActivity.EXTRA_MESSAGE);
+		
+		// Create the text view
+		TextView textView = new TextView(this);
+		textView.setTextSize(40);
+		textView.setText(message);
+		
+		// Set the text view as the activity layout
+		setContentView(textView);
 	}
 
 	/**

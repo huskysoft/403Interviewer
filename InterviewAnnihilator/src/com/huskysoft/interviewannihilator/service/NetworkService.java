@@ -23,21 +23,22 @@ import android.accounts.NetworkErrorException;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.util.Utility;
 
 import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
 
 public class NetworkService {
-	
+
 	/** The currently running instance of the NetworkService */
 	private static NetworkService instance;
-	
+
 	/** The client that actually sends data to the PHP script */
 	private HttpClient httpClient;
-	
+
 	private NetworkService() {
 		httpClient = new DefaultHttpClient();
 	}
-	
+
 	/**
 	 * Get the singleton NetworkService
 	 */
@@ -49,128 +50,136 @@ public class NetworkService {
 	}
 
 	/**
-	 * Request all the questions on the server.
+	 * Request questions from the server.
 	 * 
-	 * @return a string with the form [q_1, q_2, ..., q_n]. Each q_i is a JSON
-	 *         String; null if an exception occurs or the request fails.
-	 * @throws NetworkErrorException 
+	 * @return a string with the form [q_1, q_2, ..., q_n] (each q_i is a JSON
+	 *         String). Null if an exception occurs or the request fails.
+	 * @throws NetworkErrorException
 	 */
-	public String getQuestions(Difficulty difficulty, 
-	Collection<Category> categories, int limit, int offset) 
-	throws NetworkException {
-		String urlToSend = GET_QUESTIONS_URL + "?";
-		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
-		String.valueOf(limit));
-		urlToSend = appendParameter(urlToSend, PARAM_OFFSET, 
-		String.valueOf(offset));
+	public String getQuestions(Difficulty difficulty,
+			Collection<Category> categories, int limit, int offset,
+			boolean random)
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
+		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
-			urlToSend = appendParameter(urlToSend, PARAM_DIFFICULTY, 
-			difficulty.name());
+			urlToSend.append(appendParameter
+					(PARAM_DIFFICULTY, difficulty.name()));
 		}
 		if (categories != null && categories.size() != 0) {
-			urlToSend = appendParameter(urlToSend, PARAM_CATEGORY, 
-			categories.toString(), false);
+			Object[] categoryObj = categories.toArray();
+			StringBuilder categoryList = new StringBuilder();
+			for (int i = 0; i < categories.size(); i++) {
+				categoryList.append(categoryObj[i].toString());
+				// if this is the last element, we don't put a dash in the URL
+				if ((i + 1) < categories.size()) {
+					categoryList.append(CATEGORY_DELIMITER);
+				}
+			}
+			urlToSend.append(appendParameter(PARAM_CATEGORY,
+					categoryList.toString()));
 		}
-		return dispatchGetRequest(urlToSend);
+		if (random) {
+			urlToSend.append(appendParameter(PARAM_RANDOM, ""));
+		}
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		
+		return dispatchGetRequest(urlToSend.toString());
 	}
 
-	/** 
+	/**
 	 * Request all the solutions on the server for a given question
 	 * 
-	 * @param questionId the id of the question of the solutions we are
-	 * fetching
-	 * @param limit the number of solutions wanted. Must be >= 0
-	 * @param offset the starting offset of the solutions wanted. Must be >= 0
+	 * @param questionId
+	 *            the id of the question of the solutions we are fetching
+	 * @param limit
+	 *            the number of solutions wanted. Must be >= 0
+	 * @param offset
+	 *            the starting offset of the solutions wanted. Must be >= 0
 	 * @return a String that can be deserialized into JSON representing the
-	 * answers to a question
+	 *         answers to a question
 	 * @throws NetworkErrorException
 	 */
 	public String getSolutions(int questionId, int limit, int offset)
-	throws NetworkException {
-		String urlToSend = GET_SOLUTIONS_URL + "?";
-		urlToSend = appendParameter(urlToSend, PARAM_QUESTIONID,
-		String.valueOf(questionId));
-		urlToSend = appendParameter(urlToSend, PARAM_LIMIT, 
-		String.valueOf(limit));
-		urlToSend = appendParameter(urlToSend, PARAM_OFFSET,
-		String.valueOf(offset), false);
-		return dispatchGetRequest(urlToSend);
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(GET_SOLUTIONS_URL + "?");
+		urlToSend.append(appendParameter(PARAM_QUESTIONID,
+				String.valueOf(questionId)));
+		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		
+		return dispatchGetRequest(urlToSend.toString());
 	}
 	
+	public String getQuestionsById(Collection<String> questionIds) {
+		// TODO
+		return null;
+	}
+
 	/**
 	 * Append a given parameter to a url string
 	 * 
-	 * @param url the url to which the parameters will be appended to
-	 * @param paramName the name of the parameter appended to the url
-	 * @param paramVal the value of the parameter appended to the url
-	 * @return a new String with the parameter appended
+	 * @param paramName
+	 *            the name of the parameter appended to the url
+	 * @param paramVal
+	 *            the value of the parameter appended to the url
+	 * @param addAmpersand
+	 *            should be set to false if this is the last param that is to be
+	 *            appended
+	 * @return a new String with the parameter appended. Returns the empty
+	 *            String if either of the Strings passed in were null
 	 */
-	private String appendParameter(String url, String paramName,
-	String paramVal) {
-		return appendParameter(url, paramName, paramVal, true);
-	}
-	
-	/**
-	 * Append a given parameter to a url string
-	 * 
-	 * @param url the url to which the parameters will be appended to
-	 * @param paramName the name of the parameter appended to the url
-	 * @param paramVal the value of the parameter appended to the url
-	 * @param addAmpersand should be set to false if this is the last param
-	 * that is to be appended
-	 * @return a new String with the parameter appended. Returns null if any
-	 * of the Strings passed in were null
-	 */
-	private String appendParameter(String url, String paramName,
-	String paramVal, boolean addAmpersand) {
-		if (url == null || paramName == null || paramVal == null) {
-			return null;
+	private String appendParameter(String paramName, String paramVal) {
+		if (paramName == null || paramVal == null) {
+			return "";
 		}
-		String completeUrl = url;
-		completeUrl += (paramName + "=" + paramVal);
-		if (addAmpersand) {
-			completeUrl += "&";
-		}
-		return completeUrl;
+		return (paramName + "=" + paramVal + AMPERSAND);
 	}
-	
+
 	/**
 	 * Dispatches a get request to the remote server
 	 * 
-	 * @param url the url to send to the server
+	 * @param url
+	 *            the url to send to the server
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	private String dispatchGetRequest(String url) 
-	throws NetworkException {
+	private String dispatchGetRequest(String url) throws NetworkException {
 		try {
 			// create client and send request
-			HttpGet request = new HttpGet(url);			
+			HttpGet request = new HttpGet(url);
 			HttpResponse response = httpClient.execute(request);
 
 			// get response
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new NetworkException("Request to " + url +
-				" failed with response code " + statusCode);
+				throw new NetworkException("Request to " + url
+						+ " failed with response code " + statusCode);
 			}
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
-			response.getEntity().getContent()));
+					response.getEntity().getContent(), Utility.ASCII_ENCODING));
 
 			StringBuilder serverString = new StringBuilder();
 			String line = rd.readLine();
 			while (line != null) {
 				serverString.append(line);
 				line = rd.readLine();
-			}			
+			}
+			rd.close();
 			return serverString.toString();
 		} catch (Exception e) {
 			throw new NetworkException("Request to " + url + " failed", e);
 		}
 	}
-	
+
 	@Override
-	public void finalize() {
+	protected void finalize() {
 		httpClient.getConnectionManager().shutdown();
 	}
 
