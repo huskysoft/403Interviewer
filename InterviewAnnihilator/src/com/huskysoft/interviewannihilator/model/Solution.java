@@ -1,5 +1,4 @@
 /**
- * 
  * Governs the fields and behavior of a solution in our application
  * to a question. The solution "references" the question that it is
  * answering by storing the id of the question
@@ -56,7 +55,7 @@ public class Solution implements Likeable {
 	}
 	
 	public Date getDateCreated() {
-		return dateCreated;
+		return (Date) dateCreated.clone();
 	}
 	
 	public int getLikes() {
@@ -84,7 +83,7 @@ public class Solution implements Likeable {
 	}
 
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.dateCreated = (Date) dateCreated.clone();
 	}
 
 	public void setLikes(int likes) {

@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -34,28 +35,12 @@
                 android:value="com.huskysoft.interviewannihilator.ui.MainActivity" />
         </activity>
         <activity
-            android:name="com.huskysoft.interviewannihilator.ui.SolutionActivity"
-            android:label="@string/title_activity_solution"
+            android:name="com.huskysoft.interviewannihilator.ui.PostSolutionActivity"
+            android:label="@string/title_activity_post_solution"
             android:parentActivityName="com.huskysoft.interviewannihilator.ui.QuestionActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.ui.QuestionActivity" />
-        </activity>
-        <activity
-            android:name="com.huskysoft.interviewannihilator.ui.PostSolutionActivity"
-            android:label="@string/title_activity_post_solution"
-            android:parentActivityName="com.huskysoft.interviewannihilator.ui.SolutionActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huskysoft.interviewannihilator.ui.SolutionActivity" />
-        </activity>
-        <activity
-            android:name="com.huskysoft.interviewannihilator.ui.PostResultActivity"
-            android:label="@string/title_activity_post_result"
-            android:parentActivityName="com.huskysoft.interviewannihilator.ui.PostSolutionActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huskysoft.interviewannihilator.ui.PostSolutionActivity" />
         </activity>
     </application>
 
