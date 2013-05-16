@@ -106,7 +106,6 @@ public class MainActivity extends Activity {
 					t.setTag(question);
 					t.setText(questionText);	
 					
-					
 					// to make it work on older versions use this instead of
 					// setBackground
 					t.setBackgroundDrawable(getResources().
