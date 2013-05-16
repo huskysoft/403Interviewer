@@ -68,7 +68,7 @@ public class MainActivity extends SlidingActivity {
 		
 		buildSlideMenu();
 		
-		if(passedDifficulty != ""){
+		if(!passedDifficulty.equals("")){
 			setSpinnerToSelectedValue(passedDifficulty);
 		}
 		
@@ -117,8 +117,8 @@ public class MainActivity extends SlidingActivity {
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
-		        R.array.difficulty, 
-		        android.R.layout.simple_spinner_item);
+				R.array.difficulty, 
+				android.R.layout.simple_spinner_item);
 		
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(

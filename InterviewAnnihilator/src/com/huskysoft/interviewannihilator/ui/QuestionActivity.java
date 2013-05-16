@@ -123,8 +123,8 @@ public class QuestionActivity extends SlidingActivity {
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
-		        R.array.difficulty, 
-		        android.R.layout.simple_spinner_item);
+				R.array.difficulty, 
+				android.R.layout.simple_spinner_item);
 		
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(
@@ -136,9 +136,9 @@ public class QuestionActivity extends SlidingActivity {
 		// Handle onClick of Slide-Menu button
 		Button button = (Button) findViewById(R.id.slide_menu_button);
 		button.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+			@Override
+			public void onClick(View v) {
+				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 				String difficulty = spinner.getSelectedItem().toString();
 				
 				toggle();
@@ -146,8 +146,7 @@ public class QuestionActivity extends SlidingActivity {
 				Intent intent = new Intent(context, MainActivity.class);
 				Utility.DIFFICULTY_MESSAGE = difficulty;
 				startActivity(intent);
-				
-		    }
+			}
 		});
 		
 	}

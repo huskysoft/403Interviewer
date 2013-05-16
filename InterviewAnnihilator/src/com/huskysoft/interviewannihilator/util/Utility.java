@@ -72,7 +72,7 @@ public class Utility {
 		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
-			sb.append(line).append("\n");
+			sb.append(line).append('\n');
 		}
 		return sb.toString();
 	}

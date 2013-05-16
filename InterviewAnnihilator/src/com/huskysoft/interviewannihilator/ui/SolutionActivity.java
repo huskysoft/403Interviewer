@@ -39,7 +39,6 @@ public class SolutionActivity extends Activity {
 				getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 		
 		solutionll = (LinearLayout) findViewById(R.id.linear_layout);
-		// new FetchSolutionsTask(this, question).execute();
 	}
 	
 	/**
