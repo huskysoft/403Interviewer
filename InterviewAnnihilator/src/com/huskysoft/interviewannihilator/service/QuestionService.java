@@ -2,7 +2,7 @@
  * A class to provide services to the front end for getting questions,
  * getting and posting solutions, etc. 
  * 
- * @author Dan Sanders, Bennett Ng, 5/2/2013
+ * @author Kevin Loh, Dan Sanders, Bennett Ng, 5/2/2013
  *
  */
 

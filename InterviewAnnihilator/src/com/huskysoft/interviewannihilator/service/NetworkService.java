@@ -2,7 +2,7 @@
  * A class that provides basic functionalities for getting JSON response
  * strings from the server.
  * 
- * @author Bennett Ng, 5/3/2013
+ * @author Kevin Loh, Bennett Ng, 5/3/2013
  * 
  *
  */
@@ -10,7 +10,9 @@
 package com.huskysoft.interviewannihilator.service;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import org.apache.http.HttpResponse;
@@ -187,17 +189,9 @@ public class NetworkService {
 				throw new NetworkException("Request to " + url
 						+ " failed with response code " + statusCode);
 			}
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent(), Utility.ASCII_ENCODING));
-
-			StringBuilder serverString = new StringBuilder();
-			String line = rd.readLine();
-			while (line != null) {
-				serverString.append(line);
-				line = rd.readLine();
-			}
-			rd.close();
-			return serverString.toString();
+			
+			// Return the content
+						return getContent(response);
 		} catch (Exception e) {
 			throw new NetworkException("GET request to " + url + " failed", e);
 		}
@@ -230,22 +224,38 @@ public class NetworkService {
 				throw new NetworkException("Request to " + url
 						+ " failed with response code " + statusCode);
 			}
-			
-			// Get the response string
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent(), Utility.ASCII_ENCODING));
-			StringBuilder serverString = new StringBuilder();
-			String line = rd.readLine();
-			while (line != null) {
-				serverString.append(line);
-				line = rd.readLine();
-			}
-			rd.close();
-			return serverString.toString();
 
+			// Return the content
+			return getContent(response);
+			
 		} catch (Exception e) {
 			throw new NetworkException("POST request to " + url + " failed", e);
 		}
+	}
+
+	/**
+	 * Gets the content of the HTTP response of a GET/POST request.
+	 * 
+	 * @param response
+	 *            the HTTP response after the request
+	 * @return a String representing the content of the response
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws UnsupportedEncodingException
+	 */
+	private String getContent(HttpResponse response)
+			throws UnsupportedEncodingException, IllegalStateException,
+			IOException {
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response
+				.getEntity().getContent(), Utility.ASCII_ENCODING));
+		StringBuilder serverString = new StringBuilder();
+		String line = rd.readLine();
+		while (line != null) {
+			serverString.append(line);
+			line = rd.readLine();
+		}
+		rd.close();
+		return serverString.toString();
 	}
 
 	@Override
