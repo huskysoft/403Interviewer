@@ -21,6 +21,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
+import org.codehaus.jackson.type.TypeReference;
+
 import org.json.JSONException;
 
 import android.util.Log;
@@ -128,8 +130,10 @@ public class QuestionService {
 	 */
 	public List<Question> getQuestionsById(Collection<Integer> questionIds) 
 			throws JsonParseException, JsonMappingException, IOException {
-		// TODO
-		return null;
+		String json = networkService.getQuestionsById(questionIds);
+		TypeReference<Set<Question>> tr = new TypeReference<Set<Question>>(){};
+		Set<Question> questions = mapper.readValue(json, tr);
+		return questions;
 	}
 
 	/**
@@ -222,7 +226,8 @@ public class QuestionService {
 	 * @param questionId
 	 */
 	public void deleteQuestion(int questionId) {
-		// TODO
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		networkService.deleteQuestion(questionId, userInfo.getUserEmail());
 	}
 	
 	/**
@@ -336,7 +341,8 @@ public class QuestionService {
 	 * @param userEmail
 	 */
 	public void deleteSolution(int solutionId, String userEmail) {
-		// TODO
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		networkService.deleteSolution(solutionId, userEmail);
 	}
 
 	/**
