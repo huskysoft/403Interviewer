@@ -117,7 +117,7 @@ public class NetworkService {
 
 		return dispatchGetRequest(urlToSend.toString());
 	}
-	
+
 	public String getQuestionsById(Collection<String> questionIds) {
 		// TODO
 		return null;
@@ -128,10 +128,10 @@ public class NetworkService {
 	 * 
 	 * @param question
 	 *            a JSON string representing the question
-	 * @return true if the post succeeds, false otherwise
+	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	public boolean postQuestion(String question) throws NetworkException {
+	public String postQuestion(String question) throws NetworkException {
 		return dispatchPostRequest(POST_QUESTION_URL, question);
 	}
 
@@ -140,10 +140,10 @@ public class NetworkService {
 	 * 
 	 * @param solution
 	 *            a JSON string representing the solution
-	 * @return true if the post succeeds, false otherwise
+	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	public boolean postSolution(String solution) throws NetworkException {
+	public String postSolution(String solution) throws NetworkException {
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
 	}
 
@@ -211,10 +211,10 @@ public class NetworkService {
 	 *            the url of the server
 	 * @param content
 	 *            a JSON string as the content of the post request
-	 * @return true if the post request is successful, false otherwise
+	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	private boolean dispatchPostRequest(String url, String content)
+	private String dispatchPostRequest(String url, String content)
 			throws NetworkException {
 		try {
 			// Create and execute the HTTP POST request
@@ -226,7 +226,22 @@ public class NetworkService {
 
 			// Check the status of the response
 			int statusCode = response.getStatusLine().getStatusCode();
-			return statusCode == 200;
+			if (statusCode != 200) {
+				throw new NetworkException("Request to " + url
+						+ " failed with response code " + statusCode);
+			}
+			
+			// Get the response string
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent(), Utility.ASCII_ENCODING));
+			StringBuilder serverString = new StringBuilder();
+			String line = rd.readLine();
+			while (line != null) {
+				serverString.append(line);
+				line = rd.readLine();
+			}
+			rd.close();
+			return serverString.toString();
 
 		} catch (Exception e) {
 			throw new NetworkException("POST request to " + url + " failed", e);
