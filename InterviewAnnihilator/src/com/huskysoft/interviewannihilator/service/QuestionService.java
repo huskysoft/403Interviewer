@@ -2,7 +2,7 @@
  * A class to provide services to the front end for getting questions,
  * getting and posting solutions, etc. 
  * 
- * @author Dan Sanders, Bennett Ng, 5/2/2013
+ * @author Kevin Loh, Dan Sanders, Bennett Ng, 5/2/2013
  *
  */
 
@@ -31,6 +31,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
+import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.Utility;
@@ -44,12 +45,12 @@ public class QuestionService {
 	private ObjectMapper mapper;
 	private UserInfo userInfo;
 	private File baseDir;
-	
+
 	private QuestionService() {
 		this.networkService = NetworkService.getInstance();
 		mapper = new ObjectMapper();
-		mapper.configure(DeserializationConfig.
-				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(
+				DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	/**
@@ -65,8 +66,10 @@ public class QuestionService {
 	/**
 	 * Load the local UserInfo, or create it if not found.
 	 * 
-	 * @param baseDir	the app's private file directory, from Context
-	 * @param userEmail	the user's Email address
+	 * @param baseDir
+	 *            the app's private file directory, from Context
+	 * @param userEmail
+	 *            the user's Email address
 	 * @throws IOException
 	 * @throws NetworkException
 	 */
@@ -84,15 +87,15 @@ public class QuestionService {
 			Log.w(TAG, e.getMessage());
 			userInfo = new UserInfo();
 		}
-		if (userInfo.getUserId() == null || 
-				!userEmail.equals(userInfo.getUserEmail())) {
+		if (userInfo.getUserId() == null
+				|| !userEmail.equals(userInfo.getUserEmail())) {
 			// new or non-matching UserInfo; clear history
 			userInfo.setUserEmail(userEmail);
 			userInfo.setUserId(getUserId(userEmail));
 			userInfo.clear();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Write the local UserInfo to storage. Will use the same File directory
 	 * from which the UserInfo was initialized.
@@ -101,7 +104,7 @@ public class QuestionService {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public void writeUserInfo() throws JsonGenerationException, 
+	public void writeUserInfo() throws JsonGenerationException,
 			JsonMappingException, IOException {
 		// open file
 		if (baseDir == null || userInfo == null) {
@@ -109,12 +112,12 @@ public class QuestionService {
 					"UserInfo has not yet been initialized!");
 		}
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
-		
+
 		// write UserInfo to file as JSON
 		String json = mapper.writeValueAsString(userInfo);
 		Utility.writeStringToFile(file, json);
 	}
-	
+
 	/**
 	 * Get a specific list of Questions from the remote server. NetworkException
 	 * if one or more QuestionID does not exist.
@@ -158,19 +161,18 @@ public class QuestionService {
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset, random);
 		PaginatedQuestions databaseQuestions;
-		
+
 		// deserialize "flat parameters"
-		databaseQuestions = mapper
-				.readValue(json, PaginatedQuestions.class);
+		databaseQuestions = mapper.readValue(json, PaginatedQuestions.class);
 		JsonNode node = mapper.readTree(json);
 
 		// deserialize nested Questions
 		String questionsJson = node.get(RESULTS_KEY).asText();
-		JavaType jtype = TypeFactory.defaultInstance()
-				.constructParametricType(List.class, Question.class);
+		JavaType jtype = TypeFactory.defaultInstance().constructParametricType(
+				List.class, Question.class);
 		List<Question> questions = mapper.readValue(questionsJson, jtype);
 		databaseQuestions.setQuestions(questions);
-		
+
 		return databaseQuestions;
 	}
 
@@ -190,23 +192,22 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(int questionId, int limit,
-			int offset)	throws NetworkException, JSONException, IOException {
+	public PaginatedSolutions getSolutions(int questionId, int limit, int offset)
+			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IOException("Invalid limit or offset parameter");
 		}
 		String json = networkService.getSolutions(questionId, limit, offset);
 		PaginatedSolutions databaseSolutions;
-		
+
 		// deserialize "flat parameters"
-		databaseSolutions = mapper
-				.readValue(json, PaginatedSolutions.class);
+		databaseSolutions = mapper.readValue(json, PaginatedSolutions.class);
 		JsonNode node = mapper.readTree(json);
 
 		// deserialize nested Solutions
 		String solutionsJson = node.get(RESULTS_KEY).asText();
-		JavaType jtype = TypeFactory.defaultInstance()
-				.constructParametricType(List.class, Solution.class);
+		JavaType jtype = TypeFactory.defaultInstance().constructParametricType(
+				List.class, Solution.class);
 		List<Solution> solutions = mapper.readValue(solutionsJson, jtype);
 		databaseSolutions.setSolutions(solutions);
 
@@ -216,16 +217,18 @@ public class QuestionService {
 		return databaseSolutions;
 	}
 
-	public int postQuestion(Question toPost) throws NetworkException, 
+	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		String questionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postQuestion(questionStr);
+		return Integer.parseInt(result);
 	}
 
-	public int postSolution(Solution toPost) throws NetworkException, 
+	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		String solutionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postQuestion(solutionStr);
+		return Integer.parseInt(result);
 	}
 
 	/**
@@ -237,7 +240,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public boolean upvoteSolution(int solutionId) throws NetworkException, 
+	public boolean upvoteSolution(int solutionId) throws NetworkException,
 			IOException {
 		if (userInfo != null) {
 			userInfo.upvoteSolution(solutionId);
@@ -253,8 +256,8 @@ public class QuestionService {
 	 * @param solutionId
 	 * @return
 	 */
-	public boolean downvoteSolution(int solutionId) throws NetworkException, 
-		IOException {
+	public boolean downvoteSolution(int solutionId) throws NetworkException,
+			IOException {
 		if (userInfo != null) {
 			userInfo.downvoteSolution(solutionId);
 		}
@@ -262,7 +265,7 @@ public class QuestionService {
 		return false;
 	}
 
-	public PaginatedQuestions getFavorites(int limit, int offset) 
+	public PaginatedQuestions getFavorites(int limit, int offset)
 			throws NetworkException, IOException {
 		if (userInfo == null) {
 			throw new IllegalStateException(
@@ -271,17 +274,17 @@ public class QuestionService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void clearAllFavorites() {
 		userInfo.getFavoriteQuestions().clear();
 	}
-	
-	private String getUserId(String userEmail) throws NetworkException, 
+
+	private String getUserId(String userEmail) throws NetworkException,
 			IOException {
 		// TODO Auto-generated method stub
-		return null;		
+		return null;
 	}
-	
+
 	/**
 	 * Set the NetworkService, for mock testing.
 	 * 
