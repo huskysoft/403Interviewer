@@ -12,19 +12,15 @@ package com.huskysoft.interviewannihilator.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
-import com.huskysoft.interviewannihilator.runtime.FetchQuestionsTask;
-import com.huskysoft.interviewannihilator.util.Utility;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
 import android.util.DisplayMetrics;
@@ -37,7 +33,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
 import android.content.Intent;
 
 
@@ -141,12 +136,17 @@ public class QuestionActivity extends SlidingActivity {
 			@Override
 			public void onClick(View v) {
 				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-				String difficulty = spinner.getSelectedItem().toString();
+				String diffStr = spinner.getSelectedItem().toString();
 				
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				SlideMenuInfoTransfer.difficultyMessage = difficulty;
+				if (diffStr == null || diffStr.length() == 0) {
+					SlideMenuInfoTransfer.diff = null;
+				} else {
+					SlideMenuInfoTransfer.diff = 
+							Difficulty.valueOf(diffStr.toUpperCase());
+				}
 				startActivity(intent);
 			}
 		});
