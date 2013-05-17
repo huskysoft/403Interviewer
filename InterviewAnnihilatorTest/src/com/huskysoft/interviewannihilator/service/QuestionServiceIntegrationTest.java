@@ -8,6 +8,9 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -17,6 +20,7 @@ import org.json.JSONException;
 import android.os.Environment;
 
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.UserInfo;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
@@ -25,7 +29,7 @@ import com.huskysoft.interviewannihilator.util.Utility;
 
 import junit.framework.TestCase;
 
-public class QuestionServiceTest extends TestCase {
+public class QuestionServiceIntegrationTest extends TestCase {
 
 	private QuestionService questionService;
 	private ObjectMapper mapper;
@@ -35,7 +39,7 @@ public class QuestionServiceTest extends TestCase {
 	 *
 	 * @param name the test name
 	 */
-	public QuestionServiceTest(String name) {
+	public QuestionServiceIntegrationTest(String name) {
 		super(name);
 		questionService = QuestionService.getInstance();
 		mapper = new ObjectMapper();
@@ -51,7 +55,7 @@ public class QuestionServiceTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetAllQuestions() 
+	public void testGetQuestions() 
 			throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = 
 				questionService.getQuestions(null, null, 10, 0, false);
@@ -92,6 +96,40 @@ public class QuestionServiceTest extends TestCase {
 		assertEquals(Math.min(10, solutions.getTotalNumberOfResults()), 
 				solutions.getSolutions().size());
 		System.out.println(solutions);
+	}
+	
+	/**
+	 * Tests the local storage of information our app will use.
+	 * 
+	 * @label White-box test
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
+	public void testQuestionRoundTrip() 
+			throws NetworkException, JSONException, IOException {
+		// set up
+		questionService.setUserInfo(TestHelpers.createDummyUserInfo());
+		
+		// create
+		Question qInit = TestHelpers.createDummyQuestion(42);
+		int qId = questionService.postQuestion(qInit);
+		
+		// read
+		Set<Integer> qIdSet = new HashSet<Integer>();
+		qIdSet.add(qId);
+		List<Question> qList = questionService.getQuestionsById(qIdSet);
+		assertEquals(1, qList.size());
+		Question qCreated = qList.get(0);
+		qInit.setDateCreated(qCreated.getDateCreated());
+		qInit.setQuestionId(qId);
+		assertEquals(qInit, qCreated);
+		
+		// delete
+		questionService.deleteQuestion(qId);
+		qList = questionService.getQuestionsById(qIdSet);
+		assertEquals(0, qList.size());
 	}
 	
 	/**

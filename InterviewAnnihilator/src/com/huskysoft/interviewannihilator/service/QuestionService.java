@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
@@ -23,8 +21,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
-import org.codehaus.jackson.type.TypeReference;
-
 import org.json.JSONException;
 
 import android.util.Log;
@@ -130,12 +126,10 @@ public class QuestionService {
 	 * @throws JsonMappingException 
 	 * @throws JsonParseException 
 	 */
-	public Set<Question> getQuestionsById(Collection<String> questionIds) 
+	public List<Question> getQuestionsById(Collection<Integer> questionIds) 
 			throws JsonParseException, JsonMappingException, IOException {
-		String json = networkService.getQuestionsById(questionIds);
-		TypeReference<Set<Question>> tr = new TypeReference<Set<Question>>(){};
-		Set<Question> questions = mapper.readValue(json, tr);
-		return questions;
+		// TODO
+		return null;
 	}
 
 	/**
@@ -183,6 +177,84 @@ public class QuestionService {
 		databaseQuestions.setQuestions(questions);
 
 		return databaseQuestions;
+	}
+
+	/**
+	 * Posts a question to the server.
+	 * 
+	 * @param toPost
+	 *            the Question object that represents the question
+	 * @return the id of the question being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public int postQuestion(Question toPost) throws NetworkException,
+			JSONException, IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
+		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Empty text/title in question");
+		}
+		if (toPost.getCategory() == null) {
+			throw new IllegalArgumentException("Null category in question");
+		}
+		if (toPost.getDifficulty() == null) {
+			throw new IllegalArgumentException("Null difficulty in question");
+		}
+		
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(userInfo.getUserId());
+		toPost.setDateCreated(new Date());
+		
+		// Post the question and return result
+		String questionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postQuestion(questionStr);
+		return Integer.parseInt(result);
+	}
+
+	/**
+	 * Delete a Question. The user must be the author of the Question.
+	 * 
+	 * @param questionId
+	 */
+	public void deleteQuestion(int questionId) {
+		// TODO
+	}
+	
+	/**
+	 * Upvote a given Question. Returns true if upvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param questionId
+	 * @return
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public boolean upvoteQuestion(int questionId) throws NetworkException,
+			IOException {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.upvoteQuestion(questionId);
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Downvote a given Question. Returns true if downvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	public boolean downvoteQuestion(int questionId) throws NetworkException,
+			IOException {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.downvoteQuestion(questionId);
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/**
@@ -238,7 +310,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public int getUserId(String userEmail) throws NetworkException,
+	protected int getUserId(String userEmail) throws NetworkException,
 			IOException {
 		if (userEmail == null) {
 			throw new IllegalArgumentException("userEmail cannot be null");
@@ -246,42 +318,6 @@ public class QuestionService {
 		return networkService.getUserId(userEmail);
 	}
 	
-	/**
- 	 * Posts a question to the server.
- 	 * 
- 	 * @param toPost
- 	 *            the Question object that represents the question
- 	 * @return the id of the question being posted
- 	 * @throws NetworkException
- 	 * @throws JSONException
- 	 * @throws IOException
- 	 */
-	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException {
-		// Check parameter
-		if (toPost == null) {
-			throw new IllegalArgumentException("Invalid Question: null");
-		}
-		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
-			throw new IllegalArgumentException("Empty text/title in question");
-		}
-		if (toPost.getCategory() == null) {
-			throw new IllegalArgumentException("Null category in question");
-		}
-		if (toPost.getDifficulty() == null) {
-			throw new IllegalArgumentException("Null difficulty in question");
-		}
-		
-		// Populate authorId and dateCreated (others are filled in)
-		toPost.setAuthorId(userInfo.getUserId());
-		toPost.setDateCreated(new Date());
-		
-		// Post the question and return result
-		String questionStr = mapper.writeValueAsString(toPost);
-		String result = networkService.postQuestion(questionStr);
-		return Integer.parseInt(result);
-	}
-
 	/**
 	 * Posts a solution to the server.
 	 * 
@@ -310,6 +346,16 @@ public class QuestionService {
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
 	}
+	
+	/**
+	 * Delete a Solution. The user must be the author of the Solution.
+	 * 
+	 * @param solutionId
+	 * @param userEmail
+	 */
+	public void deleteSolution(int solutionId, String userEmail) {
+		// TODO
+	}
 
 	/**
 	 * Upvote a given Solution. Returns true if upvote was received by the
@@ -322,9 +368,8 @@ public class QuestionService {
 	 */
 	public boolean upvoteSolution(int solutionId) throws NetworkException,
 			IOException {
-		if (userInfo != null) {
-			userInfo.upvoteSolution(solutionId);
-		}
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.upvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -338,9 +383,8 @@ public class QuestionService {
 	 */
 	public boolean downvoteSolution(int solutionId) throws NetworkException,
 			IOException {
-		if (userInfo != null) {
-			userInfo.downvoteSolution(solutionId);
-		}
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.downvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -360,11 +404,20 @@ public class QuestionService {
 	}
 
 	/**
-	 * Set the NetworkService, for mock testing.
+	 * Set the NetworkService, for testing.
 	 * 
 	 * @param networkService
 	 */
 	protected void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
+	}
+	
+	/**
+	 * Set the UserInfo, for testing.
+	 * 
+	 * @param userInfo
+	 */
+	protected void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 }

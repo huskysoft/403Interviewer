@@ -20,7 +20,7 @@ public class UserInfo {
 	public static final Boolean DOWNVOTE = false;
 	
 	private String userEmail;
-	private int userId;
+	private Integer userId;
 	private Map<Integer, Date> viewedQuestions;
 	private Map<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
@@ -43,11 +43,11 @@ public class UserInfo {
 		this.userEmail = userEmail;
 	}
 	
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 	
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	

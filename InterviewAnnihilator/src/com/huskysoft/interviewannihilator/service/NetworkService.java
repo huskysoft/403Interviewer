@@ -93,6 +93,31 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
+	public String getQuestionsById(Collection<String> questionIds) {
+		// TODO
+		return null;
+	}
+	
+	/**
+	 * Posts a question to the server. Returns true if the post succeeds.
+	 * 
+	 * @param question
+	 *            a JSON string representing the question
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 * @throws IllegalArgumentException
+	 */
+	public String postQuestion(String question) throws NetworkException {
+		if (question == null) {
+			throw new IllegalArgumentException("Invalid question: null");
+		}
+		return dispatchPostRequest(POST_QUESTION_URL, question);
+	}
+
+	public void deleteQuestion(int questionId, String userEmail) {
+		// TODO
+	}
+
 	/**
 	 * Request all the solutions on the server for a given question
 	 * 
@@ -144,27 +169,6 @@ public class NetworkService {
 		return Integer.valueOf(res);
 	}
 	
-	public String getQuestionsById(Collection<String> questionIds) {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Posts a question to the server. Returns true if the post succeeds.
-	 * 
-	 * @param question
-	 *            a JSON string representing the question
-	 * @return a String representing the response from the server
-	 * @throws NetworkException
-	 * @throws IllegalArgumentException
-	 */
-	public String postQuestion(String question) throws NetworkException {
-		if (question == null) {
-			throw new IllegalArgumentException("Invalid question: null");
-		}
-		return dispatchPostRequest(POST_QUESTION_URL, question);
-	}
-
 	/**
 	 * Posts a solution to the server. Returns true if the post succeeds.
 	 * 
@@ -179,6 +183,10 @@ public class NetworkService {
 			throw new IllegalArgumentException("Invalid solution: null");
 		}
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
+	}
+	
+	public void deleteSolution(int solutionId, String userEmail) {
+		// TODO
 	}
 
 	/**

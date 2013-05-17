@@ -135,4 +135,15 @@ public class Utility {
 		}
 		return (paramName + "=" + paramVal + AMPERSAND);
 	}
+	
+	/** Ensure that a given object is not null.
+	 * 
+	 * @param o
+	 * @param objectName
+	 */
+	public static void ensureNotNull(Object o, String objectName) {
+		if (o == null) {
+			throw new IllegalStateException(objectName + " cannot be null!");
+		}
+	}
 }
