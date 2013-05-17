@@ -79,6 +79,13 @@ public class MainActivity extends SlidingActivity {
 		loadQuestions(diff);
 	}
 	
+	/**
+	 * Function that will make set the currently selected spinner
+	 * value to the passed in string. Used when the difficulty
+	 * menu is changed from a SolutionActivity or PostSolutionActivity.
+	 * 
+	 * @param value Selected Spinner value
+	 */
 	public void setSpinnerToSelectedValue(String value){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
@@ -86,6 +93,13 @@ public class MainActivity extends SlidingActivity {
 		spinner.setSelection(myAdap.getPosition(value));
 	}
 	
+	/**
+	 * Helper method that gives the correct Difficulty enum based
+	 * on the string value. Value comes from the slide menu.
+	 * 
+	 * @param difficulty
+	 * @return Difficulty Enum
+	 */
 	public Difficulty getDifficultyByString(String difficulty){
 		if(difficulty.equals("Easy")){
 			return Difficulty.EASY;
@@ -100,6 +114,13 @@ public class MainActivity extends SlidingActivity {
 		}
 	}
 	
+	/**
+	 * Method that returns the Difficulty Enum that is 
+	 * currently selected in the Difficulty spinner input
+	 * on the slide menu.
+	 * 
+	 * @return Difficulty Enum
+	 */
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		String difficulty = spinner.getSelectedItem().toString();
@@ -107,12 +128,15 @@ public class MainActivity extends SlidingActivity {
 		return getDifficultyByString(difficulty);
 	}
 	
+	/**
+	 * Helper method that builds the slide menu on the current activity.
+	 */
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels * 0.8);
-		menu.setBehindOffset((int) (width * 0.25));
+		int width = (int) ((double) metrics.widthPixels);
+		menu.setBehindOffset((int) (width * Utility.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -200,7 +224,6 @@ public class MainActivity extends SlidingActivity {
 					t.setId(question.getQuestionId());
 					t.setTag(question);
 					t.setText(questionText);	
-					
 					
 					// to make it work on older versions use this instead of
 					// setBackground

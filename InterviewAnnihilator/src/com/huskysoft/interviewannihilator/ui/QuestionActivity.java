@@ -25,20 +25,19 @@ import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 
@@ -46,6 +45,9 @@ import android.content.Intent;
  * Activity for viewing a question before reading solutions
  */
 public class QuestionActivity extends SlidingActivity {
+
+	public final static String EXTRA_MESSAGE = 
+			"com.huskysoft.interviewannihilator.QUESTION";
 	
 	/** Layout that the question and solutions will populate */
 	private LinearLayout linearLayout;
@@ -94,8 +96,8 @@ public class QuestionActivity extends SlidingActivity {
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = new TextView(this);
-		textview.setBackgroundDrawable(getResources().
-				getDrawable( R.drawable.listitem));
+		textview.setBackgroundDrawable(
+				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
@@ -117,8 +119,8 @@ public class QuestionActivity extends SlidingActivity {
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels * 0.8);
-		menu.setBehindOffset((int) (width * 0.25));
+		int width = (int) ((double) metrics.widthPixels);
+		menu.setBehindOffset((int) (width * Utility.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -198,7 +200,6 @@ public class QuestionActivity extends SlidingActivity {
 			revealSolutions();
 		}
 	}
-
 	
 	/**
 	 * Button handler for the "Solutions" button.
@@ -238,6 +239,17 @@ public class QuestionActivity extends SlidingActivity {
 		for(TextView tv : solutionTextViews){
 			tv.setVisibility(View.VISIBLE);
 		}
+		
+		// Add post solution button to end of list
+		Button post = new Button(this);
+		post.setText(R.string.button_post_solution);
+		post.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				postSolution(v);
+			}
+		});
+		linearLayout.addView(post);
 	}
 	
 	private void loadSolutions(){
@@ -258,22 +270,30 @@ public class QuestionActivity extends SlidingActivity {
 		loadingText.setVisibility(View.GONE);
 		
 		// Create a dialog
-		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
-		.setPositiveButton(R.string.retryDialog_retry,
-		new DialogInterface.OnClickListener(){
+		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.retrydialogcustom);
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		text.setText(R.string.retryDialog_title);
+		Button dialogButton = (Button) dialog.findViewById(R.id.button_retry);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View v) {
+				// Try reloading
 				loadSolutions();
 			}
-		})
-		.setNegativeButton(R.string.retryDialog_cancel,
-		new DialogInterface.OnClickListener() {
+		});
+		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
+			public void onClick(View v) {
+				// Probably don't want to send them back to questions 
+				// screen here, so just dismiss
+				dialog.dismiss();
 			}
-		})
-		.create().show();
+		});
+		dialog.show();
 	}
 
 	@Override
@@ -291,6 +311,13 @@ public class QuestionActivity extends SlidingActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/** Called when the user clicks the post solution button */
+	public void postSolution(View view) {
+		Intent intent = new Intent(this, PostSolutionActivity.class);
+		intent.putExtra(EXTRA_MESSAGE, question);
+		startActivity(intent);
 	}
 
 }

@@ -35,7 +35,13 @@ public class Utility {
 	 * rating */
 	private static final int MIN_LIKES = 5;
 	
-	/*
+	/**
+	 * The percentage of the screen that is not covered up by the slide
+	 * in menu.
+	 */
+	public static final double SLIDE_MENU_WIDTH = .25;
+	
+	/**
 	 * Used to pass a selected difficulty back to the 
 	 * MainActivity class through the slide-menu.
 	 */
@@ -105,8 +111,8 @@ public class Utility {
 			throws IOException {
 		boolean newFile = file.createNewFile();
 		FileOutputStream fout = new FileOutputStream(file);
-        OutputStreamWriter out 
-        		= new OutputStreamWriter(fout, ASCII_ENCODING);
+		OutputStreamWriter out 
+			= new OutputStreamWriter(fout, ASCII_ENCODING);
 		try {
 			out.write(string);
 		} finally {
