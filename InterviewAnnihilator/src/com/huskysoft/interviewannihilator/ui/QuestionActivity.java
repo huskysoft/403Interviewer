@@ -14,25 +14,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.runtime.FetchQuestionsTask;
+import com.huskysoft.interviewannihilator.util.Utility;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
-
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.content.Intent;
 
-public class QuestionActivity extends Activity {
+
+/**
+ * Activity for viewing a question before reading solutions
+ */
+public class QuestionActivity extends SlidingActivity {
+
 	public final static String EXTRA_MESSAGE = 
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
@@ -41,6 +54,8 @@ public class QuestionActivity extends Activity {
 	
 	/** The question the user is viewing */
 	private Question question;
+	
+	private QuestionActivity context;
 	
 	/** List of TextViews containing solutions */
 	private List<TextView> solutionTextViews;
@@ -54,10 +69,15 @@ public class QuestionActivity extends Activity {
 	/** Thread in which solutions are loaded */
 	private FetchSolutionsTask loadingThread;
 	
+	@SuppressLint("NewApi")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_question);	
+		setBehindContentView(R.layout.activity_menu);
+		getActionBar().setHomeButtonEnabled(true);
+		
+		buildSlideMenu();
 		
 		// Get intent
 		Intent intent = getIntent();
@@ -81,16 +101,56 @@ public class QuestionActivity extends Activity {
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
+		context = this;
+		
 		// Add question to layout
 		linearLayout.addView(textview, 0);
-		
+				
 		// Initialize values
 		solutionsLoaded = false;
 		showSolutionsPressed = false;
 		solutionTextViews = new ArrayList<TextView>();
 		
 		//Start loading solutions. This makes a network call.
-		loadSolutions();
+		loadSolutions();		
+	}
+	
+	public void buildSlideMenu(){
+		SlidingMenu menu = getSlidingMenu();
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int width = (int) ((double) metrics.widthPixels);
+		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		
+		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+		ArrayAdapter<CharSequence> adapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.difficulty, 
+				android.R.layout.simple_spinner_item);
+		
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		// Apply the adapter to the spinner
+		spinner.setAdapter(adapter);
+		
+		// Handle onClick of Slide-Menu button
+		Button button = (Button) findViewById(R.id.slide_menu_button);
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+				String difficulty = spinner.getSelectedItem().toString();
+				
+				toggle();
+				
+				Intent intent = new Intent(context, MainActivity.class);
+				SlideMenuInfoTransfer.difficultyMessage = difficulty;
+				startActivity(intent);
+			}
+		});
+		
 	}
 	
 	/**
@@ -247,14 +307,7 @@ public class QuestionActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
+			toggle();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

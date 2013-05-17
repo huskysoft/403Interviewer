@@ -66,7 +66,7 @@ public class Utility {
 		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
-			sb.append(line).append("\n");
+			sb.append(line).append('\n');
 		}
 		return sb.toString();
 	}
@@ -99,8 +99,8 @@ public class Utility {
 			throws IOException {
 		boolean newFile = file.createNewFile();
 		FileOutputStream fout = new FileOutputStream(file);
-        OutputStreamWriter out 
-        		= new OutputStreamWriter(fout, ASCII_ENCODING);
+		OutputStreamWriter out 
+			= new OutputStreamWriter(fout, ASCII_ENCODING);
 		try {
 			out.write(string);
 		} finally {
