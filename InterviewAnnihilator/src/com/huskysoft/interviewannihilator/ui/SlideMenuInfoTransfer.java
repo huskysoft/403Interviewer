@@ -4,6 +4,8 @@
  */
 package com.huskysoft.interviewannihilator.ui;
 
+import com.huskysoft.interviewannihilator.model.Difficulty;
+
 public class SlideMenuInfoTransfer {
 	/**
 	 * The percentage of the screen that is not covered up by the slide
@@ -15,5 +17,5 @@ public class SlideMenuInfoTransfer {
 	 * Used to pass a selected difficulty back to the 
 	 * MainActivity class through the slide-menu.
 	 */
-	public static String difficultyMessage = "";
+	public static Difficulty diff = null;
 }

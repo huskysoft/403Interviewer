@@ -10,8 +10,6 @@ package com.huskysoft.interviewannihilator.ui;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.service.*;
-import com.huskysoft.interviewannihilator.util.Utility;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 
@@ -21,7 +19,6 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -61,20 +57,18 @@ public class MainActivity extends SlidingActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		
 		// Get passed difficulty stored in Utility class
-		String passedDifficulty = SlideMenuInfoTransfer.difficultyMessage;
+		Difficulty diff = SlideMenuInfoTransfer.diff;
 		
 		// Reset PassedDifficulty
-		SlideMenuInfoTransfer.difficultyMessage = "";
+		SlideMenuInfoTransfer.diff = null;
 		
 		buildSlideMenu();
 		
-		if(!passedDifficulty.equals("")){
-			setSpinnerToSelectedValue(passedDifficulty);
+		if(diff == null){
+			setSpinnerToSelectedValue("");
 		}
 		
-		Difficulty diff = Difficulty.valueOf(passedDifficulty);
-		
-		questionll = (LinearLayout) findViewById(R.id.question_layout);		
+		questionll = (LinearLayout) findViewById(R.id.question_layout);
 
 		loadQuestions(diff);
 	}
@@ -104,7 +98,7 @@ public class MainActivity extends SlidingActivity {
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		String difficulty = spinner.getSelectedItem().toString();
 		
-		return Difficulty.valueOf(difficulty);
+		return Difficulty.valueOf(difficulty.toUpperCase());
 	}
 	
 	/**
