@@ -13,14 +13,17 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
+import org.codehaus.jackson.type.TypeReference;
 
 import org.json.JSONException;
 
@@ -123,10 +126,16 @@ public class QuestionService {
 	 * 
 	 * @param questionIds
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
-	public Question getQuestionsById(Collection<String> questionIds) {
-		// TODO
-		return null;
+	public Set<Question> getQuestionsById(Collection<String> questionIds) 
+			throws JsonParseException, JsonMappingException, IOException {
+		String json = networkService.getQuestionsById(questionIds);
+		TypeReference<Set<Question>> tr = new TypeReference<Set<Question>>(){};
+		Set<Question> questions = mapper.readValue(json, tr);
+		return questions;
 	}
 
 	/**
