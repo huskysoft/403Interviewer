@@ -120,7 +120,7 @@ public class QuestionActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * Utility.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -146,7 +146,7 @@ public class QuestionActivity extends SlidingActivity {
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				Utility.DIFFICULTY_MESSAGE = difficulty;
+				SlideMenuInfoTransfer.difficultyMessage = difficulty;
 				startActivity(intent);
 			}
 		});

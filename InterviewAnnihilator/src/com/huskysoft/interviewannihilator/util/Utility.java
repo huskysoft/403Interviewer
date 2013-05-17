@@ -36,18 +36,6 @@ public class Utility {
 	private static final int MIN_LIKES = 5;
 	
 	/**
-	 * The percentage of the screen that is not covered up by the slide
-	 * in menu.
-	 */
-	public static final double SLIDE_MENU_WIDTH = .25;
-	
-	/**
-	 * Used to pass a selected difficulty back to the 
-	 * MainActivity class through the slide-menu.
-	 */
-	public static String DIFFICULTY_MESSAGE = "";
-	
-	/**
 	 * Calculates the rank based on the number of likes and
 	 * dislikes of the question
 	 * 

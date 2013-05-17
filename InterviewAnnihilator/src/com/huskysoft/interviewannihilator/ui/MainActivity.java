@@ -61,10 +61,10 @@ public class MainActivity extends SlidingActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		
 		// Get passed difficulty stored in Utility class
-		String passedDifficulty = Utility.DIFFICULTY_MESSAGE;
+		String passedDifficulty = SlideMenuInfoTransfer.difficultyMessage;
 		
 		// Reset PassedDifficulty
-		Utility.DIFFICULTY_MESSAGE = "";
+		SlideMenuInfoTransfer.difficultyMessage = "";
 		
 		buildSlideMenu();
 		
@@ -72,7 +72,7 @@ public class MainActivity extends SlidingActivity {
 			setSpinnerToSelectedValue(passedDifficulty);
 		}
 		
-		Difficulty diff = getDifficultyByString(passedDifficulty);
+		Difficulty diff = Difficulty.valueOf(passedDifficulty);
 		
 		questionll = (LinearLayout) findViewById(R.id.question_layout);		
 
@@ -94,27 +94,6 @@ public class MainActivity extends SlidingActivity {
 	}
 	
 	/**
-	 * Helper method that gives the correct Difficulty enum based
-	 * on the string value. Value comes from the slide menu.
-	 * 
-	 * @param difficulty
-	 * @return Difficulty Enum
-	 */
-	public Difficulty getDifficultyByString(String difficulty){
-		if(difficulty.equals("Easy")){
-			return Difficulty.EASY;
-		}else if(difficulty.equals("Medium")){
-			return Difficulty.MEDIUM;
-		}
-		else if(difficulty.equals("Hard")){
-			return Difficulty.HARD;
-		}
-		else{
-			return null;
-		}
-	}
-	
-	/**
 	 * Method that returns the Difficulty Enum that is 
 	 * currently selected in the Difficulty spinner input
 	 * on the slide menu.
@@ -125,7 +104,7 @@ public class MainActivity extends SlidingActivity {
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		String difficulty = spinner.getSelectedItem().toString();
 		
-		return getDifficultyByString(difficulty);
+		return Difficulty.valueOf(difficulty);
 	}
 	
 	/**
@@ -136,7 +115,7 @@ public class MainActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * Utility.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
