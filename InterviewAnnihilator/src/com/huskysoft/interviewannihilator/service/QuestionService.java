@@ -49,8 +49,8 @@ public class QuestionService {
 	private QuestionService() {
 		this.networkService = NetworkService.getInstance();
 		mapper = new ObjectMapper();
-		mapper.configure(
-				DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(DeserializationConfig.
+				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	/**
@@ -156,7 +156,8 @@ public class QuestionService {
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
-			throw new IOException("Invalid limit or offset parameter");
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset, random);
@@ -192,10 +193,12 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(int questionId, int limit, int offset)
+	public PaginatedSolutions getSolutions(
+			int questionId, int limit, int offset)
 			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
-			throw new IOException("Invalid limit or offset parameter");
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getSolutions(questionId, limit, offset);
 		PaginatedSolutions databaseSolutions;
@@ -229,6 +232,9 @@ public class QuestionService {
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
 		return Integer.parseInt(result);
@@ -246,6 +252,9 @@ public class QuestionService {
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
