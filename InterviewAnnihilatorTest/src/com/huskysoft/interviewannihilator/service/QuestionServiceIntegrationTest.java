@@ -8,10 +8,8 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -134,9 +132,9 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		int qId = questionService.postQuestion(qInit);
 		
 		// read
-		Set<Integer> qIdSet = new HashSet<Integer>();
-		qIdSet.add(qId);
-		List<Question> qList = questionService.getQuestionsById(qIdSet);
+		List<Integer> qIdList = new ArrayList<Integer>();
+		qIdList.add(qId);
+		List<Question> qList = questionService.getQuestionsById(qIdList);
 		assertEquals(1, qList.size());
 		Question qCreated = qList.get(0);
 		qInit.setDateCreated(qCreated.getDateCreated());
@@ -145,7 +143,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		
 		// delete
 		questionService.deleteQuestion(qId);
-		qList = questionService.getQuestionsById(qIdSet);
+		qList = questionService.getQuestionsById(qIdList);
 		assertEquals(0, qList.size());
 	}
 	

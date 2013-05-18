@@ -10,7 +10,6 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
@@ -128,11 +127,11 @@ public class QuestionService {
 	 * @throws JsonMappingException 
 	 * @throws JsonParseException 
 	 */
-	public List<Question> getQuestionsById(Collection<Integer> questionIds) 
+	public List<Question> getQuestionsById(List<Integer> questionIds) 
 			throws JsonParseException, JsonMappingException, IOException {
 		String json = networkService.getQuestionsById(questionIds);
-		TypeReference<Set<Question>> tr = new TypeReference<Set<Question>>(){};
-		Set<Question> questions = mapper.readValue(json, tr);
+		TypeReference<List<Question>> tr = new TypeReference<List<Question>>(){};
+		List<Question> questions = mapper.readValue(json, tr);
 		return questions;
 	}
 

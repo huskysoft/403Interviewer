@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -93,7 +94,7 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
-	public String getQuestionsById(Collection<String> questionIds) {
+	public String getQuestionsById(List<Integer> questionIds) {
 		// TODO
 		return null;
 	}
@@ -222,17 +223,17 @@ public class NetworkService {
 	 * 
 	 * @param url
 	 *            the url of the server
-	 * @param content
+	 * @param jsonString
 	 *            a JSON string as the content of the post request
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	private String dispatchPostRequest(String url, String content)
+	private String dispatchPostRequest(String url, String jsonString)
 			throws NetworkException {
 		try {
 			// Create and execute the HTTP POST request
 			HttpPost request = new HttpPost(url);
-			StringEntity requestContent = new StringEntity(content);
+			StringEntity requestContent = new StringEntity(jsonString);
 			requestContent.setContentType("application/json");
 			request.setEntity(requestContent);
 			HttpResponse response = httpClient.execute(request);
