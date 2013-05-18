@@ -301,24 +301,6 @@ public class QuestionService {
 	}
 
 	/**
-	 * Gets the userId associated with a given email in the database
-	 * 
-	 * @param userEmail the email whose id we are getting
-	 * @return the id associated with the email. Creates a new entry in the
-	 * database and returns the id of the new entry if the email doesn't
-	 * exist in the database yet
-	 * @throws NetworkException
-	 * @throws IOException
-	 */
-	protected int getUserId(String userEmail) throws NetworkException,
-			IOException {
-		if (userEmail == null) {
-			throw new IllegalArgumentException("userEmail cannot be null");
-		}
-		return networkService.getUserId(userEmail);
-	}
-	
-	/**
 	 * Posts a solution to the server.
 	 * 
 	 * @param toPost the Solution object that represents the solution
@@ -401,6 +383,24 @@ public class QuestionService {
 
 	public void clearAllFavorites() {
 		userInfo.getFavoriteQuestions().clear();
+	}
+
+	/**
+	 * Gets the userId associated with a given email in the database
+	 * 
+	 * @param userEmail the email whose id we are getting
+	 * @return the id associated with the email. Creates a new entry in the
+	 * database and returns the id of the new entry if the email doesn't
+	 * exist in the database yet
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	protected int getUserId(String userEmail) throws NetworkException,
+			IOException {
+		if (userEmail == null) {
+			throw new IllegalArgumentException("userEmail cannot be null");
+		}
+		return networkService.getUserId(userEmail);
 	}
 
 	/**

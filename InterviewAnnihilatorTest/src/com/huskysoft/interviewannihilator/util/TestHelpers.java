@@ -22,6 +22,8 @@ import com.huskysoft.interviewannihilator.model.UserInfo;
 @SuppressLint("UseSparseArrays")
 public class TestHelpers {
 	
+	public static final int VALID_QUESTION_ID = 10;
+	
 	public static Question createDummyQuestion(int i) {
 		Question q = new Question();
 		q.setAuthorId(i + 1);
