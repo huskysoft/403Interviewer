@@ -1,10 +1,8 @@
 package com.huskysoft.interviewannihilator.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
@@ -17,7 +15,6 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;

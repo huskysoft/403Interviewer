@@ -2,7 +2,7 @@
  * A class that provides basic functionalities for getting JSON response
  * strings from the server.
  * 
- * @author Bennett Ng, 5/3/2013
+ * @author Kevin Loh, Bennett Ng, 5/3/2013
  * 
  *
  */
@@ -10,12 +10,16 @@
 package com.huskysoft.interviewannihilator.service;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.accounts.NetworkErrorException;
@@ -58,14 +62,13 @@ public class NetworkService {
 	 */
 	public String getQuestions(Difficulty difficulty,
 			Collection<Category> categories, int limit, int offset,
-			boolean random)
-			throws NetworkException {
+			boolean random) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
 		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
 		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
-			urlToSend.append(appendParameter
-					(PARAM_DIFFICULTY, difficulty.name()));
+			urlToSend.append(appendParameter(PARAM_DIFFICULTY,
+					difficulty.name()));
 		}
 		if (categories != null && categories.size() != 0) {
 			Object[] categoryObj = categories.toArray();
@@ -83,10 +86,9 @@ public class NetworkService {
 		if (random) {
 			urlToSend.append(appendParameter(PARAM_RANDOM, ""));
 		}
-		
+
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
-		
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
@@ -110,16 +112,40 @@ public class NetworkService {
 				String.valueOf(questionId)));
 		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
 		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
-		
+
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
-		
+
 		return dispatchGetRequest(urlToSend.toString());
 	}
-	
+
 	public String getQuestionsById(Collection<String> questionIds) {
 		// TODO
 		return null;
+	}
+
+	/**
+	 * Posts a question to the server. Returns true if the post succeeds.
+	 * 
+	 * @param question
+	 *            a JSON string representing the question
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 */
+	public String postQuestion(String question) throws NetworkException {
+		return dispatchPostRequest(POST_QUESTION_URL, question);
+	}
+
+	/**
+	 * Posts a solution to the server. Returns true if the post succeeds.
+	 * 
+	 * @param solution
+	 *            a JSON string representing the solution
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 */
+	public String postSolution(String solution) throws NetworkException {
+		return dispatchPostRequest(POST_SOLUTION_URL, solution);
 	}
 
 	/**
@@ -133,7 +159,7 @@ public class NetworkService {
 	 *            should be set to false if this is the last param that is to be
 	 *            appended
 	 * @return a new String with the parameter appended. Returns the empty
-	 *            String if either of the Strings passed in were null
+	 *         String if either of the Strings passed in were null
 	 */
 	private String appendParameter(String paramName, String paramVal) {
 		if (paramName == null || paramVal == null) {
@@ -162,23 +188,75 @@ public class NetworkService {
 				throw new NetworkException("Request to " + url
 						+ " failed with response code " + statusCode);
 			}
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent(), Utility.ASCII_ENCODING));
-
-			StringBuilder serverString = new StringBuilder();
-			String line = rd.readLine();
-			while (line != null) {
-				serverString.append(line);
-				line = rd.readLine();
-			}
-
-			rd.close();
-			return serverString.toString();
+			
+			// Return the content
+						return getContent(response);
 		} catch (Exception e) {
-			throw new NetworkException("Request to " + url + " failed", e);
+			throw new NetworkException("GET request to " + url + " failed", e);
 		}
 	}
 
+	/**
+	 * Dispatches a post request to the remote server with the given url. The
+	 * content of the post request is the given json string.
+	 * 
+	 * @param url
+	 *            the url of the server
+	 * @param content
+	 *            a JSON string as the content of the post request
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 */
+	private String dispatchPostRequest(String url, String content)
+			throws NetworkException {
+		try {
+			// Create and execute the HTTP POST request
+			HttpPost request = new HttpPost(url);
+			StringEntity requestContent = new StringEntity(content);
+			requestContent.setContentType("application/json");
+			request.setEntity(requestContent);
+			HttpResponse response = httpClient.execute(request);
+
+			// Check the status of the response
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new NetworkException("Request to " + url
+						+ " failed with response code " + statusCode);
+			}
+
+			// Return the content
+			return getContent(response);
+			
+		} catch (Exception e) {
+			throw new NetworkException("POST request to " + url + " failed", e);
+		}
+	}
+
+	/**
+	 * Gets the content of the HTTP response of a GET/POST request.
+	 * 
+	 * @param response
+	 *            the HTTP response after the request
+	 * @return a String representing the content of the response
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws UnsupportedEncodingException
+	 */
+	private String getContent(HttpResponse response)
+			throws UnsupportedEncodingException, IllegalStateException,
+			IOException {
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response
+				.getEntity().getContent(), Utility.ASCII_ENCODING));
+		StringBuilder serverString = new StringBuilder();
+		String line = rd.readLine();
+		while (line != null) {
+			serverString.append(line);
+			line = rd.readLine();
+		}
+		rd.close();
+		return serverString.toString();
+	}
+	
 	@Override
 	protected void finalize() {
 		httpClient.getConnectionManager().shutdown();

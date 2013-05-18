@@ -39,6 +39,10 @@
     <string name="category_post_descriptor">Category: </string>
     <string name="solution_post_descriptor">Solution: </string>
     <string name="internalError_title">The app has experienced an internal error.</string>
-    
-
+    <string-array name="difficulty">
+        <item>All</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
 </resources>
