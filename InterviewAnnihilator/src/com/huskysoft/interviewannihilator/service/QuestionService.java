@@ -217,6 +217,16 @@ public class QuestionService {
 		return databaseSolutions;
 	}
 
+	/**
+	 * Posts a question to the server.
+	 * 
+	 * @param toPost
+	 *            the Question object that represents the question
+	 * @return the id of the question being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
 		String questionStr = mapper.writeValueAsString(toPost);
@@ -224,6 +234,16 @@ public class QuestionService {
 		return Integer.parseInt(result);
 	}
 
+	/**
+	 * Posts a solution to the server.
+	 * 
+	 * @param toPost
+	 *            the Solution object that represents the solution
+	 * @return the id of the solution being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
 		String solutionStr = mapper.writeValueAsString(toPost);
