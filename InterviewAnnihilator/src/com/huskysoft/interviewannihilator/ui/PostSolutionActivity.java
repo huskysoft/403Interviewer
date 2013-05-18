@@ -12,6 +12,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.util.Utility;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
@@ -94,7 +95,8 @@ public class PostSolutionActivity extends SlidingActivity {
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.length() == 0) {
+				if (diffStr == null || diffStr.length() == 0 ||
+					diffStr.equals(Utility.ALL)) {
 					SlideMenuInfoTransfer.diff = null;
 				} else {
 					SlideMenuInfoTransfer.diff = 

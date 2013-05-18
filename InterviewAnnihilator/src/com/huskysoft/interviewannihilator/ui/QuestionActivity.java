@@ -19,6 +19,8 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
+import com.huskysoft.interviewannihilator.util.Utility;
+
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -141,7 +143,8 @@ public class QuestionActivity extends SlidingActivity {
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.length() == 0) {
+				if (diffStr == null || diffStr.length() == 0 || 
+					diffStr.equals(Utility.ALL)) {
 					SlideMenuInfoTransfer.diff = null;
 				} else {
 					SlideMenuInfoTransfer.diff = 

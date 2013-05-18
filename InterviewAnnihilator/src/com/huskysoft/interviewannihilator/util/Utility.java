@@ -35,6 +35,11 @@ public class Utility {
 	 * rating */
 	private static final int MIN_LIKES = 5;
 	
+	/** 
+	 * For difficulty "All" special-case for slide-in menu
+	 */
+	public static final String ALL = "All";
+	
 	/**
 	 * Calculates the rank based on the number of likes and
 	 * dislikes of the question
