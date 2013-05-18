@@ -12,6 +12,7 @@ import java.util.List;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
+import com.huskysoft.interviewannihilator.util.Utility;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
@@ -39,9 +40,10 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public final static String EXTRA_MESSAGE =
 			"com.huskysoft.interviewannihilator.QUESTION";
-		
+	
 	/** Layout element that holds the questions */
 	private LinearLayout questionll;
+	
 	
 	/**
 	 * Method that populates the app when the MainActivity is created.
@@ -97,7 +99,9 @@ public class MainActivity extends SlidingActivity {
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		String difficulty = spinner.getSelectedItem().toString();
-		
+		if (difficulty.equals(Utility.ALL)){
+			return null;
+		}
 		return Difficulty.valueOf(difficulty.toUpperCase());
 	}
 	
