@@ -11,6 +11,7 @@ package com.huskysoft.interviewannihilator.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -245,6 +246,11 @@ public class QuestionService {
 			throw new IllegalArgumentException("Empty text/title in question");
 		}
 		
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setDateCreated(new Date());
+		
+		// Post the question and return result
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
 		return Integer.parseInt(result);
@@ -273,6 +279,11 @@ public class QuestionService {
 			throw new IllegalArgumentException("Empty text in solution");
 		}
 		
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setDateCreated(new Date());
+
+		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
