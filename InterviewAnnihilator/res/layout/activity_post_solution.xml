@@ -22,7 +22,7 @@
 	        android:layout_toLeftOf="@+id/send_solution"
 	        android:layout_marginTop="10dp"
 	        android:ems="10"
-	        android:hint="@string/edit_solution" >
+	        android:hint="@string/edit_solution_msg" >
 	
 	        <requestFocus />
 	    </EditText>

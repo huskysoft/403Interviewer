@@ -77,8 +77,8 @@ public class QuestionActivity extends Activity {
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = new TextView(this);
-		textview.setBackgroundDrawable(getResources().
-				getDrawable( R.drawable.listitem));
+		textview.setBackgroundDrawable(
+				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
@@ -93,7 +93,6 @@ public class QuestionActivity extends Activity {
 		//Start loading solutions. This makes a network call.
 		loadSolutions();
 	}
-
 	
 	/**
 	 * Appends a list of solutions to a hidden list.
@@ -115,27 +114,28 @@ public class QuestionActivity extends Activity {
 			t.setText("There doesn't seem to be any solutions");
 			t.setLayoutParams(llp);
 			linearLayout.addView(t);
-		}
-		for(int i = 0; i < solutions.size(); i++){
-			Solution solution = solutions.get(i);
-			if(solution != null && solution.getText() != null){
-				String solutionText = solution.getText();
-				
-				TextView t = new TextView(this);
-				
-				t.setText(solutionText);
-				t.setBackgroundDrawable(
-						getResources().getDrawable( R.drawable.listitem));
-				t.setLayoutParams(llp);
-				t.setId(solution.getId());
-				//Hide solutions
-				t.setVisibility(View.GONE);
-				
-				solutionTextViews.add(t);
-				linearLayout.addView(t);
+		} else {
+			for(int i = 0; i < solutions.size(); i++){
+				Solution solution = solutions.get(i);
+				if(solution != null && solution.getText() != null){
+					String solutionText = solution.getText();
+					
+					TextView t = new TextView(this);
+					
+					t.setText(solutionText);
+					t.setBackgroundDrawable(getResources().
+							getDrawable( R.drawable.listitem));
+					t.setLayoutParams(llp);
+					t.setId(solution.getId());
+					//Hide solutions
+					t.setVisibility(View.GONE);
+					
+					solutionTextViews.add(t);
+					linearLayout.addView(t);
+				}
 			}
 		}
-		
+			
 		solutionsLoaded = true;
 		if(showSolutionsPressed){
 			revealSolutions();

@@ -63,7 +63,7 @@ public class Question implements Likeable, Serializable {
 	}
 	
 	public Date getDateCreated() {
-		return dateCreated;
+		return (Date) dateCreated.clone();
 	}
 	
 	public Category getCategory() {
@@ -99,7 +99,7 @@ public class Question implements Likeable, Serializable {
 	}
 
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.dateCreated = (Date) dateCreated.clone();
 	}
 
 	public void setCategory(Category category) {

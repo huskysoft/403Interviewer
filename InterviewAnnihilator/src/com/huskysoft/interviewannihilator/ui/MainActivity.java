@@ -22,6 +22,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,6 +53,16 @@ public class MainActivity extends Activity {
 		questionll = (LinearLayout) findViewById(R.id.question_layout);		
 
 		loadQuestions();
+		//append add question button
+		Button post = new Button(this);
+		post.setText(R.string.button_post_question);
+		post.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				postQuestion(v);
+			}
+		});
+		questionll.addView(post);
 	}
 	
 	public void loadQuestions(){
@@ -169,6 +181,17 @@ public class MainActivity extends Activity {
 	public void openQuestion(View view){
 		Intent intent = new Intent(this, QuestionActivity.class);
 		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
+		startActivity(intent);
+	}
+	
+	/**
+	 * Called when the user clicks on the post question button
+	 * Takes the user to the post a question form.
+	 * 
+	 * @param v The TextView that holds the selected question.
+	 */
+	public void postQuestion(View v){
+		Intent intent = new Intent(this, PostQuestionActivity.class);
 		startActivity(intent);
 	}
 }

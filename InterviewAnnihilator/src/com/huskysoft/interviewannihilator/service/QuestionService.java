@@ -158,21 +158,19 @@ public class QuestionService {
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset, random);
 		PaginatedQuestions databaseQuestions;
-		try {
-			// deserialize "flat parameters"
-			databaseQuestions = mapper
-					.readValue(json, PaginatedQuestions.class);
-			JsonNode node = mapper.readTree(json);
+		
+		// deserialize "flat parameters"
+		databaseQuestions = mapper
+				.readValue(json, PaginatedQuestions.class);
+		JsonNode node = mapper.readTree(json);
 
-			// deserialize nested Questions
-			String questionsJson = node.get(RESULTS_KEY).asText();
-			JavaType jtype = TypeFactory.defaultInstance()
-					.constructParametricType(List.class, Question.class);
-			List<Question> questions = mapper.readValue(questionsJson, jtype);
-			databaseQuestions.setQuestions(questions);
-		} catch (Exception e) {
-			throw new JSONException("Failed to deserialize JSON :" + json);
-		}
+		// deserialize nested Questions
+		String questionsJson = node.get(RESULTS_KEY).asText();
+		JavaType jtype = TypeFactory.defaultInstance()
+				.constructParametricType(List.class, Question.class);
+		List<Question> questions = mapper.readValue(questionsJson, jtype);
+		databaseQuestions.setQuestions(questions);
+		
 		return databaseQuestions;
 	}
 
@@ -199,20 +197,21 @@ public class QuestionService {
 		}
 		String json = networkService.getSolutions(questionId, limit, offset);
 		PaginatedSolutions databaseSolutions;
-		try {
-			// deserialize "flat parameters"
-			databaseSolutions = mapper
-					.readValue(json, PaginatedSolutions.class);
-			JsonNode node = mapper.readTree(json);
+		
+		// deserialize "flat parameters"
+		databaseSolutions = mapper
+				.readValue(json, PaginatedSolutions.class);
+		JsonNode node = mapper.readTree(json);
 
-			// deserialize nested Solutions
-			String solutionsJson = node.get(RESULTS_KEY).asText();
-			JavaType jtype = TypeFactory.defaultInstance()
-					.constructParametricType(List.class, Solution.class);
-			List<Solution> solutions = mapper.readValue(solutionsJson, jtype);
-			databaseSolutions.setSolutions(solutions);
-		} catch (Exception e) {
-			throw new JSONException("Failed to deserialize JSON :" + json);
+		// deserialize nested Solutions
+		String solutionsJson = node.get(RESULTS_KEY).asText();
+		JavaType jtype = TypeFactory.defaultInstance()
+				.constructParametricType(List.class, Solution.class);
+		List<Solution> solutions = mapper.readValue(solutionsJson, jtype);
+		databaseSolutions.setSolutions(solutions);
+
+		if (userInfo != null) {
+			userInfo.markViewedQuestion(questionId);
 		}
 		if (userInfo != null) {
 			userInfo.markViewedQuestion(questionId);

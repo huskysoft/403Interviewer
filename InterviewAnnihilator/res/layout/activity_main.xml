@@ -12,6 +12,6 @@
 	    android:gravity="center">
 	    
 		<include layout="@layout/loading_anim"/>
-	    
+	
 	</LinearLayout>
 </ScrollView>
