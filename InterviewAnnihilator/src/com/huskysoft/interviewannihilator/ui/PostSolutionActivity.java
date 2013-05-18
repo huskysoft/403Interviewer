@@ -1,4 +1,4 @@
-/*
+/**
  * The screen for when users attempt to post a solution
  * 
  * @author Cody Andrews, 05/14/2013
@@ -7,34 +7,49 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.util.Utility;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.Dialog;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 
-public class PostSolutionActivity extends Activity {
+public class PostSolutionActivity extends SlidingActivity {
 	/** The question being answered **/
 	private Question question;
 	
+	/** Reference to activity used in click handler for slide-in menu */
+	private PostSolutionActivity context;
+	
+	@SuppressLint("NewApi")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
+		setBehindContentView(R.layout.activity_menu);
+		getActionBar().setHomeButtonEnabled(true);
+		
+		buildSlideMenu();
+		context = this;
 		
 		// Get intent
 		Intent intent = getIntent();
@@ -46,6 +61,54 @@ public class PostSolutionActivity extends Activity {
 		tv.setText(question.getText());
 	}
 
+	/**
+	 * Helper method that builds and populates the slide in menu.
+	 */
+	public void buildSlideMenu(){
+		SlidingMenu menu = getSlidingMenu();
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int width = (int) ((double) metrics.widthPixels);
+		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		
+		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+		ArrayAdapter<CharSequence> adapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.difficulty, 
+				android.R.layout.simple_spinner_item);
+		
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		// Apply the adapter to the spinner
+		spinner.setAdapter(adapter);
+		
+		// Handle onClick of Slide-Menu button
+		Button button = (Button) findViewById(R.id.slide_menu_button);
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+				String diffStr = spinner.getSelectedItem().toString();
+				
+				toggle();
+				
+				Intent intent = new Intent(context, MainActivity.class);
+				if (diffStr == null || diffStr.length() == 0 ||
+					diffStr.equals(Utility.ALL)) {
+					SlideMenuInfoTransfer.diff = null;
+				} else {
+					SlideMenuInfoTransfer.diff = 
+							Difficulty.valueOf(diffStr.toUpperCase());
+				}
+				
+				startActivity(intent);
+			}
+		});
+		
+	}
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -67,14 +130,7 @@ public class PostSolutionActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
+			toggle();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -181,4 +237,6 @@ public class PostSolutionActivity extends Activity {
 		}
 		dialog.show();
 	}
+	
+	
 }

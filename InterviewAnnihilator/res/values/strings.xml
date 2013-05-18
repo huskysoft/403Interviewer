@@ -9,6 +9,16 @@
     <string name="title_activity_post_solution">PostSolution</string>
     <string name="edit_solution">Enter a solution</string>
     <string name="button_post">Post</string>
+    <string name="title_activity_post_result">PostResult</string>
+    
+
+    <string-array name="difficulty">
+        <item>All</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
     <string name="button_post_solution">Submit a Solution</string>
     <string name="error_displaying_question">Error Displaying Question!</string>
     <string name="retryDialog_title">A network error has occurred</string>
@@ -22,5 +32,6 @@
     <string name="toast_return">Returning&#8230;</string>
     <string name="toast_retry">Trying again&#8230;</string>
     <string name="title_activity_post_result">PostResult</string> 
+
 
 </resources>
