@@ -151,6 +151,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
@@ -192,6 +193,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	public PaginatedSolutions getSolutions(
 			int questionId, int limit, int offset)
@@ -229,6 +231,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
@@ -249,11 +252,12 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
 		if (toPost == null) {
-			throw new IllegalArgumentException("Invalid Question: null");
+			throw new IllegalArgumentException("Invalid Solution: null");
 		}
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
