@@ -235,9 +235,16 @@ public class QuestionService {
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
+		// Check parameter isn't null
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
 		}
+		
+		// Check question has nonempty text and title
+		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Empty text/title in question");
+		}
+		
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
 		return Integer.parseInt(result);
@@ -256,9 +263,16 @@ public class QuestionService {
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
+		// Check parameter isn't null
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
 		}
+		
+		// Check solution has nonempty text
+		if (toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Empty text in solution");
+		}
+		
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
