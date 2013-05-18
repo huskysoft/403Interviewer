@@ -132,8 +132,12 @@ public class NetworkService {
 	 *            a JSON string representing the question
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
+	 * @throws IllegalArgumentException
 	 */
 	public String postQuestion(String question) throws NetworkException {
+		if (question == null) {
+			throw new IllegalArgumentException("Invalid question: null");
+		}
 		return dispatchPostRequest(POST_QUESTION_URL, question);
 	}
 
@@ -144,8 +148,12 @@ public class NetworkService {
 	 *            a JSON string representing the solution
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
+	 * @throws IllegalArgumentException
 	 */
 	public String postSolution(String solution) throws NetworkException {
+		if (solution == null) {
+			throw new IllegalArgumentException("Invalid solution: null");
+		}
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
 	}
 
