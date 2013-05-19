@@ -41,6 +41,16 @@ public class QuestionServiceTest extends TestCase {
 		mapper = new ObjectMapper();
 	}
 	
+	/**
+	 * testGetAllQuestions actually gets a number of questions from the
+	 * database, and tests whether the questions retrieved and the data in the
+	 * paginatedQuestions object is what it should be
+	 * 
+	 * @label white-box test
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void testGetAllQuestions() 
 			throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = 
@@ -51,6 +61,33 @@ public class QuestionServiceTest extends TestCase {
 		System.out.println(questions);
 	}
 	
+	/**
+	 * Give bad limit and offset to getQuestions
+	 * 
+	 * @label Black-box test
+	 */
+	public void testGetQuestionsBadArguments()
+				throws NetworkException, JSONException, IOException {
+		boolean illegalargexception = false;
+		try {
+			questionService.getQuestions(null, null, -1, -1, false);
+		}
+		catch (IllegalArgumentException e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			illegalargexception = true;
+		}
+		assertTrue(illegalargexception);
+	}
+	
+	/**
+	 * testGetSolutions tests if the retrieval of solutions for a given
+	 * question from the database is working.
+	 * 
+	 * @label White-box test
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void testGetSolutions() 
 			throws NetworkException, JSONException, IOException {
 		PaginatedSolutions solutions = questionService.getSolutions(10, 10, 0);
@@ -60,6 +97,15 @@ public class QuestionServiceTest extends TestCase {
 		System.out.println(solutions);
 	}
 	
+	/**
+	 * Tests the local storage of information our app will use.
+	 * 
+	 * @label White-box test
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
 	public void testReadWriteUserInfo() throws JsonGenerationException, 
 			JsonMappingException, IOException, NetworkException {		
 		// write UserInfo to a file
@@ -86,6 +132,43 @@ public class QuestionServiceTest extends TestCase {
 			file.delete();
 		}
 	}
-
 	
+	/**
+	 * Tests the retrieval of userId from an email
+	 * 
+	 * @label White-box testing
+	 * @throws NetworkException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 * 
+	 */
+	public void testGetUserId() throws NetworkException, IOException,
+			IllegalArgumentException {
+		String userEmail = "dan.sanders@gmail.com";
+		int expectedId = 3;
+		int actualId = questionService.getUserId(userEmail);
+		assertEquals(expectedId, actualId);
+	}
+	
+	/**
+	 * Tests the retrieval of userId from an email
+	 * 
+	 * @label White-box testing
+	 * @throws NetworkException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 * 
+	 */
+	public void testGetUserIdWithNull() throws NetworkException, IOException,
+			IllegalArgumentException {
+		boolean illegalargexception = false;
+		try {
+			questionService.getUserId(null);
+		}
+		catch (IllegalArgumentException e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			illegalargexception = true;
+		}
+		assertTrue(illegalargexception);
+	}
 }

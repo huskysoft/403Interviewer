@@ -20,7 +20,7 @@ public class UserInfo {
 	public static final Boolean DOWNVOTE = false;
 	
 	private String userEmail;
-	private String userId;
+	private int userId;
 	private Map<Integer, Date> viewedQuestions;
 	private Map<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
@@ -43,11 +43,11 @@ public class UserInfo {
 		this.userEmail = userEmail;
 	}
 	
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 	
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	
@@ -205,7 +205,7 @@ public class UserInfo {
 						.hashCode());
 		result = prime * result
 				+ ((userEmail == null) ? 0 : userEmail.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result;
 		result = prime * result
 				+ ((viewedQuestions == null) ? 0 : viewedQuestions.hashCode());
 		result = prime * result
@@ -234,11 +234,9 @@ public class UserInfo {
 				return false;
 		} else if (!userEmail.equals(other.userEmail))
 			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
+		if (userId != other.userId) {
 			return false;
+		}
 		if (viewedQuestions == null) {
 			if (other.viewedQuestions != null)
 				return false;

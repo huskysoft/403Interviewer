@@ -47,14 +47,14 @@ public class TestHelpers {
 	public static UserInfo createDummyUserInfo() {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail("johndoe@email.com");
-		userInfo.setUserId("1234");
+		userInfo.setUserId(1234);
 		userInfo.setFavoriteQuestions(createIntegerDateMap(10, 0));
 		userInfo.setViewedQuestions(createIntegerDateMap(20, 1024));
 		userInfo.setVotedQuestions(createIntegerBooleanMap(10, 0));
 		userInfo.setVotedSolutions(createIntegerBooleanMap(10, 50));
 		return userInfo;
 	}
-
+	
 	private static Map<Integer, Boolean> createIntegerBooleanMap(
 			int size, int initial) {
 		Map<Integer, Boolean> m = new HashMap<Integer, Boolean>();

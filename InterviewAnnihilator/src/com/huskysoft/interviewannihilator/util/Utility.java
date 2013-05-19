@@ -8,6 +8,8 @@
 
 package com.huskysoft.interviewannihilator.util;
 
+import static com.huskysoft.interviewannihilator.util.NetworkConstants.AMPERSAND;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,5 +114,25 @@ public class Utility {
 			out.close();
 		}
 		return newFile;
+	}
+	
+	/**
+	 * Append a given parameter to a url string
+	 * 
+	 * @param paramName
+	 *            the name of the parameter appended to the url
+	 * @param paramVal
+	 *            the value of the parameter appended to the url
+	 * @param addAmpersand
+	 *            should be set to false if this is the last param that is to be
+	 *            appended
+	 * @return a new String with the parameter appended. Returns the empty
+	 *         String if either of the Strings passed in were null
+	 */
+	public static String appendParameter(String paramName, String paramVal) {
+		if (paramName == null || paramVal == null) {
+			return "";
+		}
+		return (paramName + "=" + paramVal + AMPERSAND);
 	}
 }

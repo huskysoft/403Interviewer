@@ -32,7 +32,6 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
-import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.Utility;
@@ -88,8 +87,7 @@ public class QuestionService {
 			Log.w(TAG, e.getMessage());
 			userInfo = new UserInfo();
 		}
-		if (userInfo.getUserId() == null
-				|| !userEmail.equals(userInfo.getUserEmail())) {
+		if (!userEmail.equals(userInfo.getUserEmail())) {
 			// new or non-matching UserInfo; clear history
 			userInfo.setUserEmail(userEmail);
 			userInfo.setUserId(getUserId(userEmail));
@@ -224,18 +222,37 @@ public class QuestionService {
 	}
 
 	/**
-	 * Posts a question to the server.
+	 * Gets the userId associated with a given email in the database
 	 * 
-	 * @param toPost
-	 *            the Question object that represents the question
-	 * @return the id of the question being posted
+	 * @param userEmail the email whose id we are getting
+	 * @return the id associated with the email. Creates a new entry in the
+	 * database and returns the id of the new entry if the email doesn't
+	 * exist in the database yet
 	 * @throws NetworkException
-	 * @throws JSONException
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 */
+	public int getUserId(String userEmail) throws NetworkException,
+			IOException, IllegalArgumentException {
+		if (userEmail == null) {
+			throw new IllegalArgumentException("userEmail cannot be null");
+		}
+		return networkService.getUserId(userEmail);
+	}
+	
+	/**
+ 	 * Posts a question to the server.
+ 	 * 
+ 	 * @param toPost
+ 	 *            the Question object that represents the question
+ 	 * @return the id of the question being posted
+ 	 * @throws NetworkException
+ 	 * @throws JSONException
+ 	 * @throws IOException
+ 	 * @throws IllegalArgumentException
+ 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException {
+			JSONException, IOException, IllegalArgumentException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
@@ -251,7 +268,7 @@ public class QuestionService {
 		}
 		
 		// Populate authorId and dateCreated (others are filled in)
-		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setAuthorId(userInfo.getUserId());
 		toPost.setDateCreated(new Date());
 		
 		// Post the question and return result
@@ -263,8 +280,7 @@ public class QuestionService {
 	/**
 	 * Posts a solution to the server.
 	 * 
-	 * @param toPost
-	 *            the Solution object that represents the solution
+	 * @param toPost the Solution object that represents the solution
 	 * @return the id of the solution being posted
 	 * @throws NetworkException
 	 * @throws JSONException
@@ -282,7 +298,7 @@ public class QuestionService {
 		}
 		
 		// Populate authorId and dateCreated (others are filled in)
-		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setAuthorId(userInfo.getUserId());
 		toPost.setDateCreated(new Date());
 
 		// Post the solution and return result
@@ -337,12 +353,6 @@ public class QuestionService {
 
 	public void clearAllFavorites() {
 		userInfo.getFavoriteQuestions().clear();
-	}
-
-	private String getUserId(String userEmail) throws NetworkException,
-			IOException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
