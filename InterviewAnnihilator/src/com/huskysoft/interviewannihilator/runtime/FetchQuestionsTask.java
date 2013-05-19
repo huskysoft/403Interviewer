@@ -15,21 +15,11 @@ import android.util.Log;
 
 
 import com.huskysoft.interviewannihilator.model.Difficulty;
-import com.huskysoft.interviewannihilator.model.NetworkException;
-
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
-/**
- * 
- * This AsyncTask is used to populate the MainActivity list of questions.
- * To use it, call new FetchQuestionsTask(this).execute();
- * 
- * @author Cody Andrews
- *
- */
 public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	
 	private QuestionService questionService;
@@ -85,6 +75,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 */
 	@Override
 	protected void onPostExecute(Void result){
-		context.displayQuestions(questionList);
+		context.setQuestions(questionList);
+		context.displayQuestions();
+		context.switchView();
 	}
 }

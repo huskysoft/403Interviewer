@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:background="@color/light_purple"
-    android:layout_height="match_parent"
-    android:clickable="true" >
-	    
-	<LinearLayout android:id="@+id/question_layout"
 
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_view_switcher"
+    android:background="@color/light_purple"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    	
+	<include layout="@layout/loading_anim"/>
+	    
+	<ScrollView 
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:layout_gravity="center"
-	    android:gravity="center">
+	    android:layout_height="match_parent"
+	    android:clickable="true" >
 	    
-		<include layout="@layout/loading_anim"/>
-	    
-	</LinearLayout>
-</ScrollView>
+		<LinearLayout android:id="@+id/question_layout"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical">	    
+		</LinearLayout>
+
+	</ScrollView>
+</ViewSwitcher>

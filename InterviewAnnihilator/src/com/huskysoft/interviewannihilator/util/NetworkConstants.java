@@ -37,6 +37,9 @@ public interface NetworkConstants {
 	public static final String POST_SOLUTION_URL = 
 			BASE_URI + SOLUTION	+ "postSolution.php";
 
+	public static final String GET_QUESTIONS_BYID_URL =
+			BASE_URI + QUESTION + "getQuestionsById.php";
+	
 	/** The script for getUserId */
 	public static final String GET_USERID_URL =
 			BASE_URI + AUTHENTICATION + "getUserId.php";
