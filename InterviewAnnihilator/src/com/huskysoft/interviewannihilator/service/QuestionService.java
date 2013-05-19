@@ -51,6 +51,7 @@ public class QuestionService {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		this.userInfo = Utility.createTestUserInfo();
 	}
 
 	/**
