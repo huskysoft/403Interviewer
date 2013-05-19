@@ -135,15 +135,30 @@ public class NetworkService {
 	 * @throws IllegalArgumentException
 	 */
 	public String postQuestion(String question) throws NetworkException {
-		if (question == null) {
-			throw new IllegalArgumentException("Invalid question: null");
-		}
+		Utility.ensureNotNull(question, "Question");
 		return dispatchPostRequest(POST_QUESTION_URL, question);
 	}
 
-	public boolean deleteQuestion(int questionId, String userEmail) {
-		// TODO
-		return false;
+	/**
+	 * Deletes a question from the remote DB. Returns true on success.
+	 * 
+	 * @param questionId
+	 * @param userEmail
+	 * @return
+	 * @throws NetworkException 
+	 */
+	public boolean deleteQuestion(int questionId, String userEmail)
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(DELETE_QUESTION_URL + "?");
+		urlToSend.append(Utility.appendParameter(
+				PARAM_QUESTIONID, String.valueOf(questionId)));
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		dispatchPostRequest(urlToSend.toString(), userEmail);
+		
+		// TODO: detect failure
+		return true;
 	}
 
 	/**
@@ -186,31 +201,24 @@ public class NetworkService {
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 */
-	public int getUserId(String userEmail)
-			throws NetworkException {
-		StringBuilder urlToSend = new StringBuilder(GET_USERID_URL + "?");
-		urlToSend.append(Utility.appendParameter(PARAM_EMAIL, userEmail));
-
-		// delete the trailing ampersand from the url
-		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
-		String res = dispatchGetRequest(urlToSend.toString());
+	public int getUserId(String userEmail) throws NetworkException {
+		Utility.ensureNotNull(userEmail, "User email");
+		String res = dispatchPostRequest(GET_USERID_URL, userEmail);
 		return Integer.valueOf(res);
 	}
 
 	/**
 	 * Posts a solution to the server. Returns true if the post succeeds.
 	 * 
-	 * @param solution
+	 * @param json
 	 *            a JSON string representing the solution
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 * @throws IllegalArgumentException
 	 */
-	public String postSolution(String solution) throws NetworkException {
-		if (solution == null) {
-			throw new IllegalArgumentException("Invalid solution: null");
-		}
-		return dispatchPostRequest(POST_SOLUTION_URL, solution);
+	public String postSolution(String json) throws NetworkException {
+		Utility.ensureNotNull(json, "Solution JSON");
+		return dispatchPostRequest(POST_SOLUTION_URL, json);
 	}
 
 	public boolean deleteSolution(int solutionId, String userEmail) {

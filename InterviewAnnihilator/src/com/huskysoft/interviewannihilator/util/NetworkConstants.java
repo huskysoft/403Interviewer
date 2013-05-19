@@ -17,7 +17,7 @@ public interface NetworkConstants {
 
 	/** The 'solution' directory */
 	public static final String SOLUTION = "solution/";
-
+	
 	/** The 'authentication' directory */
 	public static final String AUTHENTICATION = "authentication/";
 
@@ -32,18 +32,23 @@ public interface NetworkConstants {
 	/** The script for postQuestion */
 	public static final String POST_QUESTION_URL = 
 			BASE_URI + QUESTION	+ "postQuestion.php";
-
+	
 	/** The script for postSolution */
 	public static final String POST_SOLUTION_URL = 
 			BASE_URI + SOLUTION	+ "postSolution.php";
 
+	/** The script for getQuestionsById */
 	public static final String GET_QUESTIONS_BYID_URL =
 			BASE_URI + QUESTION + "getQuestionsById.php";
-
+	
+	/** The script for deleteQuestion */
+	public static final String DELETE_QUESTION_URL =
+			BASE_URI + QUESTION + "deleteQuestion.php";
+	
 	/** The script for getUserId */
 	public static final String GET_USERID_URL =
 			BASE_URI + AUTHENTICATION + "getUserId.php";
-
+	
 	/**
 	 * If a request for multiple categories happens, this token separates out
 	 * the categories
