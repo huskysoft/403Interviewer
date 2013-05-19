@@ -64,10 +64,10 @@ public class NetworkService {
 			Collection<Category> categories, int limit, int offset,
 			boolean random) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
-		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
-		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		urlToSend.append(Utility.appendParameter(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(Utility.appendParameter(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
-			urlToSend.append(appendParameter(PARAM_DIFFICULTY,
+			urlToSend.append(Utility.appendParameter(PARAM_DIFFICULTY,
 					difficulty.name()));
 		}
 		if (categories != null && categories.size() != 0) {
@@ -80,11 +80,11 @@ public class NetworkService {
 					categoryList.append(CATEGORY_DELIMITER);
 				}
 			}
-			urlToSend.append(appendParameter(PARAM_CATEGORY,
+			urlToSend.append(Utility.appendParameter(PARAM_CATEGORY,
 					categoryList.toString()));
 		}
 		if (random) {
-			urlToSend.append(appendParameter(PARAM_RANDOM, ""));
+			urlToSend.append(Utility.appendParameter(PARAM_RANDOM, ""));
 		}
 
 		// delete the trailing ampersand from the url
@@ -109,10 +109,12 @@ public class NetworkService {
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_SOLUTIONS_URL + "?");
-		urlToSend.append(appendParameter(PARAM_QUESTIONID,
+		urlToSend.append(Utility.appendParameter(PARAM_QUESTIONID,
 				String.valueOf(questionId)));
-		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
-		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_OFFSET, String.valueOf(offset)));
 
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
@@ -120,6 +122,28 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
+	/**
+	 * Gets the userId associated with a given email in the database
+	 * 
+	 * @param userEmail the email whose id we are getting
+	 * @return the id associated with the email. Creates a new entry in the
+	 * database and returns the id of the new entry if the email doesn't
+	 * exist in the database yet
+	 * @throws NetworkException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public int getUserId(String userEmail)
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(GET_USERID_URL + "?");
+		urlToSend.append(Utility.appendParameter(PARAM_EMAIL, userEmail));
+
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		String res = dispatchGetRequest(urlToSend.toString());
+		return Integer.valueOf(res);
+	}
+	
 	public String getQuestionsById(Collection<String> questionIds) {
 		// TODO
 		return null;
@@ -158,30 +182,9 @@ public class NetworkService {
 	}
 
 	/**
-	 * Append a given parameter to a url string
-	 * 
-	 * @param paramName
-	 *            the name of the parameter appended to the url
-	 * @param paramVal
-	 *            the value of the parameter appended to the url
-	 * @param addAmpersand
-	 *            should be set to false if this is the last param that is to be
-	 *            appended
-	 * @return a new String with the parameter appended. Returns the empty
-	 *         String if either of the Strings passed in were null
-	 */
-	private String appendParameter(String paramName, String paramVal) {
-		if (paramName == null || paramVal == null) {
-			return "";
-		}
-		return (paramName + "=" + paramVal + AMPERSAND);
-	}
-
-	/**
 	 * Dispatches a get request to the remote server
 	 * 
-	 * @param url
-	 *            the url to send to the server
+	 * @param url the url to send to the server
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
@@ -199,7 +202,7 @@ public class NetworkService {
 			}
 			
 			// Return the content
-						return getContent(response);
+			return getContent(response);
 		} catch (Exception e) {
 			throw new NetworkException("GET request to " + url + " failed", e);
 		}

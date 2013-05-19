@@ -29,6 +29,15 @@ public class UserInfoTest extends TestCase {
 		mapper = new ObjectMapper();
 	}
 	
+	/**
+	 * This tests the construction and usage of userInfo, its translation to
+	 * json to send over the network, and back
+	 * 
+	 * @label white-box test
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void testUserInfoRoundTrip() throws JsonGenerationException, 
 			JsonMappingException, IOException {
 		UserInfo userInfo = TestHelpers.createDummyUserInfo();
