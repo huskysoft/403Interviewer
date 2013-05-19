@@ -27,9 +27,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -148,6 +146,16 @@ public class MainActivity extends SlidingActivity {
 		// Clear current Questions
 		questionll.removeAllViews();
 		new FetchQuestionsTask(this, diff).execute();
+	}
+	
+	/**
+	 * Called when the user clicks on button to post a question
+	 * 
+	 * @param v The TextView that holds the selected question. 
+	 */
+	public void postQuestion(View v){
+		Intent intent = new Intent(this, PostQuestionActivity.class);
+		startActivity(intent);
 	}
 
 	public void loadQuestions(Difficulty diff){
@@ -281,9 +289,5 @@ public class MainActivity extends SlidingActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-	private void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
 	}
 }

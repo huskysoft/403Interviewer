@@ -1,3 +1,9 @@
+/**
+ * The UI for posting a question.
+ * 
+ * @author Justin Robb, 05/18/2013
+ * 
+ */
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.ArrayList;
@@ -27,11 +33,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PostQuestionActivity extends Activity {
-
+	
+	/**The currently selected difficulty (radio buttons)*/
+	Difficulty diff;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_post_solution);
+		setContentView(R.layout.activity_post_question);
+		diff = Difficulty.EASY;
 		
 		// fill category spinner
 		List<String> SpinnerArray =  new ArrayList<String>();
@@ -40,8 +50,10 @@ public class PostQuestionActivity extends Activity {
 		}
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SpinnerArray);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    Spinner Items = (Spinner) findViewById(R.id.category_select);
-	    Items.setAdapter(adapter);
+	    EditText solutionText = (EditText) findViewById(R.id.edit_solution_q);
+	    Spinner spinner = (Spinner) findViewById(R.id.category_spinner_question);
+	    
+	    spinner.setAdapter(adapter);
 	}
 
 	@Override
@@ -51,43 +63,42 @@ public class PostQuestionActivity extends Activity {
 		return true;
 	}
 	
+	/**
+	 * Sends a question to the database.
+	 * 
+	 * @param v The view for the button for sending a question
+	 */
 	public void sendQuestion(View v) {
-		String category = ((Spinner) findViewById(R.id.category_select)).getSelectedItem().toString();
+		// get all necessary fields
+		String category = ((Spinner) findViewById(R.id.category_spinner_question)).getSelectedItem().toString();
 		Category c = Category.valueOf(category);
 		String solutionText = ((EditText) findViewById(R.id.edit_solution_q)).getText().toString();
 		String questionText = ((EditText) findViewById(R.id.edit_question)).getText().toString();
 		String titleText = ((EditText) findViewById(R.id.edit_question_title)).getText().toString();
 		
-		if (titleText.trim() == ""){
+		// chack fields for correctness
+		if (titleText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_title));
-		} else if (questionText.trim() == ""){
+		} else if (questionText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_question));
-		} else if (solutionText.trim() == ""){
+		} else if (solutionText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_solution));
 		} else {
-			Question q = new Question(questionText, titleText, Category.COMPSCI, getDifficulty());
+			// all fields are correct, try and send it!
+			Question q = new Question(questionText, titleText, Category.COMPSCI, diff);
 			QuestionService qs = QuestionService.getInstance();
 			Solution s = new Solution(q.getQuestionId(), solutionText);
 			try {
 				qs.postQuestion(q);
 				qs.postSolution(s);
-				displayMessage(1, getString(R.string.successDialog_title_q));
 			} catch (NetworkException e) {
 				displayMessage(-1, getString(R.string.retryDialog_title));
 			} catch (Exception e) {
 				displayMessage(-1, getString(R.string.internalError_title));
 			}
+			displayMessage(1, getString(R.string.successDialog_title_q));
 		}
 		
-	}
-	
-	private Difficulty getDifficulty(){
-		if (((RadioButton) findViewById(R.id.difficulty_hard)).isChecked())
-			return Difficulty.HARD;
-		else if (((RadioButton) findViewById(R.id.difficulty_medium)).isChecked())
-			return Difficulty.MEDIUM;
-		else
-			return Difficulty.EASY;
 	}
 	
 	/**
@@ -165,5 +176,30 @@ public class PostQuestionActivity extends Activity {
 		}
 		dialog.show();
 	}
-
+	
+	/**
+	 * Manages the radio buttons 
+	 * 
+	 * @param v The radio button that was clicked
+	 */
+	public void updateRadio(View v){
+		RadioButton clicked = (RadioButton) v;
+		RadioButton easy = (RadioButton) findViewById(R.id.difficulty_easy);
+		RadioButton med = (RadioButton) findViewById(R.id.difficulty_medium);
+		RadioButton hard = (RadioButton) findViewById(R.id.difficulty_hard);
+		
+		if (v.equals(easy)){
+			med.setChecked(false);
+			hard.setChecked(false);
+			diff = Difficulty.EASY;
+		} else if (v.equals(med)){
+			easy.setChecked(false);
+			hard.setChecked(false);
+			diff = Difficulty.MEDIUM;
+		} else {
+			easy.setChecked(false);
+			med.setChecked(false);
+			diff = Difficulty.HARD;
+		}
+	}
 }
