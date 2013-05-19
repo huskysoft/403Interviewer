@@ -22,6 +22,10 @@ import com.huskysoft.interviewannihilator.model.UserInfo;
 @SuppressLint("UseSparseArrays")
 public class TestHelpers {
 	
+	public static final int VALID_QUESTION_ID = 10;
+	public static final String TEST_USER_EMAIL = "admin@huskysoft.com";
+	public static final int TEST_USER_ID = 0;
+	
 	public static Question createDummyQuestion(int i) {
 		Question q = new Question();
 		q.setAuthorId(i + 1);
@@ -42,6 +46,13 @@ public class TestHelpers {
 		s.setQuestionId(i);
 		s.setText("Some solution" + i);
 		return s;
+	}
+	
+	public static UserInfo createTestUserInfo() {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserEmail(TEST_USER_EMAIL);
+		userInfo.setUserId(TEST_USER_ID);
+		return userInfo;
 	}
 	
 	public static UserInfo createDummyUserInfo() {

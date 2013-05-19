@@ -8,7 +8,8 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import android.os.Environment;
 
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.UserInfo;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
@@ -25,7 +27,7 @@ import com.huskysoft.interviewannihilator.util.Utility;
 
 import junit.framework.TestCase;
 
-public class QuestionServiceTest extends TestCase {
+public class QuestionServiceIntegrationTest extends TestCase {
 
 	private QuestionService questionService;
 	private ObjectMapper mapper;
@@ -35,7 +37,7 @@ public class QuestionServiceTest extends TestCase {
 	 *
 	 * @param name the test name
 	 */
-	public QuestionServiceTest(String name) {
+	public QuestionServiceIntegrationTest(String name) {
 		super(name);
 		questionService = QuestionService.getInstance();
 		mapper = new ObjectMapper();
@@ -47,11 +49,14 @@ public class QuestionServiceTest extends TestCase {
 	 * paginatedQuestions object is what it should be
 	 * 
 	 * @label white-box test
+	 * Vertically test the ability to get Questions from the DB
+	 * 
+	 * @testtype WhiteBox
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetAllQuestions() 
+	public void testGetQuestions() 
 			throws NetworkException, JSONException, IOException {
 		PaginatedQuestions questions = 
 				questionService.getQuestions(null, null, 10, 0, false);
@@ -81,17 +86,62 @@ public class QuestionServiceTest extends TestCase {
 	 * question from the database is working.
 	 * 
 	 * @label White-box test
+	 * Vertically test the ability to get Solutions for a given Question from
+	 * the DB
+	 * 
+	 * @testtype WhiteBox
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
 	 */
 	public void testGetSolutions() 
 			throws NetworkException, JSONException, IOException {
-		PaginatedSolutions solutions = questionService.getSolutions(10, 10, 0);
+		PaginatedSolutions solutions = questionService.getSolutions(
+				TestHelpers.VALID_QUESTION_ID, 10, 0);
 		assertNotNull(solutions);
 		assertEquals(Math.min(10, solutions.getTotalNumberOfResults()), 
 				solutions.getSolutions().size());
 		System.out.println(solutions);
+	}
+	
+	/**
+	 * Round-trip test the ability to create, read, and delete a specific \
+	 * Question.
+	 * 
+	 * Please note that this functionality was implemented using test-driven 
+	 * development (TDD)
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	public void testQuestionRoundTrip() 
+			throws NetworkException, JSONException, IOException {
+		// TODO: enable when implemented
+		/*
+		// set up
+		questionService.setUserInfo(TestHelpers.createTestUserInfo());
+		
+		// create
+		Question qInit = TestHelpers.createDummyQuestion(42);
+		int qId = questionService.postQuestion(qInit);
+		
+		// read
+		List<Integer> qIdList = new ArrayList<Integer>();
+		qIdList.add(qId);
+		List<Question> qList = questionService.getQuestionsById(qIdList);
+		assertEquals(1, qList.size());
+		Question qCreated = qList.get(0);
+		qInit.setDateCreated(qCreated.getDateCreated());
+		qInit.setQuestionId(qId);
+		assertEquals(qInit, qCreated);
+		
+		// delete
+		questionService.deleteQuestion(qId);
+		qList = questionService.getQuestionsById(qIdList);
+		assertEquals(0, qList.size());
+		*/
 	}
 	
 	/**
