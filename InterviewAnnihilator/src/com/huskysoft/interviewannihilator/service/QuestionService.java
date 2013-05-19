@@ -150,7 +150,6 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
@@ -192,7 +191,6 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public PaginatedSolutions getSolutions(
 			int questionId, int limit, int offset)
@@ -230,10 +228,9 @@ public class QuestionService {
 	 * exist in the database yet
 	 * @throws NetworkException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public int getUserId(String userEmail) throws NetworkException,
-			IOException, IllegalArgumentException {
+			IOException {
 		if (userEmail == null) {
 			throw new IllegalArgumentException("userEmail cannot be null");
 		}
@@ -249,10 +246,9 @@ public class QuestionService {
  	 * @throws NetworkException
  	 * @throws JSONException
  	 * @throws IOException
- 	 * @throws IllegalArgumentException
  	 */
 	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException, IllegalArgumentException {
+			JSONException, IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
@@ -285,7 +281,6 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {

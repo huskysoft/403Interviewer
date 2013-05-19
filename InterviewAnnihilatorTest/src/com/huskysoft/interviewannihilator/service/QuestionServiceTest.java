@@ -67,16 +67,13 @@ public class QuestionServiceTest extends TestCase {
 	 * @label Black-box test
 	 */
 	public void testGetQuestionsBadArguments()
-				throws NetworkException, JSONException, IOException {
-		boolean illegalargexception = false;
+			throws NetworkException, JSONException, IOException {
 		try {
 			questionService.getQuestions(null, null, -1, -1, false);
+			fail("Should have gotten IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
-			assertTrue(e instanceof IllegalArgumentException);
-			illegalargexception = true;
 		}
-		assertTrue(illegalargexception);
 	}
 	
 	/**
@@ -161,14 +158,11 @@ public class QuestionServiceTest extends TestCase {
 	 */
 	public void testGetUserIdWithNull() throws NetworkException, IOException,
 			IllegalArgumentException {
-		boolean illegalargexception = false;
 		try {
 			questionService.getUserId(null);
+			fail("Should have thrown IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
-			assertTrue(e instanceof IllegalArgumentException);
-			illegalargexception = true;
 		}
-		assertTrue(illegalargexception);
 	}
 }
