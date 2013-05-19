@@ -57,6 +57,14 @@ public class MainActivityTest extends
 		assertNull(diff);
 	}
 	
+	/**
+	 * Tests the getCurrentDifficultySetting method.
+	 * 
+	 * Selects a different difficulty and tests to see if the
+	 * method reports the change.
+	 * 
+	 * @label white-box test
+	 */
 	public void testDifficultySelection(){
 		Spinner s = (Spinner) mActivity.findViewById(
 				com.huskysoft.interviewannihilator.R.id.diff_spinner);
