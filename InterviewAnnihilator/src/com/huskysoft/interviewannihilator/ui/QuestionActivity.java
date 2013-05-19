@@ -47,7 +47,7 @@ public class QuestionActivity extends SlidingActivity {
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
 	/** Layout that the question and solutions will populate */
-	private LinearLayout linearLayout;
+	private LinearLayout solutionsLayout;
 	
 	/** The question the user is viewing */
 	private Question question;
@@ -82,7 +82,8 @@ public class QuestionActivity extends SlidingActivity {
 				MainActivity.EXTRA_MESSAGE);
 		
 		// Grab Linear Layout
-		linearLayout = (LinearLayout) findViewById(R.id.linear_layout);
+		solutionsLayout =
+				(LinearLayout) findViewById(R.id.question_layout_solutions);
 		
 		// Create TextView that holds Question
 		LinearLayout.LayoutParams llp =  new LinearLayout.LayoutParams(
@@ -92,16 +93,13 @@ public class QuestionActivity extends SlidingActivity {
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1; // Horizontal Center
 
-		TextView textview = new TextView(this);
+		TextView textview = (TextView) findViewById(R.id.question_text_view);
 		textview.setBackgroundDrawable(
 				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
 		
 		context = this;
-		
-		// Add question to layout
-		linearLayout.addView(textview, 0);
 				
 		// Initialize values
 		solutionsLoaded = false;
@@ -117,7 +115,8 @@ public class QuestionActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int)
+				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -175,7 +174,7 @@ public class QuestionActivity extends SlidingActivity {
 			
 			t.setText("There doesn't seem to be any solutions");
 			t.setLayoutParams(llp);
-			linearLayout.addView(t);
+			solutionsLayout.addView(t);
 		} else {
 			for(int i = 0; i < solutions.size(); i++){
 				Solution solution = solutions.get(i);
@@ -193,7 +192,7 @@ public class QuestionActivity extends SlidingActivity {
 					t.setVisibility(View.GONE);
 					
 					solutionTextViews.add(t);
-					linearLayout.addView(t);
+					solutionsLayout.addView(t);
 				}
 			}
 		}
@@ -216,8 +215,7 @@ public class QuestionActivity extends SlidingActivity {
 			if(solutionsLoaded){
 				revealSolutions();
 			}else{
-				LinearLayout loadingText =
-						(LinearLayout) findViewById(R.id.loading_text_layout);
+				View loadingText = findViewById(R.id.loading_text_layout);
 				loadingText.setVisibility(View.VISIBLE);
 				showSolutionsPressed = true;
 			}
@@ -229,13 +227,12 @@ public class QuestionActivity extends SlidingActivity {
 	 */
 	private void revealSolutions(){
 		// Dismiss loading window
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);
 		
 		// Dismiss show solutions button
 		Button showSolutions =
-				(Button) findViewById(R.id.show_solutions_button);
+				(Button) findViewById(R.id.question_button_show_solutions);
 		showSolutions.setVisibility(View.GONE);
 		
 		// Reveal hidden solutions
@@ -252,7 +249,7 @@ public class QuestionActivity extends SlidingActivity {
 				postSolution(v);
 			}
 		});
-		linearLayout.addView(post);
+		solutionsLayout.addView(post);
 	}
 	
 	private void loadSolutions(){
@@ -268,8 +265,7 @@ public class QuestionActivity extends SlidingActivity {
 	 */
 	public void onNetworkError(){	
 		// Stop loadingDialog
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);
 		
 		// Create a dialog

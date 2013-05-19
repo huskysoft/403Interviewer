@@ -20,7 +20,7 @@ public class UserInfo {
 	public static final Boolean DOWNVOTE = false;
 	
 	private String userEmail;
-	private String userId;
+	private Integer userId;
 	private Map<Integer, Date> viewedQuestions;
 	private Map<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
@@ -43,11 +43,11 @@ public class UserInfo {
 		this.userEmail = userEmail;
 	}
 	
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 	
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	
@@ -214,7 +214,7 @@ public class UserInfo {
 				+ ((votedSolutions == null) ? 0 : votedSolutions.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -256,4 +256,6 @@ public class UserInfo {
 			return false;
 		return true;
 	}
+	
+	
 }

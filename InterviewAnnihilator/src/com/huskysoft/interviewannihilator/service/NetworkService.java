@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -21,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 
 import android.accounts.NetworkErrorException;
 
@@ -64,10 +66,12 @@ public class NetworkService {
 			Collection<Category> categories, int limit, int offset,
 			boolean random) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
-		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
-		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
-			urlToSend.append(appendParameter(PARAM_DIFFICULTY,
+			urlToSend.append(Utility.appendParameter(PARAM_DIFFICULTY,
 					difficulty.name()));
 		}
 		if (categories != null && categories.size() != 0) {
@@ -80,17 +84,81 @@ public class NetworkService {
 					categoryList.append(CATEGORY_DELIMITER);
 				}
 			}
-			urlToSend.append(appendParameter(PARAM_CATEGORY,
+			urlToSend.append(Utility.appendParameter(PARAM_CATEGORY,
 					categoryList.toString()));
 		}
 		if (random) {
-			urlToSend.append(appendParameter(PARAM_RANDOM, ""));
+			urlToSend.append(Utility.appendParameter(PARAM_RANDOM, ""));
 		}
 
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
 
 		return dispatchGetRequest(urlToSend.toString());
+	}
+
+	/**
+	 * Get a specific list of Questions from the remote server. NetworkException
+	 * if one or more QuestionID does not exist.
+	 * 
+	 * @param questionIds
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonException 
+	 * @throws NetworkException
+	 */
+	public String getQuestionsById(List<Integer> questionIds) 
+			throws NetworkException, JSONException, IOException {
+		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_BYID_URL + "?");
+		StringBuilder deliminatedQuestions = new StringBuilder();
+		for (int i = 0; i < questionIds.size(); i++) {
+			deliminatedQuestions.append(questionIds.get(i));
+			if (i < questionIds.size() - 1) {
+				deliminatedQuestions.append(CATEGORY_DELIMITER);
+			}
+		}
+		urlToSend.append(Utility.appendParameter(PARAM_QUESTIONID,
+				deliminatedQuestions.toString()));
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+
+		return dispatchGetRequest(urlToSend.toString());
+	}
+	
+	/**
+	 * Posts a question to the server. Returns true if the post succeeds.
+	 * 
+	 * @param question
+	 *            a JSON string representing the question
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 * @throws IllegalArgumentException
+	 */
+	public String postQuestion(String question) throws NetworkException {
+		Utility.ensureNotNull(question, "Question");
+		return dispatchPostRequest(POST_QUESTION_URL, question);
+	}
+
+	/**
+	 * Deletes a question from the remote DB. Returns true on success.
+	 * 
+	 * @param questionId
+	 * @param userEmail
+	 * @return
+	 * @throws NetworkException 
+	 */
+	public boolean deleteQuestion(int questionId, String userEmail)
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(DELETE_QUESTION_URL + "?");
+		urlToSend.append(Utility.appendParameter(
+				PARAM_QUESTIONID, String.valueOf(questionId)));
+		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		dispatchPostRequest(urlToSend.toString(), userEmail);
+		
+		// TODO: detect failure
+		return true;
 	}
 
 	/**
@@ -109,10 +177,12 @@ public class NetworkService {
 	public String getSolutions(int questionId, int limit, int offset)
 			throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_SOLUTIONS_URL + "?");
-		urlToSend.append(appendParameter(PARAM_QUESTIONID,
+		urlToSend.append(Utility.appendParameter(PARAM_QUESTIONID,
 				String.valueOf(questionId)));
-		urlToSend.append(appendParameter(PARAM_LIMIT, String.valueOf(limit)));
-		urlToSend.append(appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_OFFSET, String.valueOf(offset)));
 
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
@@ -120,68 +190,46 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
-	public String getQuestionsById(Collection<String> questionIds) {
-		// TODO
-		return null;
-	}
-
 	/**
-	 * Posts a question to the server. Returns true if the post succeeds.
+	 * Gets the userId associated with a given email in the database
 	 * 
-	 * @param question
-	 *            a JSON string representing the question
-	 * @return a String representing the response from the server
+	 * @param userEmail the email whose id we are getting
+	 * @return the id associated with the email. Creates a new entry in the
+	 * database and returns the id of the new entry if the email doesn't
+	 * exist in the database yet
 	 * @throws NetworkException
+	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 */
-	public String postQuestion(String question) throws NetworkException {
-		if (question == null) {
-			throw new IllegalArgumentException("Invalid question: null");
-		}
-		return dispatchPostRequest(POST_QUESTION_URL, question);
+	public int getUserId(String userEmail) throws NetworkException {
+		Utility.ensureNotNull(userEmail, "User email");
+		String res = dispatchPostRequest(GET_USERID_URL, userEmail);
+		return Integer.valueOf(res);
 	}
-
+	
 	/**
 	 * Posts a solution to the server. Returns true if the post succeeds.
 	 * 
-	 * @param solution
+	 * @param json
 	 *            a JSON string representing the solution
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 * @throws IllegalArgumentException
 	 */
-	public String postSolution(String solution) throws NetworkException {
-		if (solution == null) {
-			throw new IllegalArgumentException("Invalid solution: null");
-		}
-		return dispatchPostRequest(POST_SOLUTION_URL, solution);
+	public String postSolution(String json) throws NetworkException {
+		Utility.ensureNotNull(json, "Solution JSON");
+		return dispatchPostRequest(POST_SOLUTION_URL, json);
 	}
-
-	/**
-	 * Append a given parameter to a url string
-	 * 
-	 * @param paramName
-	 *            the name of the parameter appended to the url
-	 * @param paramVal
-	 *            the value of the parameter appended to the url
-	 * @param addAmpersand
-	 *            should be set to false if this is the last param that is to be
-	 *            appended
-	 * @return a new String with the parameter appended. Returns the empty
-	 *         String if either of the Strings passed in were null
-	 */
-	private String appendParameter(String paramName, String paramVal) {
-		if (paramName == null || paramVal == null) {
-			return "";
-		}
-		return (paramName + "=" + paramVal + AMPERSAND);
+	
+	public boolean deleteSolution(int solutionId, String userEmail) {
+		// TODO
+		return false;
 	}
 
 	/**
 	 * Dispatches a get request to the remote server
 	 * 
-	 * @param url
-	 *            the url to send to the server
+	 * @param url the url to send to the server
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
@@ -199,7 +247,7 @@ public class NetworkService {
 			}
 			
 			// Return the content
-						return getContent(response);
+			return getContent(response);
 		} catch (Exception e) {
 			throw new NetworkException("GET request to " + url + " failed", e);
 		}
@@ -211,17 +259,17 @@ public class NetworkService {
 	 * 
 	 * @param url
 	 *            the url of the server
-	 * @param content
+	 * @param jsonString
 	 *            a JSON string as the content of the post request
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	private String dispatchPostRequest(String url, String content)
+	private String dispatchPostRequest(String url, String jsonString)
 			throws NetworkException {
 		try {
 			// Create and execute the HTTP POST request
 			HttpPost request = new HttpPost(url);
-			StringEntity requestContent = new StringEntity(content);
+			StringEntity requestContent = new StringEntity(jsonString);
 			requestContent.setContentType("application/json");
 			request.setEntity(requestContent);
 			HttpResponse response = httpClient.execute(request);

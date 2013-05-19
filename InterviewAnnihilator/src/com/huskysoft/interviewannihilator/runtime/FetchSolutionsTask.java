@@ -18,12 +18,6 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
-/**
- * This AsyncTask is used to populate SolutionActivity
- * 
- * @author Cody Andrews
- *
- */
 public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	
 	private QuestionService questionService;
