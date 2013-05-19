@@ -129,6 +129,10 @@ public class QuestionService {
 	 */
 	public List<Question> getQuestionsById(List<Integer> questionIds) 
 			throws JsonParseException, JsonMappingException, IOException {
+		if (questionIds == null || questionIds.size() == 0) {
+			throw new IllegalArgumentException(
+					"Must specify at least one Question ID!");
+		}
 		String json = networkService.getQuestionsById(questionIds);
 		TypeReference<List<Question>> tr = new TypeReference<List<Question>>(){};
 		List<Question> questions = mapper.readValue(json, tr);
