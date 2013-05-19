@@ -75,6 +75,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 */
 	@Override
 	protected void onPostExecute(Void result){
-		context.displayQuestions(questionList);
+		context.setQuestions(questionList);
+		context.displayQuestions();
+		context.switchView();
 	}
 }

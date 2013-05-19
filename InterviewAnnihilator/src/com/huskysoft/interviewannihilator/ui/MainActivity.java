@@ -43,7 +43,9 @@ public class MainActivity extends SlidingActivity {
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
 	/** Layout element that holds the questions */
-	private LinearLayout questionll;
+	private LinearLayout questionLayout;
+	
+	private List<Question> questionList;
 	
 	
 	/**
@@ -71,9 +73,17 @@ public class MainActivity extends SlidingActivity {
 			setSpinnerToSelectedValue("");
 		}
 		
-		questionll = (LinearLayout) findViewById(R.id.question_layout);
-
-		loadQuestions(diff);
+		questionLayout = (LinearLayout) findViewById(R.id.question_layout);
+		
+		View loadingText = findViewById(R.id.loading_text_layout);
+		loadingText.setVisibility(View.VISIBLE);
+		
+		if(questionList == null){
+			loadQuestions(diff);
+		}
+		else{
+			displayQuestions();
+		}
 	}
 	
 	/**
@@ -144,17 +154,42 @@ public class MainActivity extends SlidingActivity {
 		toggle();
 		
 		// Clear current Questions
-		questionll.removeAllViews();
+		questionLayout.removeAllViews();
+		//new FetchQuestionsTask(this, diff).execute();
+		
+		// Switch back to the loading view
+		
+		this.switchView();
+		
+		loadQuestions(diff);
+	}
+	
+	/**
+	 * Changes from the loading view to the question list view and vice versa
+	 */
+	public void switchView(){
+		// Switch views
+		ViewSwitcher switcher =
+				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
+		switcher.showNext();
+	}
+	
+	/**
+	 * Shows loading text and starts loading questions
+	 * 
+	 * @param diff
+	 */
+	private void loadQuestions(Difficulty diff){			
+		// Populate questions list. This makes a network call.
 		new FetchQuestionsTask(this, diff).execute();
 	}
 	
-	public void loadQuestions(Difficulty diff){
-		// Display loading text
-		View loadingText = findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.VISIBLE);
-		
-		// Populate questions list. This makes a network call.
-		new FetchQuestionsTask(this, diff).execute();
+	/**
+	 * Sets the questions to be displayed (does not display them).
+	 * @param questions
+	 */
+	public void setQuestions(List<Question> questions){
+		questionList = questions;
 	}
 	
 	/**
@@ -163,7 +198,7 @@ public class MainActivity extends SlidingActivity {
 	 * @param questions
 	 */
 	@SuppressLint("NewApi")
-	public void displayQuestions(List<Question> questions) {				
+	public void displayQuestions() {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
 		
@@ -172,16 +207,16 @@ public class MainActivity extends SlidingActivity {
 		llp.gravity = 1;  // Horizontal Center
 		
 		
-		if(questions == null || questions.size() <= 0){
+		if(questionList == null || questionList.size() <= 0){
 			TextView t = new TextView(this);
 			
 			t.setText("There doesn't seem to be any questions.");
 			// special look?
 			t.setLayoutParams(llp);
-			questionll.addView(t);
+			questionLayout.addView(t);
 		}else{
-			for(int i = 0; i < questions.size(); i++){
-				Question question = questions.get(i);
+			for(int i = 0; i < questionList.size(); i++){
+				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
 					
 					String questionText = question.getTitle();
@@ -205,18 +240,13 @@ public class MainActivity extends SlidingActivity {
 						}
 					});
 			
-					questionll.addView(t);
+					questionLayout.addView(t);
 				}
 			}
 		}
 		
 		// Dismiss loading text
-		View loadingText = findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.GONE);
-		// Switch views
-		ViewSwitcher switcher =
-				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
-		switcher.showNext();
+		//hideLoadingText();
 	}
 	
 	/**
@@ -224,9 +254,8 @@ public class MainActivity extends SlidingActivity {
 	 * operation fails.
 	 */
 	public void onNetworkError(){	
-		// Stop loadingDialog
-		View loadingText = findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.GONE);
+		// Dismiss loading text
+		//hideLoadingText();
 		
 		// Create a dialog
 		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
