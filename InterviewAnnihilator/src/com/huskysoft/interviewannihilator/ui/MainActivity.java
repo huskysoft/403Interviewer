@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 public class MainActivity extends SlidingActivity {
 	
@@ -148,8 +149,7 @@ public class MainActivity extends SlidingActivity {
 	
 	public void loadQuestions(Difficulty diff){
 		// Display loading text
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.VISIBLE);
 		
 		// Populate questions list. This makes a network call.
@@ -162,17 +162,7 @@ public class MainActivity extends SlidingActivity {
 	 * @param questions
 	 */
 	@SuppressLint("NewApi")
-	public void displayQuestions(List<Question> questions) {		
-		
-		// Dismiss loading text
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
-		
-		if(loadingText != null){
-			loadingText.setVisibility(View.GONE);
-		}
-		
-		
+	public void displayQuestions(List<Question> questions) {				
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
 		
@@ -218,6 +208,13 @@ public class MainActivity extends SlidingActivity {
 				}
 			}
 		}
+		
+		// Dismiss loading text
+		View loadingText = findViewById(R.id.loading_text_layout);
+		loadingText.setVisibility(View.GONE);
+		// Switch views
+		ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.main_acivity_view_switcher);
+		switcher.showNext();
 	}
 	
 	/**
@@ -226,8 +223,7 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public void onNetworkError(){	
 		// Stop loadingDialog
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);
 		
 		// Create a dialog

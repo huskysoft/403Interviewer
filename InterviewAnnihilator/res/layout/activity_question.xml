@@ -5,25 +5,32 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
 	    
-	<LinearLayout android:id="@+id/linear_layout"
+	<LinearLayout android:id="@+id/question_layout_main"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 	    
-	    <TextView android:id="@+id/question_textView"
+	    <TextView android:id="@+id/question_text_view"
 	        android:textIsSelectable="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 		</TextView>
 	    
-	    <Button 
-	        android:id="@+id/show_solutions_button"
+		<Button 
+	        android:id="@+id/question_button_show_solutions"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/button_solutions"
 	        android:layout_gravity="center_horizontal"
 	        android:onClick="onShowSolutions">	        
-	    </Button>    
-	    <include layout="@layout/loading_anim" />
+	    </Button>
+	    
+		<LinearLayout android:id="@+id/question_layout_solutions"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+		    
+		    <include layout="@layout/loading_anim" />
+		</LinearLayout>
 	</LinearLayout>
 </ScrollView>
