@@ -221,13 +221,12 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * Tests the retrieval of questions by the given question ids
 	 * 
 	 * @label White-box test
-	 * @throws JsonParseException
-	 * @throws JsonMappingException
+	 * @throws JSONException
 	 * @throws IOException
 	 * @throws NetworkException
 	 */
 	public void testGetQuestionById() throws JsonParseException, 
-			JsonMappingException, IOException, NetworkException {
+			JSONException, IOException, NetworkException {
 		List<Integer> questionIds = new ArrayList<Integer>();
 		questionIds.add(42);
 		questionIds.add(43);
