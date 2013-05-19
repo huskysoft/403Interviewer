@@ -14,10 +14,16 @@
     <!-- Application theme. -->
 	
 
+	<color name="white">#FFFFFF</color>
     <color name="white_opaque">#999999</color>
 	<color name="pitch_black">#FF000000</color>
-	<color name="light_purple">#D166FF</color>
-	<color name="gold">#FFCC00</color>
+	
+	<!-- <color name="light_purple">#D166FF</color> -->
+	<color name="light_purple">#39275B</color>
+	
+	<!-- <color name="gold">#FFCC00</color> -->
+	<color name="gold">#C79900</color>
+	
 	<color name="sliding_menu">#e6e4e9</color>
 	
 	<!-- Default theme for the App -->
