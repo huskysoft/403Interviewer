@@ -70,7 +70,7 @@ public class NetworkServiceTest extends TestCase {
 	 * @label White-box testing
 	 * @throws NetworkException
 	 */
-	public void testGetQuestionsByCategories() throws NetworkException {
+	public void testGetQuestionsByMultipleCategories() throws NetworkException {
 		List<Category> categories = new ArrayList<Category>();
 		categories.add(Category.COMPSCI);
 		categories.add(Category.BUSINESS);

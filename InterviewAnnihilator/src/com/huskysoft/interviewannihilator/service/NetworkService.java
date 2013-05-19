@@ -65,8 +65,10 @@ public class NetworkService {
 			Collection<Category> categories, int limit, int offset,
 			boolean random) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
-		urlToSend.append(Utility.appendParameter(PARAM_LIMIT, String.valueOf(limit)));
-		urlToSend.append(Utility.appendParameter(PARAM_OFFSET, String.valueOf(offset)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_LIMIT, String.valueOf(limit)));
+		urlToSend.append(Utility.appendParameter
+				(PARAM_OFFSET, String.valueOf(offset)));
 		if (difficulty != null) {
 			urlToSend.append(Utility.appendParameter(PARAM_DIFFICULTY,
 					difficulty.name()));

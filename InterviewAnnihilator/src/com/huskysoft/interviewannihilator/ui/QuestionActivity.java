@@ -117,7 +117,8 @@ public class QuestionActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) (width * 
+				SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
