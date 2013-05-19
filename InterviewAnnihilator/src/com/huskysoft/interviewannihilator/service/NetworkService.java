@@ -115,8 +115,9 @@ public class NetworkService {
 		return dispatchPostRequest(POST_QUESTION_URL, question);
 	}
 
-	public void deleteQuestion(int questionId, String userEmail) {
+	public boolean deleteQuestion(int questionId, String userEmail) {
 		// TODO
+		return false;
 	}
 
 	/**
@@ -186,8 +187,9 @@ public class NetworkService {
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
 	}
 	
-	public void deleteSolution(int solutionId, String userEmail) {
+	public boolean deleteSolution(int solutionId, String userEmail) {
 		// TODO
+		return false;
 	}
 
 	/**

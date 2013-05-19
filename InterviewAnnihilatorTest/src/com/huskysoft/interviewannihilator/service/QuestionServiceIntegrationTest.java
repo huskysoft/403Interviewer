@@ -44,17 +44,14 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * testGetAllQuestions actually gets a number of questions from the
 	 * database, and tests whether the questions retrieved and the data in the
 	 * paginatedQuestions object is what it should be
 	 * 
 	 * @label white-box test
-=======
 	 * Vertically test the ability to get Questions from the DB
 	 * 
 	 * @testtype WhiteBox
->>>>>>> comments for QuestionServiceIntegrationTest
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
@@ -70,7 +67,6 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Give bad limit and offset to getQuestions
 	 * 
 	 * @label Black-box test
@@ -90,12 +86,10 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * question from the database is working.
 	 * 
 	 * @label White-box test
-=======
 	 * Vertically test the ability to get Solutions for a given Question from
 	 * the DB
 	 * 
 	 * @testtype WhiteBox
->>>>>>> comments for QuestionServiceIntegrationTest
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
