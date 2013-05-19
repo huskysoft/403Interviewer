@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -93,6 +94,32 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
+	public String getQuestionsById(List<Integer> questionIds) {
+		// TODO
+		return null;
+	}
+	
+	/**
+	 * Posts a question to the server. Returns true if the post succeeds.
+	 * 
+	 * @param question
+	 *            a JSON string representing the question
+	 * @return a String representing the response from the server
+	 * @throws NetworkException
+	 * @throws IllegalArgumentException
+	 */
+	public String postQuestion(String question) throws NetworkException {
+		if (question == null) {
+			throw new IllegalArgumentException("Invalid question: null");
+		}
+		return dispatchPostRequest(POST_QUESTION_URL, question);
+	}
+
+	public boolean deleteQuestion(int questionId, String userEmail) {
+		// TODO
+		return false;
+	}
+
 	/**
 	 * Request all the solutions on the server for a given question
 	 * 
@@ -144,27 +171,6 @@ public class NetworkService {
 		return Integer.valueOf(res);
 	}
 	
-	public String getQuestionsById(Collection<String> questionIds) {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Posts a question to the server. Returns true if the post succeeds.
-	 * 
-	 * @param question
-	 *            a JSON string representing the question
-	 * @return a String representing the response from the server
-	 * @throws NetworkException
-	 * @throws IllegalArgumentException
-	 */
-	public String postQuestion(String question) throws NetworkException {
-		if (question == null) {
-			throw new IllegalArgumentException("Invalid question: null");
-		}
-		return dispatchPostRequest(POST_QUESTION_URL, question);
-	}
-
 	/**
 	 * Posts a solution to the server. Returns true if the post succeeds.
 	 * 
@@ -179,6 +185,11 @@ public class NetworkService {
 			throw new IllegalArgumentException("Invalid solution: null");
 		}
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
+	}
+	
+	public boolean deleteSolution(int solutionId, String userEmail) {
+		// TODO
+		return false;
 	}
 
 	/**
@@ -214,17 +225,17 @@ public class NetworkService {
 	 * 
 	 * @param url
 	 *            the url of the server
-	 * @param content
+	 * @param jsonString
 	 *            a JSON string as the content of the post request
 	 * @return a String representing the response from the server
 	 * @throws NetworkException
 	 */
-	private String dispatchPostRequest(String url, String content)
+	private String dispatchPostRequest(String url, String jsonString)
 			throws NetworkException {
 		try {
 			// Create and execute the HTTP POST request
 			HttpPost request = new HttpPost(url);
-			StringEntity requestContent = new StringEntity(content);
+			StringEntity requestContent = new StringEntity(jsonString);
 			requestContent.setContentType("application/json");
 			request.setEntity(requestContent);
 			HttpResponse response = httpClient.execute(request);
