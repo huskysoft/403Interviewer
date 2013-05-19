@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
@@ -214,5 +215,27 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		}
 		catch (IllegalArgumentException e) {
 		}
+	}
+	
+	/**
+	 * Tests the retrieval of questions by the given question ids
+	 * 
+	 * @label White-box test
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
+	public void testGetQuestionById() throws JsonParseException, 
+			JsonMappingException, IOException, NetworkException {
+		List<Integer> questionIds = new ArrayList<Integer>();
+		questionIds.add(42);
+		questionIds.add(43);
+		questionIds.add(44);
+		List<Question> results = questionService.getQuestionsById(questionIds);
+		assertNotNull(results);
+		assertEquals(42, results.get(0).getQuestionId());
+		assertEquals(43, results.get(1).getQuestionId());
+		assertEquals(44, results.get(2).getQuestionId());
 	}
 }

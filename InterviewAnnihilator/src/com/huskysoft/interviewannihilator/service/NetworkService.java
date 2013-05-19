@@ -22,6 +22,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import android.accounts.NetworkErrorException;
 
@@ -96,9 +98,33 @@ public class NetworkService {
 		return dispatchGetRequest(urlToSend.toString());
 	}
 
-	public String getQuestionsById(List<Integer> questionIds) {
-		// TODO
-		return null;
+	/**
+	 * Get a specific list of Questions from the remote server. NetworkException
+	 * if one or more QuestionID does not exist.
+	 * 
+	 * @param questionIds
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException
+	 * @throws NetworkException
+	 */
+	public String getQuestionsById(List<Integer> questionIds) 
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
+		StringBuilder deliminatedQuestions = new StringBuilder();
+		for (int i = 0; i < questionIds.size(); i++) {
+			deliminatedQuestions.append(questionIds.get(i));
+			if (i < questionIds.size() - 1) {
+				deliminatedQuestions.append(CATEGORY_DELIMITER);
+			}
+		}
+		urlToSend.append(Utility.appendParameter(PARAM_QUESTIONID,
+				deliminatedQuestions.toString()));
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+
+		return dispatchGetRequest(urlToSend.toString());
 	}
 	
 	/**
