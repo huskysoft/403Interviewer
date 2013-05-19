@@ -155,10 +155,8 @@ public class MainActivity extends SlidingActivity {
 		
 		// Clear current Questions
 		questionLayout.removeAllViews();
-		//new FetchQuestionsTask(this, diff).execute();
 		
 		// Switch back to the loading view
-		
 		this.switchView();
 		
 		loadQuestions(diff);
@@ -244,19 +242,13 @@ public class MainActivity extends SlidingActivity {
 				}
 			}
 		}
-		
-		// Dismiss loading text
-		//hideLoadingText();
 	}
 	
 	/**
 	 * Pops up a dialog menu with "Retry" and "Cancel" options when a network
 	 * operation fails.
 	 */
-	public void onNetworkError(){	
-		// Dismiss loading text
-		//hideLoadingText();
-		
+	public void onNetworkError(){		
 		// Create a dialog
 		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
 		.setPositiveButton(R.string.retryDialog_retry,
