@@ -13,7 +13,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.huskysoft.interviewannihilator.model.Difficulty;
+import com.huskysoft.interviewannihilator.model.NetworkException;
 
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
@@ -29,13 +31,14 @@ import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
  *
  */
 public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
-	
+
 	private QuestionService questionService;
 	private MainActivity context;
 	private List<Question> questionList;
 	private Difficulty diff;
 	private Exception exception;
-	
+
+
 	/**
 	 * 
 	 * @param context reference to MainActivity
@@ -44,8 +47,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		this.context = (MainActivity) context;
 		this.diff = diff;
 	}
-	
-	
+
+
 	/**
 	 * This is the main function of the AsyncTask thread. This will populate
 	 * questionList with Questions so that they may be displayed afterwards.
@@ -53,7 +56,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		questionService = QuestionService.getInstance();
-		
+
 		try {
 			PaginatedQuestions currentQuestions =
 					questionService.getQuestions(null, diff, 20, 0, false);
@@ -63,11 +66,11 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			exception = e;
 			this.cancel(true);
 		}
-	
-		
+
+
 		return null;
 	}
-	
+
 	@Override
 	protected void onCancelled(){
 		//TODO: handle specific error cases
@@ -75,7 +78,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			context.onNetworkError();
 		}
 	}
-	
+
 	/**
 	 * This event fires when doInBackground() is complete, and it will populate
 	 * the MainActivity question area.

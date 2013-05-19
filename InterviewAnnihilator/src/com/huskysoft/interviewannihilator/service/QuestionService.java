@@ -11,6 +11,8 @@ package com.huskysoft.interviewannihilator.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -49,8 +51,8 @@ public class QuestionService {
 	private QuestionService() {
 		this.networkService = NetworkService.getInstance();
 		mapper = new ObjectMapper();
-		mapper.configure(
-				DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(DeserializationConfig.
+				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	/**
@@ -151,12 +153,14 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
-			throw new IOException("Invalid limit or offset parameter");
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getQuestions(difficulty, categories,
 				limit, offset, random);
@@ -191,11 +195,14 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
-	public PaginatedSolutions getSolutions(int questionId, int limit, int offset)
+	public PaginatedSolutions getSolutions(
+			int questionId, int limit, int offset)
 			throws NetworkException, JSONException, IOException {
 		if (limit < 0 || offset < 0) {
-			throw new IOException("Invalid limit or offset parameter");
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getSolutions(questionId, limit, offset);
 		PaginatedSolutions databaseSolutions;
@@ -217,15 +224,69 @@ public class QuestionService {
 		return databaseSolutions;
 	}
 
+	/**
+	 * Posts a question to the server.
+	 * 
+	 * @param toPost
+	 *            the Question object that represents the question
+	 * @return the id of the question being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
+		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Empty text/title in question");
+		}
+		if (toPost.getCategory() == null) {
+			throw new IllegalArgumentException("Null category in question");
+		}
+		if (toPost.getDifficulty() == null) {
+			throw new IllegalArgumentException("Null difficulty in question");
+		}
+		
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setDateCreated(new Date());
+		
+		// Post the question and return result
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
 		return Integer.parseInt(result);
 	}
 
+	/**
+	 * Posts a solution to the server.
+	 * 
+	 * @param toPost
+	 *            the Solution object that represents the solution
+	 * @return the id of the solution being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Solution: null");
+		}
+		if (toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Empty text in solution");
+		}
+		
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setDateCreated(new Date());
+
+		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);

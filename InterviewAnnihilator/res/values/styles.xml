@@ -12,7 +12,7 @@
     </style>
 
     <!-- Application theme. -->
-    
+	
     <color name="white_opaque">#999999</color>
 	<color name="pitch_black">#FF000000</color>
 	<color name="light_purple">#D166FF</color>

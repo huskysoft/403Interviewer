@@ -29,7 +29,7 @@ public interface NetworkConstants {
 	/** The script for postQuestion */
 	public static final String POST_QUESTION_URL = 
 			BASE_URI + QUESTION	+ "postQuestion.php";
-	
+
 	/** The script for postSolution */
 	public static final String POST_SOLUTION_URL = 
 			BASE_URI + SOLUTION	+ "postSolution.php";
@@ -43,7 +43,6 @@ public interface NetworkConstants {
 	/** Ampersand for get URL requests */
 	public static final String AMPERSAND = "&";
 
-	
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
 	public static final String PARAM_OFFSET = "offset";

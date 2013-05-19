@@ -1,7 +1,7 @@
 /**
  * The screen for when users attempt to post a solution
  * 
- * @author Cody Andrews, 05/14/2013
+ * @author Cody Andrews, Justin Robb 05/14/2013
  */
 
 package com.huskysoft.interviewannihilator.ui;
@@ -12,6 +12,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,10 +21,12 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -72,7 +76,8 @@ public class PostSolutionActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) 
+				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -110,16 +115,6 @@ public class PostSolutionActivity extends SlidingActivity {
 			}
 		});
 		
-	}
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
 	}
 
 	@Override
@@ -166,9 +161,12 @@ public class PostSolutionActivity extends SlidingActivity {
 			// Retry or cancel
 			// Complains that i need to log the error, 
 			// not sure how to do that
+			Log.w("Network Error", e.getMessage());
 			outcome= -1;
 		} catch (Exception e) {
+			Log.e("Internal Error", e.getMessage());
 			displayMessage(-2);
+
 		}
 		displayMessage(outcome);
 	}
@@ -205,12 +203,14 @@ public class PostSolutionActivity extends SlidingActivity {
 				public void onClick(View v) {
 					Toast.makeText(getApplicationContext(), 
 							R.string.toast_return, Toast.LENGTH_LONG).show();
+
 					finish();   //It would look really cool for the solutions
 								//to update b4 the user returns
 				}
 			});
 		}else if (status == 0){
 			text.setText(R.string.badInputDialog_solution);
+
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog

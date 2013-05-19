@@ -1,7 +1,7 @@
 /**
  * Main UI for the application. Displays a list of questions.
  * 
- * @author Cody Andrews, Phillip Leland, 05/01/2013
+ * @author Cody Andrews, Phillip Leland, Justin Robb 05/01/2013
  * 
  */
 
@@ -27,6 +27,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -83,11 +84,15 @@ public class MainActivity extends SlidingActivity {
 	 * @param value Selected Spinner value
 	 */
 	public void setSpinnerToSelectedValue(String value){
-		// TODO: fix
-		/*Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
-
-		spinner.setSelection(myAdap.getPosition(value));*/
+		// This was causing a type error before, please don't change back 
+		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+		Adapter a = spinner.getAdapter();
+		for (int i = 0; i < a.getCount(); i++){
+			if (a.getItem(i).toString().equals(value)){
+				spinner.setSelection(i);
+				return;
+			}
+		}
 	}
 
 	/**
@@ -114,7 +119,8 @@ public class MainActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) 
+				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -192,7 +198,6 @@ public class MainActivity extends SlidingActivity {
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1;  // Horizontal Center
 
-
 		if(questions == null || questions.size() <= 0){
 			TextView t = new TextView(this);
 
@@ -204,11 +209,8 @@ public class MainActivity extends SlidingActivity {
 			for(int i = 0; i < questions.size(); i++){
 				Question question = questions.get(i);
 				if(question != null && question.getText() != null){
-
 					String questionText = question.getTitle();
-
 					TextView t = new TextView(this);
-
 					t.setLayoutParams(llp);
 					t.setId(question.getQuestionId());
 					t.setTag(question);
@@ -225,7 +227,6 @@ public class MainActivity extends SlidingActivity {
 							openQuestion(v);
 						}
 					});
-
 					questionll.addView(t);
 				}
 			}
@@ -291,3 +292,4 @@ public class MainActivity extends SlidingActivity {
 		}
 	}
 }
+

@@ -4,7 +4,7 @@
  * It display the question clicked, and a hidden list of solutions that pop
  * up when a "Solutions" button is clicked.
  * 
- * @author Cody Andrews, Phillip Leland, 05/01/2013
+ * @author Cody Andrews, Phillip Leland, Justin Robb 05/01/2013
  * 
  */
 
@@ -57,6 +57,7 @@ public class QuestionActivity extends SlidingActivity {
 	/** Layout that the question and solutions will populate */
 	private LinearLayout linearLayout;
 	
+
 	/** The question the user is viewing */
 	private Question question;
 	

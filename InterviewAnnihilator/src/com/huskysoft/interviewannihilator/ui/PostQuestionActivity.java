@@ -21,6 +21,7 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,16 +45,19 @@ public class PostQuestionActivity extends Activity {
 		diff = Difficulty.EASY;
 		
 		// fill category spinner
-		List<String> SpinnerArray =  new ArrayList<String>();
+		List<String> spinnerArray =  new ArrayList<String>();
 		for (Category c : Category.values()){
-			SpinnerArray.add(c.toString());
+			spinnerArray.add(c.toString());
 		}
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SpinnerArray);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    EditText solutionText = (EditText) findViewById(R.id.edit_solution_q);
-	    Spinner spinner = (Spinner) findViewById(R.id.category_spinner_question);
-	    
-	    spinner.setAdapter(adapter);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, spinnerArray);
+		adapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		EditText solutionText = (EditText) findViewById(R.id.edit_solution_q);
+		Spinner spinner = (Spinner) 
+				findViewById(R.id.category_spinner_question);
+
+		spinner.setAdapter(adapter);
 	}
 
 	@Override
@@ -70,11 +74,15 @@ public class PostQuestionActivity extends Activity {
 	 */
 	public void sendQuestion(View v) {
 		// get all necessary fields
-		String category = ((Spinner) findViewById(R.id.category_spinner_question)).getSelectedItem().toString();
+		String category = ((Spinner) findViewById(
+				R.id.category_spinner_question)).getSelectedItem().toString();
 		Category c = Category.valueOf(category);
-		String solutionText = ((EditText) findViewById(R.id.edit_solution_q)).getText().toString();
-		String questionText = ((EditText) findViewById(R.id.edit_question)).getText().toString();
-		String titleText = ((EditText) findViewById(R.id.edit_question_title)).getText().toString();
+		String solutionText = ((EditText) findViewById(
+				R.id.edit_solution_q)).getText().toString();
+		String questionText = ((EditText) findViewById(
+				R.id.edit_question)).getText().toString();
+		String titleText = ((EditText) findViewById(
+				R.id.edit_question_title)).getText().toString();
 		
 		// chack fields for correctness
 		if (titleText.trim().equals("")){
@@ -85,15 +93,18 @@ public class PostQuestionActivity extends Activity {
 			displayMessage(0, getString(R.string.badInputDialog_solution));
 		} else {
 			// all fields are correct, try and send it!
-			Question q = new Question(questionText, titleText, Category.COMPSCI, diff);
+			Question q = new Question(questionText, 
+					titleText, Category.COMPSCI, diff);
 			QuestionService qs = QuestionService.getInstance();
 			Solution s = new Solution(q.getQuestionId(), solutionText);
 			try {
 				qs.postQuestion(q);
 				qs.postSolution(s);
 			} catch (NetworkException e) {
+				Log.w("Network error", e.getMessage());
 				displayMessage(-1, getString(R.string.retryDialog_title));
 			} catch (Exception e) {
+				Log.e("Internal Error", e.getMessage());
 				displayMessage(-1, getString(R.string.internalError_title));
 			}
 			displayMessage(1, getString(R.string.successDialog_title_q));

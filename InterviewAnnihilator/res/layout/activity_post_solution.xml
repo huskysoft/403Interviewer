@@ -36,4 +36,3 @@
 	        android:text="@string/button_post" 
 	        android:onClick="sendSolution"/>
 </RelativeLayout>
-
