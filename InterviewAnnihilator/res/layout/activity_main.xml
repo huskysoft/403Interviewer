@@ -2,7 +2,7 @@
 
 <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_acivity_view_switcher"
+    android:id="@+id/main_activity_view_switcher"
     android:background="@color/light_purple"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

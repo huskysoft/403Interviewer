@@ -82,7 +82,8 @@ public class QuestionActivity extends SlidingActivity {
 				MainActivity.EXTRA_MESSAGE);
 		
 		// Grab Linear Layout
-		solutionsLayout = (LinearLayout) findViewById(R.id.question_layout_solutions);
+		solutionsLayout =
+				(LinearLayout) findViewById(R.id.question_layout_solutions);
 		
 		// Create TextView that holds Question
 		LinearLayout.LayoutParams llp =  new LinearLayout.LayoutParams(

@@ -114,7 +114,8 @@ public class MainActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int)
+				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -213,7 +214,8 @@ public class MainActivity extends SlidingActivity {
 		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);
 		// Switch views
-		ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.main_acivity_view_switcher);
+		ViewSwitcher switcher =
+				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
 		switcher.showNext();
 	}
 	
