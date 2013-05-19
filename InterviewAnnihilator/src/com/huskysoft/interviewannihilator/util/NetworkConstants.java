@@ -10,13 +10,16 @@ package com.huskysoft.interviewannihilator.util;
 public interface NetworkConstants {
 	/** The URI of our server for both solution and question. */
 	public static final String BASE_URI = 
-			"http://students.washington.edu/bkng/cse403/403Interviewer-php/";
+			"https://students.washington.edu/bkng/cse403/403Interviewer-php/";
 
 	/** The 'question' directory */
 	public static final String QUESTION = "question/";
 
 	/** The 'solution' directory */
 	public static final String SOLUTION = "solution/";
+	
+	/** The 'authentication' directory */
+	public static final String AUTHENTICATION = "authentication/";
 
 	/** The script for getQuestions */
 	public static final String GET_QUESTIONS_URL = 
@@ -34,6 +37,10 @@ public interface NetworkConstants {
 	public static final String POST_SOLUTION_URL = 
 			BASE_URI + SOLUTION	+ "postSolution.php";
 
+	/** The script for getUserId */
+	public static final String GET_USERID_URL =
+			BASE_URI + AUTHENTICATION + "getUserId.php";
+	
 	/**
 	 * If a request for multiple categories happens, this token separates out
 	 * the categories
@@ -50,4 +57,5 @@ public interface NetworkConstants {
 	public static final String PARAM_CATEGORY = "category";
 	public static final String PARAM_QUESTIONID = "questionId";
 	public static final String PARAM_RANDOM = "random";
+	public static final String PARAM_EMAIL = "email";
 }
