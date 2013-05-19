@@ -37,8 +37,13 @@ public interface NetworkConstants {
 	public static final String POST_SOLUTION_URL = 
 			BASE_URI + SOLUTION	+ "postSolution.php";
 
+	/** The script for getQuestionsById */
 	public static final String GET_QUESTIONS_BYID_URL =
 			BASE_URI + QUESTION + "getQuestionsById.php";
+	
+	/** The script for deleteQuestion */
+	public static final String DELETE_QUESTION_URL =
+			BASE_URI + QUESTION + "deleteQuestion.php";
 	
 	/** The script for getUserId */
 	public static final String GET_USERID_URL =
