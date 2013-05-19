@@ -43,7 +43,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		questionService = QuestionService.getInstance();
 		mapper = new ObjectMapper();
 	}
-	
+
 	/**
 	 * testGetAllQuestions actually gets a number of questions from the
 	 * database, and tests whether the questions retrieved and the data in the
@@ -66,7 +66,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 				questions.getQuestions().size());
 		System.out.println(questions);
 	}
-	
+
 	/**
 	 * Give bad limit and offset to getQuestions
 	 * 
@@ -81,7 +81,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		catch (IllegalArgumentException e) {
 		}
 	}
-	
+
 	/**
 	 * testGetSolutions tests if the retrieval of solutions for a given
 	 * question from the database is working.
@@ -104,7 +104,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 				solutions.getSolutions().size());
 		System.out.println(solutions);
 	}
-	
+
 	/**
 	 * Round-trip test the ability to create, read, and delete a specific \
 	 * Question.
@@ -144,7 +144,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		assertEquals(0, qList.size());
 		*/
 	}
-	
+
 	/**
 	 * Tests the local storage of information our app will use.
 	 * 
@@ -165,11 +165,11 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		try {
 			// load UserInfo in QuestionService
 			questionService.initializeUserInfo(path, userInfo.getUserEmail());
-			
+
 			// modify userInfo and write changes
 			questionService.clearAllFavorites();
 			questionService.writeUserInfo();
-			
+
 			// read from file and verify changes
 			String str = Utility.readStringFromFile(file);
 			UserInfo clone = mapper.readValue(str, UserInfo.class);
@@ -180,7 +180,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			file.delete();
 		}
 	}
-	
+
 	/**
 	 * Tests the retrieval of userId from an email
 	 * 
@@ -197,7 +197,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		int actualId = questionService.getUserId(userEmail);
 		assertEquals(expectedId, actualId);
 	}
-	
+
 	/**
 	 * Tests the retrieval of userId from an email
 	 * 
@@ -216,7 +216,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		catch (IllegalArgumentException e) {
 		}
 	}
-	
+
 	/**
 	 * Tests the retrieval of questions by the given question ids
 	 * 

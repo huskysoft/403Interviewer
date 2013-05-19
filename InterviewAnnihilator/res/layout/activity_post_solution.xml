@@ -1,4 +1,3 @@
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
@@ -16,25 +15,31 @@
 	        android:text="@string/error_displaying_question"
 	        android:textSize="8pt" />
 	
-	    <EditText android:id="@+id/edit_solution"
+	    <EditText
+	        android:id="@+id/edit_solution"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignLeft="@+id/question_view"
 	        android:layout_below="@+id/question_view"
-	        android:layout_toLeftOf="@+id/send_solution"
 	        android:layout_marginTop="10dp"
+	        android:layout_toLeftOf="@+id/send_solution"
+	        android:background="@color/white"
 	        android:ems="10"
-	        android:hint="@string/edit_solution" >
-	
+	        android:hint="@string/edit_solution_msg" >
+
 	        <requestFocus />
 	    </EditText>
 	
-	    <Button android:id="@+id/send_solution"
+	    <Button
+	        android:id="@+id/send_solution"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignBaseline="@+id/edit_solution"
 	        android:layout_alignBottom="@+id/edit_solution"
 	        android:layout_alignRight="@+id/question_view"
-	        android:text="@string/button_post" 
-	        android:onClick="sendSolution"/>
+	        android:layout_alignTop="@+id/edit_solution"
+	        android:layout_marginLeft="16dp"
+	        android:background="@color/button"
+	        android:onClick="sendSolution"
+	        android:text="@string/button_post" />
+
 </RelativeLayout>

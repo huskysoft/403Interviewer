@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 
 
 public class NetworkServiceTest extends TestCase {
-	
+
 	private NetworkService networkService;
 
 	/**
@@ -29,7 +29,7 @@ public class NetworkServiceTest extends TestCase {
 		super(name);
 		this.networkService = NetworkService.getInstance();
 	}
-	
+
 	/**
 	 * Tests the method getQuestions in NetworkService.java that is called
 	 * by QuestionService.java
@@ -40,7 +40,7 @@ public class NetworkServiceTest extends TestCase {
 	public void testGetAllQuestions() throws NetworkException {
 		assertNotNull(networkService.getQuestions(null, null, 10, 0, false));
 	}
-	
+
 	/**
 	 * Gets a random set of questions
 	 * 
@@ -50,7 +50,7 @@ public class NetworkServiceTest extends TestCase {
 	public void testGetQuestionsRandom() throws NetworkException {
 		assertNotNull(networkService.getQuestions(null, null, 10, 0, true));
 	}
-	
+
 	/**
 	 * Gets a set of questions only of one category
 	 * 
@@ -63,7 +63,7 @@ public class NetworkServiceTest extends TestCase {
 		assertNotNull(networkService.getQuestions
 		(null, categories, 10, 0, false));		
 	}
-	
+
 	/**
 	 * Gets a set of questions only of certain categories
 	 * 
@@ -77,7 +77,7 @@ public class NetworkServiceTest extends TestCase {
 		assertNotNull(networkService.getQuestions
 		(null, categories, 10, 0, false));
 	}
-	
+
 	/**
 	 * Gets a set of questions by a certain difficulty level
 	 * 
@@ -88,7 +88,7 @@ public class NetworkServiceTest extends TestCase {
 		assertNotNull(networkService.getQuestions
 		(Difficulty.MEDIUM, null, 5, 0, false));
 	}
-	
+
 	/**
 	 * Gets a set of questions by a certain difficulty level and a certain
 	 * list of categories
@@ -104,7 +104,7 @@ public class NetworkServiceTest extends TestCase {
 		assertNotNull(networkService.getQuestions
 		(Difficulty.MEDIUM, categories, 5, 0, false));		
 	}
-	
+
 	/**
 	 * Gets a set of questions starting at a certain offset within
 	 * the database
@@ -115,7 +115,7 @@ public class NetworkServiceTest extends TestCase {
 	public void testGetQuestionsWithOffset() throws NetworkException {
 		assertNotNull(networkService.getQuestions(null, null, 5, 5, false));
 	}
-	
+
 	/**
 	 * Tests the method getSolutions in NetworkService.java that is called by
 	 * QuestionService.java
@@ -128,7 +128,7 @@ public class NetworkServiceTest extends TestCase {
 		assertNotNull(result);
 		System.out.println(result);
 	}
-	
+
 	/**
 	 * Tests the method getSolutions with a questionId that is not in the
 	 * database

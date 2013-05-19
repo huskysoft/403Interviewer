@@ -124,7 +124,7 @@ public class NetworkService {
 
 		return dispatchGetRequest(urlToSend.toString());
 	}
-	
+
 	/**
 	 * Posts a question to the server. Returns true if the post succeeds.
 	 * 
@@ -196,7 +196,7 @@ public class NetworkService {
 		String res = dispatchGetRequest(urlToSend.toString());
 		return Integer.valueOf(res);
 	}
-	
+
 	/**
 	 * Posts a solution to the server. Returns true if the post succeeds.
 	 * 
@@ -212,7 +212,7 @@ public class NetworkService {
 		}
 		return dispatchPostRequest(POST_SOLUTION_URL, solution);
 	}
-	
+
 	public boolean deleteSolution(int solutionId, String userEmail) {
 		// TODO
 		return false;
@@ -237,7 +237,7 @@ public class NetworkService {
 				throw new NetworkException("Request to " + url
 						+ " failed with response code " + statusCode);
 			}
-			
+
 			// Return the content
 			return getContent(response);
 		} catch (Exception e) {
@@ -275,7 +275,7 @@ public class NetworkService {
 
 			// Return the content
 			return getContent(response);
-			
+
 		} catch (Exception e) {
 			throw new NetworkException("POST request to " + url + " failed", e);
 		}

@@ -42,6 +42,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.ui.QuestionActivity" />
         </activity>
+        <activity
+            android:name="com.huskysoft.interviewannihilator.ui.PostQuestionActivity"
+            android:label="@string/title_activity_post_question" >
+        </activity>
     </application>
 
 </manifest>
