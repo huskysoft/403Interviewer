@@ -8,7 +8,8 @@
 
 package com.huskysoft.interviewannihilator.util;
 
-import static com.huskysoft.interviewannihilator.util.NetworkConstants.AMPERSAND;
+import static com.huskysoft.interviewannihilator.
+util.NetworkConstants.AMPERSAND;
 
 import java.io.BufferedReader;
 import java.io.File;
