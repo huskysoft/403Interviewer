@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -226,13 +225,16 @@ public class QuestionService {
 	}
 
 	/**
-	 * Delete a Question. The user must be the author of the Question.
+	 * Delete a Question. The user must be the author of the Question. Returns
+	 * true on success.
 	 * 
 	 * @param questionId
+	 * @throws NetworkException 
 	 */
-	public void deleteQuestion(int questionId) {
+	public boolean deleteQuestion(int questionId) throws NetworkException {
 		Utility.ensureNotNull(userInfo, "UserInfo");
-		networkService.deleteQuestion(questionId, userInfo.getUserEmail());
+		return networkService.deleteQuestion(
+				questionId, userInfo.getUserEmail());
 	}
 	
 	/**
