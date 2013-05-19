@@ -39,7 +39,8 @@ public class MainActivityTest extends
 	 * @label white-box test
 	 */
 	public void testPreConditions() {
-		LinearLayout ll = (LinearLayout) mActivity.findViewById(com.huskysoft.interviewannihilator.R.id.question_layout);
+		LinearLayout ll = (LinearLayout) mActivity.findViewById(
+				com.huskysoft.interviewannihilator.R.id.question_layout);
 		assertEquals(0, ll.getChildCount());
 		assertEquals(4, mSpinner.getCount());
 	}
@@ -57,7 +58,8 @@ public class MainActivityTest extends
 	}
 	
 	public void testDifficultySelection(){
-		Spinner s = (Spinner) mActivity.findViewById(com.huskysoft.interviewannihilator.R.id.diff_spinner);
+		Spinner s = (Spinner) mActivity.findViewById(
+				com.huskysoft.interviewannihilator.R.id.diff_spinner);
 		
 		mActivity.runOnUiThread(
 			new Runnable() {
