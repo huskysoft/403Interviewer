@@ -227,12 +227,13 @@ public class QuestionService {
 	 * Posts a question to the server.
 	 * 
 	 * @param toPost
-	 *            the Question object that represents the question
+	 *            the Question object that represents the question.
+	 *            Cannot be null.
 	 * @return the id of the question being posted
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if toPost is null
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
@@ -240,8 +241,11 @@ public class QuestionService {
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
 		}
-		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
-			throw new IllegalArgumentException("Empty text/title in question");
+		if (toPost.getText()== null | toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Null/Empty text in question");
+		}
+		if (toPost.getTitle()== null | toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Null/Empty title in question");
 		}
 		if (toPost.getCategory() == null) {
 			throw new IllegalArgumentException("Null category in question");
@@ -264,12 +268,12 @@ public class QuestionService {
 	 * Posts a solution to the server.
 	 * 
 	 * @param toPost
-	 *            the Solution object that represents the solution
+	 *            the Solution object that represents the solution.
 	 * @return the id of the solution being posted
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if toPost is null
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
@@ -277,8 +281,8 @@ public class QuestionService {
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
 		}
-		if (toPost.getText().isEmpty()) {
-			throw new IllegalArgumentException("Empty text in solution");
+		if (toPost.getText() == null || toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Null/Empty text in solution");
 		}
 		
 		// Populate authorId and dateCreated (others are filled in)

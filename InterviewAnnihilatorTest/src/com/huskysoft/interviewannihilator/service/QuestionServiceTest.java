@@ -23,6 +23,7 @@ import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
 import com.huskysoft.interviewannihilator.util.Utility;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class QuestionServiceTest extends TestCase {
@@ -32,36 +33,37 @@ public class QuestionServiceTest extends TestCase {
 
 	/**
 	 * Construct new test instance
-	 *
-	 * @param name the test name
+	 * 
+	 * @param name
+	 *            the test name
 	 */
 	public QuestionServiceTest(String name) {
 		super(name);
 		questionService = QuestionService.getInstance();
 		mapper = new ObjectMapper();
 	}
-	
-	public void testGetAllQuestions() 
-			throws NetworkException, JSONException, IOException {
-		PaginatedQuestions questions = 
-				questionService.getQuestions(null, null, 10, 0, false);
+
+	public void testGetAllQuestions() throws NetworkException, JSONException,
+			IOException {
+		PaginatedQuestions questions = questionService.getQuestions(null, null,
+				10, 0, false);
 		assertNotNull(questions);
 		assertEquals(Math.min(10, questions.getTotalNumberOfResults()),
 				questions.getQuestions().size());
 		System.out.println(questions);
 	}
-	
-	public void testGetSolutions() 
-			throws NetworkException, JSONException, IOException {
+
+	public void testGetSolutions() throws NetworkException, JSONException,
+			IOException {
 		PaginatedSolutions solutions = questionService.getSolutions(10, 10, 0);
 		assertNotNull(solutions);
-		assertEquals(Math.min(10, solutions.getTotalNumberOfResults()), 
+		assertEquals(Math.min(10, solutions.getTotalNumberOfResults()),
 				solutions.getSolutions().size());
 		System.out.println(solutions);
 	}
-	
-	public void testReadWriteUserInfo() throws JsonGenerationException, 
-			JsonMappingException, IOException, NetworkException {		
+
+	public void testReadWriteUserInfo() throws JsonGenerationException,
+			JsonMappingException, IOException, NetworkException {
 		// write UserInfo to a file
 		UserInfo userInfo = TestHelpers.createDummyUserInfo();
 		String json = mapper.writeValueAsString(userInfo);
@@ -71,11 +73,11 @@ public class QuestionServiceTest extends TestCase {
 		try {
 			// load UserInfo in QuestionService
 			questionService.initializeUserInfo(path, userInfo.getUserEmail());
-			
+
 			// modify userInfo and write changes
 			questionService.clearAllFavorites();
 			questionService.writeUserInfo();
-			
+
 			// read from file and verify changes
 			String str = Utility.readStringFromFile(file);
 			UserInfo clone = mapper.readValue(str, UserInfo.class);
@@ -87,5 +89,21 @@ public class QuestionServiceTest extends TestCase {
 		}
 	}
 
-	
+	/**
+	 * Tests that postQuestion throws IllegalArgumentException when given a null
+	 * question. (Black box test)
+	 * 
+	 * @throws IOException
+	 * @throws JSONException
+	 * @throws NetworkException
+	 */
+	public void testpostQuestionNull() throws NetworkException, JSONException,
+			IOException {
+		try {
+			QuestionService service = QuestionService.getInstance();
+			service.postQuestion(null);
+			Assert.fail("Posting null question should not be allowed.");
+		} catch (IllegalArgumentException e) {
+		}
+	}
 }
