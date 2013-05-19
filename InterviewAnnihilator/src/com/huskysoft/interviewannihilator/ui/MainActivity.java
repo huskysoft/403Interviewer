@@ -32,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 public class MainActivity extends SlidingActivity {
 
@@ -41,11 +42,12 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public final static String EXTRA_MESSAGE =
 			"com.huskysoft.interviewannihilator.QUESTION";
-
+	
 	/** Layout element that holds the questions */
-	private LinearLayout questionll;
-
-
+	private LinearLayout questionLayout;
+	
+	private List<Question> questionList;
+	
 	/**
 	 * Method that populates the app when the MainActivity is created.
 	 * Initializes the questions and questionll fields. Also calls
@@ -58,24 +60,32 @@ public class MainActivity extends SlidingActivity {
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
-
+		
 		// Get passed difficulty stored in Utility class
 		Difficulty diff = SlideMenuInfoTransfer.diff;
-
+		
 		// Reset PassedDifficulty
 		SlideMenuInfoTransfer.diff = null;
-
+		
 		buildSlideMenu();
-
+		
 		if(diff == null){
 			setSpinnerToSelectedValue("");
 		}
-
-		questionll = (LinearLayout) findViewById(R.id.question_layout);
-
-		loadQuestions(diff);
+		
+		questionLayout = (LinearLayout) findViewById(R.id.question_layout);
+		
+		View loadingText = findViewById(R.id.loading_text_layout);
+		loadingText.setVisibility(View.VISIBLE);
+		
+		if(questionList == null){
+			loadQuestions(diff);
+		}
+		else{
+			displayQuestions();
+		}
 	}
-
+	
 	/**
 	 * Function that will make set the currently selected spinner
 	 * value to the passed in string. Used when the difficulty
@@ -110,7 +120,7 @@ public class MainActivity extends SlidingActivity {
 		}
 		return Difficulty.valueOf(difficulty.toUpperCase());
 	}
-
+	
 	/**
 	 * Helper method that builds the slide menu on the current activity.
 	 */
@@ -119,24 +129,23 @@ public class MainActivity extends SlidingActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) 
+		menu.setBehindOffset((int)
 				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
-
+		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 				R.array.difficulty, 
 				android.R.layout.simple_spinner_item);
-
+		
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
-
+		
 		// Apply the adapter to the spinner
 		spinner.setAdapter(adapter);
-		
 	}
-
+	
 	/**
 	 * Click handler for the slide-in menu difficulty selection.
 	 * Will repopulate the list of questions with new questions
@@ -146,12 +155,34 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public void adjustDifficulty(View v){
 		Difficulty diff = getCurrentDifficultySetting();
-
+		
 		toggle();
-
+		
 		// Clear current Questions
-		questionll.removeAllViews();
-		new FetchQuestionsTask(this, diff).execute();
+		questionLayout.removeAllViews();
+		
+		// Switch back to the loading view
+		this.switchView();
+		
+		loadQuestions(diff);
+	}
+	
+	/**
+	 * Changes from the loading view to the question list view and vice versa
+	 */
+	public void switchView(){
+		// Switch views
+		ViewSwitcher switcher =
+				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
+		switcher.showNext();
+	}
+	
+	/**
+	 * Sets the questions to be displayed (does not display them).
+	 * @param questions
+	 */
+	public void setQuestions(List<Question> questions){
+		questionList = questions;
 	}
 	
 	/**
@@ -180,37 +211,31 @@ public class MainActivity extends SlidingActivity {
 	 * @param questions
 	 */
 	@SuppressLint("NewApi")
-	public void displayQuestions(List<Question> questions) {		
-
-		// Dismiss loading text
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
-
-		if(loadingText != null){
-			loadingText.setVisibility(View.GONE);
-		}
-
-
+	public void displayQuestions() {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
-
+		
 		//TODO: Move to XML or constants file - haven't yet figured out how
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1;  // Horizontal Center
-
-		if(questions == null || questions.size() <= 0){
+		
+		
+		if(questionList == null || questionList.size() <= 0){
 			TextView t = new TextView(this);
 
 			t.setText("There doesn't seem to be any questions.");
 			// special look?
 			t.setLayoutParams(llp);
-			questionll.addView(t);
+			questionLayout.addView(t);
 		}else{
-			for(int i = 0; i < questions.size(); i++){
-				Question question = questions.get(i);
+			for(int i = 0; i < questionList.size(); i++){
+				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
+					
 					String questionText = question.getTitle();
+					
 					TextView t = new TextView(this);
+					
 					t.setLayoutParams(llp);
 					t.setId(question.getQuestionId());
 					t.setTag(question);
@@ -227,22 +252,17 @@ public class MainActivity extends SlidingActivity {
 							openQuestion(v);
 						}
 					});
-					questionll.addView(t);
+					questionLayout.addView(t);
 				}
 			}
 		}
 	}
-
+	
 	/**
 	 * Pops up a dialog menu with "Retry" and "Cancel" options when a network
 	 * operation fails.
 	 */
-	public void onNetworkError(){	
-		// Stop loadingDialog
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.GONE);
-
+	public void onNetworkError(){		
 		// Create a dialog
 		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
 		.setPositiveButton(R.string.retryDialog_retry,

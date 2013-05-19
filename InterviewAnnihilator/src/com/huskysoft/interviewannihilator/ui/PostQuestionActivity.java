@@ -122,7 +122,7 @@ public class PostQuestionActivity extends Activity {
     *              0 if the solution was not valid upon trying to post
     *              Any other number to indicate an error
     *              
-    * @param titleId The string to display to the user, 
+    * @param message The string to display to the user, 
     * 				 telling them what was invalid          
     */
 	private void displayMessage(int status, String message){
@@ -171,6 +171,9 @@ public class PostQuestionActivity extends Activity {
 			dialogButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Toast.makeText(getApplicationContext(), 
+							R.string.toast_retry, Toast.LENGTH_LONG).show();
+					dialog.dismiss();
 					sendQuestion(v);
 				}
 			});
@@ -180,7 +183,7 @@ public class PostQuestionActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					Toast.makeText(getApplicationContext(), 
-							R.string.toast_retry, Toast.LENGTH_LONG).show();
+							R.string.toast_return, Toast.LENGTH_LONG).show();
 					dialog.dismiss();
 				}
 			});

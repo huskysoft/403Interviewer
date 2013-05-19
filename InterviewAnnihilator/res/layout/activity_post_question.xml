@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"  >
+    android:layout_height="fill_parent"  
+    android:background="@color/light_purple">
 
     <TextView
         android:id="@+id/title_descriptor"
@@ -21,7 +22,8 @@
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/title_descriptor"
         android:ems="10"
-        android:hint="@string/edit_question_title_msg"> 
+        android:hint="@string/edit_question_title_msg"
+        android:background="@color/white"> 
                 <requestFocus /> </EditText> 
  
     <TextView
@@ -83,7 +85,7 @@
         android:layout_alignTop="@+id/goup_difficulty"
         android:checked="true"
         android:text="@string/radio_easy" 
-        android:onClick="updateRadio"/>
+        android:onClick="updateRadio" />
 
     <TextView
         android:id="@+id/solution_descriptor"
@@ -103,7 +105,8 @@
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/solution_descriptor"
         android:ems="10"
-        android:hint="@string/edit_solution_msg" />
+        android:hint="@string/edit_solution_msg" 
+        android:background="@color/white" />
     
     <Button
         android:id="@+id/send_question"
@@ -113,25 +116,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:onClick="sendQuestion"
-        android:text="@string/button_post" />
+        android:text="@string/button_post" 
+        android:background="@color/button" />
 
     <EditText
         android:id="@+id/edit_question"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
-        android:layout_alignLeft="@+id/difficulty_medium"
+        android:layout_toRightOf="@+id/question_descriptor"
         android:layout_alignTop="@+id/question_descriptor"
-        android:layout_marginLeft="24dp"
+        android:layout_marginLeft="8dp"
         android:ems="10"
-        android:hint="@string/edit_question_msg" >
+        android:hint="@string/edit_question_msg" 
+        android:background="@color/white" >
     </EditText>
-   
-    <Spinner
-        android:id="@+id/category_spinner_question"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_alignLeft="@+id/difficulty_medium"
-        android:layout_below="@+id/category_descriptor" />
     
     <TextView
         android:id="@+id/category_descriptor"
@@ -141,5 +139,13 @@
         android:layout_below="@+id/edit_solution_q"
         android:text="@string/category_post_descriptor"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Spinner
+        android:id="@+id/category_spinner_question"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/category_descriptor"
+        android:layout_alignLeft="@+id/edit_question"
+        android:background="@color/white" />
 
 </RelativeLayout>

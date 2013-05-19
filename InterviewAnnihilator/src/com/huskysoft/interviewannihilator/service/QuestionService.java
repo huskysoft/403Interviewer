@@ -10,18 +10,17 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-
 import java.util.Date;
 import java.util.List;
-
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
+import org.codehaus.jackson.type.TypeReference;
 
 import org.json.JSONException;
 
@@ -33,7 +32,6 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
-import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.Utility;
@@ -53,6 +51,7 @@ public class QuestionService {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		this.userInfo = Utility.createTestUserInfo();
 	}
 
 	/**
@@ -89,8 +88,7 @@ public class QuestionService {
 			Log.w(TAG, e.getMessage());
 			userInfo = new UserInfo();
 		}
-		if (userInfo.getUserId() == null
-				|| !userEmail.equals(userInfo.getUserEmail())) {
+		if (!userEmail.equals(userInfo.getUserEmail())) {
 			// new or non-matching UserInfo; clear history
 			userInfo.setUserEmail(userEmail);
 			userInfo.setUserId(getUserId(userEmail));
@@ -126,10 +124,21 @@ public class QuestionService {
 	 * 
 	 * @param questionIds
 	 * @return
+	 * @throws IOException 
+	 * @throws JSONException
+	 * @throws NetworkException
 	 */
-	public Question getQuestionsById(Collection<String> questionIds) {
-		// TODO
-		return null;
+	public List<Question> getQuestionsById(List<Integer> questionIds) 
+			throws JSONException, IOException, NetworkException {
+		if (questionIds == null || questionIds.size() == 0) {
+			throw new IllegalArgumentException(
+					"Must specify at least one Question ID!");
+		}
+		String json = networkService.getQuestionsById(questionIds);
+		TypeReference<List<Question>> tr = new 
+				TypeReference<List<Question>>(){};
+		List<Question> questions = mapper.readValue(json, tr);
+		return questions;
 	}
 
 	/**
@@ -153,7 +162,6 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
@@ -181,6 +189,85 @@ public class QuestionService {
 	}
 
 	/**
+	 * Posts a question to the server.
+	 * 
+	 * @param toPost
+	 *            the Question object that represents the question
+	 * @return the id of the question being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public int postQuestion(Question toPost) throws NetworkException,
+			JSONException, IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
+		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Empty text/title in question");
+		}
+		if (toPost.getCategory() == null) {
+			throw new IllegalArgumentException("Null category in question");
+		}
+		if (toPost.getDifficulty() == null) {
+			throw new IllegalArgumentException("Null difficulty in question");
+		}
+
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(userInfo.getUserId());
+		toPost.setDateCreated(new Date());
+
+		// Post the question and return result
+		String questionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postQuestion(questionStr);
+		return Integer.parseInt(result);
+	}
+
+	/**
+	 * Delete a Question. The user must be the author of the Question.
+	 * 
+	 * @param questionId
+	 */
+	public void deleteQuestion(int questionId) {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		networkService.deleteQuestion(questionId, userInfo.getUserEmail());
+	}
+
+	/**
+	 * Upvote a given Question. Returns true if upvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param questionId
+	 * @return
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public boolean upvoteQuestion(int questionId) throws NetworkException,
+			IOException {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.upvoteQuestion(questionId);
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Downvote a given Question. Returns true if downvote was received by the
+	 * server, otherwise false.
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	public boolean downvoteQuestion(int questionId) throws NetworkException,
+			IOException {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.downvoteQuestion(questionId);
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
 	 * The method the front-end calls to receive solutions for a given question
 	 * from the database
 	 * 
@@ -195,7 +282,6 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public PaginatedSolutions getSolutions(
 			int questionId, int limit, int offset)
@@ -225,52 +311,13 @@ public class QuestionService {
 	}
 
 	/**
-	 * Posts a question to the server.
-	 * 
-	 * @param toPost
-	 *            the Question object that represents the question
-	 * @return the id of the question being posted
-	 * @throws NetworkException
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws IllegalArgumentException
-	 */
-	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException {
-		// Check parameter
-		if (toPost == null) {
-			throw new IllegalArgumentException("Invalid Question: null");
-		}
-		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
-			throw new IllegalArgumentException("Empty text/title in question");
-		}
-		if (toPost.getCategory() == null) {
-			throw new IllegalArgumentException("Null category in question");
-		}
-		if (toPost.getDifficulty() == null) {
-			throw new IllegalArgumentException("Null difficulty in question");
-		}
-		
-		// Populate authorId and dateCreated (others are filled in)
-		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
-		toPost.setDateCreated(new Date());
-		
-		// Post the question and return result
-		String questionStr = mapper.writeValueAsString(toPost);
-		String result = networkService.postQuestion(questionStr);
-		return Integer.parseInt(result);
-	}
-
-	/**
 	 * Posts a solution to the server.
 	 * 
-	 * @param toPost
-	 *            the Solution object that represents the solution
+	 * @param toPost the Solution object that represents the solution
 	 * @return the id of the solution being posted
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
@@ -281,15 +328,26 @@ public class QuestionService {
 		if (toPost.getText().isEmpty()) {
 			throw new IllegalArgumentException("Empty text in solution");
 		}
-		
+
 		// Populate authorId and dateCreated (others are filled in)
-		toPost.setAuthorId(Integer.parseInt(userInfo.getUserId()));
+		toPost.setAuthorId(userInfo.getUserId());
 		toPost.setDateCreated(new Date());
 
 		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
+	}
+
+	/**
+	 * Delete a Solution. The user must be the author of the Solution.
+	 * 
+	 * @param solutionId
+	 * @param userEmail
+	 */
+	public void deleteSolution(int solutionId, String userEmail) {
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		networkService.deleteSolution(solutionId, userEmail);
 	}
 
 	/**
@@ -303,9 +361,8 @@ public class QuestionService {
 	 */
 	public boolean upvoteSolution(int solutionId) throws NetworkException,
 			IOException {
-		if (userInfo != null) {
-			userInfo.upvoteSolution(solutionId);
-		}
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.upvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -319,9 +376,8 @@ public class QuestionService {
 	 */
 	public boolean downvoteSolution(int solutionId) throws NetworkException,
 			IOException {
-		if (userInfo != null) {
-			userInfo.downvoteSolution(solutionId);
-		}
+		Utility.ensureNotNull(userInfo, "UserInfo");
+		userInfo.downvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -340,18 +396,39 @@ public class QuestionService {
 		userInfo.getFavoriteQuestions().clear();
 	}
 
-	private String getUserId(String userEmail) throws NetworkException,
+	/**
+	 * Gets the userId associated with a given email in the database
+	 * 
+	 * @param userEmail the email whose id we are getting
+	 * @return the id associated with the email. Creates a new entry in the
+	 * database and returns the id of the new entry if the email doesn't
+	 * exist in the database yet
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	protected int getUserId(String userEmail) throws NetworkException,
 			IOException {
-		// TODO Auto-generated method stub
-		return null;
+		if (userEmail == null) {
+			throw new IllegalArgumentException("userEmail cannot be null");
+		}
+		return networkService.getUserId(userEmail);
 	}
 
 	/**
-	 * Set the NetworkService, for mock testing.
+	 * Set the NetworkService, for testing.
 	 * 
 	 * @param networkService
 	 */
 	protected void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
+	}
+
+	/**
+	 * Set the UserInfo, for testing.
+	 * 
+	 * @param userInfo
+	 */
+	protected void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 }

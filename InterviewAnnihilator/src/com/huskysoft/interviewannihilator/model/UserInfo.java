@@ -15,17 +15,17 @@ import java.util.SortedMap;
 
 @SuppressLint("UseSparseArrays")
 public class UserInfo {
-	
+
 	public static final Boolean UPVOTE = true;
 	public static final Boolean DOWNVOTE = false;
-	
+
 	private String userEmail;
-	private String userId;
+	private Integer userId;
 	private Map<Integer, Date> viewedQuestions;
 	private Map<Integer, Date> favoriteQuestions;
 	private Map<Integer, Boolean> votedQuestions;
 	private Map<Integer, Boolean> votedSolutions;
-	
+
 	public UserInfo() {
 		// how to sort a map on values:
 		// http://stackoverflow.com/questions/2864840/treemap-sort-by-value
@@ -34,56 +34,56 @@ public class UserInfo {
 		votedQuestions = new HashMap<Integer, Boolean>();
 		votedSolutions = new HashMap<Integer, Boolean>();
 	}
-	
+
 	public String getUserEmail() {
 		return userEmail;
 	}
-	
+
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
-	
-	public String getUserId() {
+
+	public Integer getUserId() {
 		return userId;
 	}
-	
-	public void setUserId(String userId) {
+
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
+
 	public Map<Integer, Date> getViewedQuestions() {
 		return viewedQuestions;
 	}
-	
+
 	public void setViewedQuestions(SortedMap<Integer, Date> viewedQuestions) {
 		this.viewedQuestions = viewedQuestions;
 	}
-	
+
 	public Map<Integer, Date> getFavoriteQuestions() {
 		return favoriteQuestions;
 	}
-	
+
 	public void setFavoriteQuestions(
 			SortedMap<Integer, Date> favoriteQuestions) {
 		this.favoriteQuestions = favoriteQuestions;
 	}
-	
+
 	public Map<Integer, Boolean> getVotedQuestions() {
 		return votedQuestions;
 	}
-	
+
 	public void setVotedQuestions(Map<Integer, Boolean> votedQuestions) {
 		this.votedQuestions = votedQuestions;
 	}
-	
+
 	public Map<Integer, Boolean> getVotedSolutions() {
 		return votedSolutions;
 	}
-	
+
 	public void setVotedSolutions(Map<Integer, Boolean> votedSolutions) {
 		this.votedSolutions = votedSolutions;
 	}
-	
+
 	/**
 	 * Mark a Question as viewed
 	 * 
@@ -92,7 +92,7 @@ public class UserInfo {
 	public void markViewedQuestion(int questionId) {
 		viewedQuestions.put(questionId, new Date());
 	}
-	
+
 	/**
 	 * Get the Date at which this Question was marked viewed. Returns null if
 	 * Question has never been marked viewed.
@@ -103,7 +103,7 @@ public class UserInfo {
 	public Date whenViewedQuestion(int questionId) {
 		return viewedQuestions.get(questionId);
 	}
-	
+
 	/**
 	 * Mark a Question as a favorite
 	 * 
@@ -112,7 +112,7 @@ public class UserInfo {
 	public void markFavoriteQuestion(int questionId) {
 		favoriteQuestions.put(questionId, new Date());
 	}
-	
+
 	/**
 	 * Clear all favorite Questions
 	 * 
@@ -122,7 +122,7 @@ public class UserInfo {
 	public boolean clearFavoriteQuestion(int questionId) {
 		return (favoriteQuestions.remove(questionId) != null);
 	}
-	
+
 	/**
 	 * Get the Date at which this Question was marked favorite. Returns null if
 	 * Question has never been marked favorite.
@@ -133,7 +133,7 @@ public class UserInfo {
 	public Date whenFavoriteQuestion(int questionId) {
 		return favoriteQuestions.get(questionId);
 	}
-	
+
 	/**
 	 * Upvote a Question. Will overwrite a downvote.
 	 * 
@@ -142,7 +142,7 @@ public class UserInfo {
 	public void upvoteQuestion(int questionId) {
 		votedQuestions.put(questionId, UPVOTE);
 	}
-	
+
 	/**
 	 * Downvote a Question. Will overwrite an upvote.
 	 * 
@@ -151,7 +151,7 @@ public class UserInfo {
 	public void downvoteQuestion(int questionId) {
 		votedQuestions.put(questionId, DOWNVOTE);
 	}
-	
+
 	/**
 	 * Clear any votes for a Question.
 	 * 
@@ -160,7 +160,7 @@ public class UserInfo {
 	public void novoteQuestion(int questionId) {
 		votedQuestions.remove(questionId);
 	}
-	
+
 	/**
 	 * Upvote a Solution. Will overwrite a downvote.
 	 * 
@@ -169,7 +169,7 @@ public class UserInfo {
 	public void upvoteSolution(int solutionId) {
 		votedSolutions.put(solutionId, UPVOTE);
 	}
-	
+
 	/**
 	 * Downvote a Solution. Will overwrite an upvote.
 	 * 
@@ -178,7 +178,7 @@ public class UserInfo {
 	public void downvoteSolution(int solutionId) {
 		votedSolutions.put(solutionId, DOWNVOTE);
 	}
-	
+
 	/**
 	 * Clear any votes for a Question.
 	 * 
@@ -187,14 +187,14 @@ public class UserInfo {
 	public void novoteSolution(int solutionId) {
 		votedQuestions.remove(solutionId);
 	}
-	
+
 	public void clear() {
 		viewedQuestions.clear();
 		favoriteQuestions.clear();
 		votedQuestions.clear();
 		votedSolutions.clear();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -214,7 +214,7 @@ public class UserInfo {
 				+ ((votedSolutions == null) ? 0 : votedSolutions.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -256,4 +256,6 @@ public class UserInfo {
 			return false;
 		return true;
 	}
+
+
 }
