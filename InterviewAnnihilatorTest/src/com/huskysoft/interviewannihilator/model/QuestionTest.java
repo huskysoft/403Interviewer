@@ -100,10 +100,7 @@ public class QuestionTest extends TestCase {
 		// ensure dates are the same
 		q1.setDateCreated(new Date(1));
 		q2.setDateCreated(new Date(1));
-		// Note we assert true that they are equal to ensure that
-		// the question equals() method is called, not Object equals()
-		// or ==
-		assertTrue(q1.equals(q2));
+		assertEquals(q1, q2);
 	}
 	
 	/**
