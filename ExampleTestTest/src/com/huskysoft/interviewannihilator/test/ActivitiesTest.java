@@ -45,7 +45,8 @@ public class ActivitiesTest
 	 * Black Box Testing
 	 */
 	public void testClickQuestion() {
-		TextView button = solo.getText("GDP");
+		TextView button = solo.getText(3);
+		// TextView button = solo.getText("GDP");
 		button.callOnClick();
 		solo.assertCurrentActivity("checking going to question",
 				QuestionActivity.class);
@@ -55,7 +56,7 @@ public class ActivitiesTest
 	 * Black Box Testing
 	 */
 	public void testGoToQuestionAndBackToMainActivity() {
-		TextView button = solo.getText("Fast Sorting");
+		TextView button = solo.getText(3);
 		button.callOnClick();
 		solo.assertCurrentActivity("checking going to question",
 				QuestionActivity.class);
@@ -68,7 +69,7 @@ public class ActivitiesTest
 	 * Black Box Testing
 	 */
 	public void testGoToShowSolution() {
-		TextView button = solo.getText("GDP");
+		TextView button = solo.getText(3);
 		button.callOnClick();
 		solo.clickOnButton("Solutions");
 		solo.assertCurrentActivity("stays at QuestionActivity",
@@ -94,7 +95,7 @@ public class ActivitiesTest
 	 */
 	public void testPostSolutionActivity() {
 		solo.assertCurrentActivity("on MainActivity", MainActivity.class);
-		TextView button = solo.getText("GDP");
+		TextView button = solo.getText(3);
 		button.callOnClick();
 		solo.assertCurrentActivity("on QuestionActivity",
 				QuestionActivity.class);
