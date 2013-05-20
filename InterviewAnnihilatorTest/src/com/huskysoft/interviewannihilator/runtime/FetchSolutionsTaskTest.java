@@ -12,7 +12,6 @@ import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
-import com.huskysoft.interviewannihilator.util.TestHelpers;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 
 import junit.framework.TestCase;
