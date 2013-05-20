@@ -22,11 +22,9 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
-public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
+public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 
-	private QuestionService questionService;
 	private MainActivity context;
-	private List<Question> questionList;
 	private Difficulty diff;
 	private Category cat;
 	private Exception exception;
@@ -48,9 +46,10 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 * questionList with Questions so that they may be displayed afterwards.
 	 */
 	@Override
-	protected Void doInBackground(Void... params) {
-		questionService = QuestionService.getInstance();
-
+	protected List<Question> doInBackground(Void... params) {
+		QuestionService questionService = QuestionService.getInstance();
+		List<Question> questionList = null;
+		
 		try {
 			// Create a List of the selected Category
 			List<Category> category = null;
@@ -70,7 +69,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		}
 
 
-		return null;
+		return questionList;
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 * the MainActivity question area.
 	 */
 	@Override
-	protected void onPostExecute(Void result){
+	protected void onPostExecute(List<Question> questionList){
 		context.setQuestions(questionList);
 		context.displayQuestions();
 		context.switchView();
