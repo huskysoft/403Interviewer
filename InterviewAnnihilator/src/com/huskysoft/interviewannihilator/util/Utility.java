@@ -154,7 +154,7 @@ public class Utility {
 	public static UserInfo createTestUserInfo() {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail("admin@huskysoft.com");
-		userInfo.setUserId(1);
+		userInfo.setUserId(0);
 		return userInfo;
 	}
 }
