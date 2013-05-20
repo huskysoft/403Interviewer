@@ -97,7 +97,7 @@ public class PostSolutionActivity extends SlidingActivity {
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.length() == 0 ||
+				if (diffStr == null || diffStr.isEmpty() ||
 					diffStr.equals(Utility.ALL)) {
 					SlideMenuInfoTransfer.diff = null;
 				} else {
