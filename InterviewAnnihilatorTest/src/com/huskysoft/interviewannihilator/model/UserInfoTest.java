@@ -28,7 +28,7 @@ public class UserInfoTest extends TestCase {
 		super(name);
 		mapper = new ObjectMapper();
 	}
-	
+
 	/**
 	 * This tests the construction and usage of userInfo, its translation to
 	 * json to send over the network, and back
@@ -45,5 +45,5 @@ public class UserInfoTest extends TestCase {
 		UserInfo clone = mapper.readValue(json, UserInfo.class);
 		assertEquals(userInfo, clone);
 	}
-	
+
 }

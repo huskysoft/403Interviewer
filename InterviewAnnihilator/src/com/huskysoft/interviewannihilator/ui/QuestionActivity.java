@@ -4,7 +4,7 @@
  * It display the question clicked, and a hidden list of solutions that pop
  * up when a "Solutions" button is clicked.
  * 
- * @author Cody Andrews, Phillip Leland, 05/01/2013
+ * @author Cody Andrews, Phillip Leland, Justin Robb 05/01/2013
  * 
  */
 
@@ -12,17 +12,22 @@ package com.huskysoft.interviewannihilator.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
+
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
-import com.huskysoft.interviewannihilator.util.Utility;
 
 import android.os.Bundle;
+import android.app.Activity;
+
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
+import com.huskysoft.interviewannihilator.util.Utility;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
@@ -36,6 +41,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.support.v4.app.NavUtils;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 
@@ -226,7 +233,8 @@ public class QuestionActivity extends SlidingActivity {
 		if(showSolutionsPressed){
 			revealSolutions();
 		}
-	}
+	}	
+
 	
 	/**
 	 * Button handler for the "Solutions" button.
@@ -268,6 +276,7 @@ public class QuestionActivity extends SlidingActivity {
 		// Add post solution button to end of list
 		Button post = new Button(this);
 		post.setText(R.string.button_post_solution);
+		post.setBackgroundColor(getResources().getColor(R.color.button));
 		post.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){
@@ -341,6 +350,16 @@ public class QuestionActivity extends SlidingActivity {
 	public void postSolution(View view) {
 		Intent intent = new Intent(this, PostSolutionActivity.class);
 		intent.putExtra(EXTRA_MESSAGE, question);
+		startActivity(intent);
+	}
+	
+	/**
+	 * Called when the user clicks on button to post a question
+	 * 
+	 * @param v The TextView that holds the selected question. 
+	 */
+	public void postQuestion(View v){
+		Intent intent = new Intent(this, PostQuestionActivity.class);
 		startActivity(intent);
 	}
 

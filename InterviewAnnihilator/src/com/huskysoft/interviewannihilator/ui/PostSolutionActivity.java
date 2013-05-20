@@ -1,7 +1,7 @@
 /**
  * The screen for when users attempt to post a solution
  * 
- * @author Cody Andrews, 05/14/2013
+ * @author Cody Andrews, Justin Robb 05/14/2013
  */
 
 package com.huskysoft.interviewannihilator.ui;
@@ -13,26 +13,27 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
+
+import android.os.Bundle;
+import android.app.Dialog;
 import com.huskysoft.interviewannihilator.util.Utility;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
-import android.os.Bundle;
-import android.app.Dialog;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 
 public class PostSolutionActivity extends SlidingActivity {
 	/** The question being answered **/
@@ -61,17 +62,17 @@ public class PostSolutionActivity extends SlidingActivity {
 		TextView tv = (TextView) findViewById(R.id.question_view);
 		tv.setText(question.getText());
 	}
-
+	
 	/**
-	 * Helper method that builds and populates the slide in menu.
+	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) (width * 
-				SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+		menu.setBehindOffset((int) 
+				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -135,16 +136,6 @@ public class PostSolutionActivity extends SlidingActivity {
 		});
 		
 	}
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,11 +167,11 @@ public class PostSolutionActivity extends SlidingActivity {
 			throw new IllegalStateException();
 	
 		EditText editText = (EditText) findViewById(R.id.edit_solution);
-		String message = editText.getText().toString();
-		int outcome = 1;   
+		String message = editText.getText().toString();  
 		if (message.trim().equals("")){
 			// Fail due to bad solution
-			outcome = 0;
+			displayMessage(0, getString(R.string.badInputDialog_title));
+			return;
 		}
 		Solution solution = new Solution(question.getQuestionId(), message);
 		QuestionService qs = QuestionService.getInstance();
@@ -190,12 +181,15 @@ public class PostSolutionActivity extends SlidingActivity {
 			// Retry or cancel
 			// Complains that i need to log the error, 
 			// not sure how to do that
-			outcome= -1;
-		} catch (Exception e){
-			// TODO: probably should do something useful here
-			finish();
+			Log.w("Network Error", e.getMessage());
+			displayMessage(-1, getString(R.string.retryDialog_title));
+			return;
+		} catch (Exception e) {
+			Log.e("Internal Error", e.getMessage());
+			displayMessage(-2, getString(R.string.internalError_title));
+			return;
 		}
-		displayMessage(outcome);
+		displayMessage(1, getString(R.string.successDialog_title));
 	}
 	
 	/**
@@ -204,11 +198,14 @@ public class PostSolutionActivity extends SlidingActivity {
     * 
     * @param status The state of the solution, which should 
     * 		 be passed as one of the following:
-    *              1 if the solution was successfully posted
+    *              1 if the user is finished on this page
     *              0 if the solution was not valid upon trying to post
-    *              Any other number to indicate a network error
+    *              Any other number to indicate an error
+    *              
+    * @param message The string to display to the user, 
+    * 				 telling them what was invalid          
     */
-	private void displayMessage(int status){
+	private void displayMessage(int status, String message){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		if (status == 1 || status == 0){
@@ -220,44 +217,53 @@ public class PostSolutionActivity extends SlidingActivity {
 		// set the custom dialog components - text, buttons
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
-			text.setText(R.string.successDialog_title);
+			text.setText(message);
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
 			dialogButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Toast.makeText(getApplicationContext(), 
+							R.string.toast_return, Toast.LENGTH_LONG).show();
 					finish();   //It would look really cool for the solutions
 								//to update b4 the user returns
 				}
 			});
 		}else if (status == 0){
-			text.setText(R.string.badInputDialog_title);
+			text.setText(message);
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
 			dialogButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Toast.makeText(getApplicationContext(), 
+							R.string.toast_return, Toast.LENGTH_LONG).show();
 					dialog.dismiss();
 				}
 			});
 		}else{
-			text.setText(R.string.retryDialog_title);
+			text.setText(message);
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.button_retry);
-			// if button is clicked, close the custom dialog
+			// if button is clicked, send the solution
 			dialogButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					sendSolution();
+					Toast.makeText(getApplicationContext(), 
+							R.string.toast_retry, Toast.LENGTH_LONG).show();
+					dialog.dismiss();
+					sendSolution(v);
 				}
 			});
 			dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
-			// if button is clicked, close the custom dialog
+			// if CANCEL button is clicked
 			dialogButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Toast.makeText(getApplicationContext(), 
+							R.string.toast_return, Toast.LENGTH_LONG).show();
 					dialog.dismiss();
 				}
 			});
@@ -265,5 +271,13 @@ public class PostSolutionActivity extends SlidingActivity {
 		dialog.show();
 	}
 	
-	
+	/**
+	 * Called when the user clicks on button to post a question
+	 * 
+	 * @param v The TextView that holds the selected question. 
+	 */
+	public void postQuestion(View v){
+		Intent intent = new Intent(this, PostQuestionActivity.class);
+		startActivity(intent);
+	}
 }

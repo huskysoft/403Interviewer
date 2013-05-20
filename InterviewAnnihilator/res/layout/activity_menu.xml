@@ -21,6 +21,14 @@
        	android:layout_marginTop="80px"
        	android:layout_gravity="right"
        	android:layout_alignParentRight="true"/>
+    
+    <Button
+	    android:id="@+id/slide_menu_button_post"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/button_post_question"
+	    android:onClick="postQuestion" 
+	    android:layout_centerInParent="true" />
 	
     <TextView
         android:layout_width="fill_parent"
@@ -42,8 +50,8 @@
 	    android:id="@+id/slide_menu_button"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:text="Okay"
 	    android:onClick="adjustSettings" 
+	    android:text="@string/button_ok"
 	    android:layout_centerInParent="true" 
 	    android:layout_alignParentBottom="true"/>
 	

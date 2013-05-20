@@ -7,9 +7,8 @@
     <string name="button_solutions">Solutions</string>
     <string name="title_activity_question">Question</string>
     <string name="title_activity_post_solution">PostSolution</string>
-    <string name="edit_solution">Enter a solution</string>
+    <string name="edit_solution_msg">Enter a solution</string>
     <string name="button_post">Post</string>
-    
 
     <string-array name="difficulty">
         <item>All</item>
@@ -31,19 +30,36 @@
         <item>Science</item>
     </string-array>
 
+
     <string name="button_post_solution">Submit a Solution</string>
+    <string name="button_post_question">Submit a Question</string>
     <string name="error_displaying_question">Error Displaying Question!</string>
     <string name="retryDialog_title">A network error has occurred</string>
     <string name="retryDialog_retry">  Retry  </string>
     <string name="retryDialog_cancel"> Cancel </string>
     <string name="successDialog_title">Your solution was successfully posted.</string>
-    <string name="badInputDialog_title">Please provide a valid solution.</string>
+    <string name="successDialog_title_q">Your question was successfully posted.</string>
+    <string name="badInputDialog_solution">Please provide a valid solution.</string>
+    <string name="badInputDialog_title">Please provide a valid title.</string>
+    <string name="badInputDialog_question">Please provide a valid question.</string>
     <string name="badInputDialog_return">Return to editor</string>
     <string name="button_ok"> OK </string>
     <string name="loading_text">Loading&#8230;</string>
-    <string name="toast_return">Returning&#8230;</string>
-    <string name="toast_retry">Trying again&#8230;</string>
-    <string name="title_activity_post_result">PostResult</string> 
-
-
+    <string name="toast_return">Returning&#8230; </string>
+    <string name="toast_retry">Trying again&#8230; </string>
+    <string name="title_activity_post_result">PostResult</string>
+    <string name="title_activity_post_question">PostQuestionActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="edit_question_msg">Enter a question</string>
+    <string name="edit_question_title_msg">Enter a descriptive title</string>
+    <string name="radio_easy">Easy</string>
+    <string name="radio_medium">Medium</string>
+    <string name="radio_hard">Hard</string>
+    <string name="difficulty_post_descriptor">Select a difficulty rank: </string>
+    <string name="title_post_descriptor">Title: </string>
+    <string name="question_post_descriptor">Question: </string>
+    <string name="category_post_descriptor">Category: </string>
+    <string name="solution_post_descriptor">Solution: </string>
+    <string name="internalError_title">The app has experienced an internal error.</string>
+ 
 </resources>

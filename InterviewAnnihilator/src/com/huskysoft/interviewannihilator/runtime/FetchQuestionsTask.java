@@ -23,7 +23,7 @@ import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
 public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
-	
+
 	private QuestionService questionService;
 	private MainActivity context;
 	private List<Question> questionList;
@@ -31,7 +31,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	private Category cat;
 	private Exception exception;
 
-	
+
 	/**
 	 * 
 	 * @param context reference to MainActivity
@@ -41,8 +41,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		this.diff = diff;
 		this.cat = cat;
 	}
-	
-	
+
+
 	/**
 	 * This is the main function of the AsyncTask thread. This will populate
 	 * questionList with Questions so that they may be displayed afterwards.
@@ -50,7 +50,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		questionService = QuestionService.getInstance();
-		
+
 		try {
 			// Create a List of the selected Category
 			List<Category> category = null;
@@ -68,11 +68,11 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			exception = e;
 			this.cancel(true);
 		}
-	
-		
+
+
 		return null;
 	}
-	
+
 	@Override
 	protected void onCancelled(){
 		//TODO: handle specific error cases
@@ -80,7 +80,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 			context.onNetworkError();
 		}
 	}
-	
+
 	/**
 	 * This event fires when doInBackground() is complete, and it will populate
 	 * the MainActivity question area.

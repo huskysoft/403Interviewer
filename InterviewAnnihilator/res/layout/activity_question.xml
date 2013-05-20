@@ -4,32 +4,32 @@
     	android:background="@color/light_purple"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
-	    
+
 	<LinearLayout android:id="@+id/question_layout_main"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	    
+
 	    <TextView android:id="@+id/question_text_view"
 	        android:textIsSelectable="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 		</TextView>
-	    
+
 		<Button 
 	        android:id="@+id/question_button_show_solutions"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/button_solutions"
 	        android:layout_gravity="center_horizontal"
-	        android:onClick="onShowSolutions">	        
-	    </Button>
-	    
+	        android:onClick="onShowSolutions"
+	        android:background="@color/button" />	        
+
 		<LinearLayout android:id="@+id/question_layout_solutions"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:orientation="vertical" >
-		    
+
 		    <include layout="@layout/loading_anim" />
 		</LinearLayout>
 	</LinearLayout>
