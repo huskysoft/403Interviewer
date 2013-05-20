@@ -159,8 +159,11 @@ public class QuestionActivity extends SlidingActivity {
 				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 				String diffStr = diffSpinner.getSelectedItem().toString();
 				
-				Spinner catSpinner = (Spinner) findViewById(R.id.category_spinner);
-				String categoryStr = catSpinner.getSelectedItem().toString().replaceAll("\\s", "");
+				Spinner catSpinner = 
+						(Spinner) findViewById(R.id.category_spinner);
+				String categoryStr = 
+						catSpinner.getSelectedItem()
+						.toString().replaceAll("\\s", "");
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);

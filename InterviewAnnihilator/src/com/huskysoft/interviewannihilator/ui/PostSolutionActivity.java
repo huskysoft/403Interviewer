@@ -109,13 +109,17 @@ public class PostSolutionActivity extends SlidingActivity {
 				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 				String diffStr = diffSpinner.getSelectedItem().toString();
 				
-				Spinner catSpinner = (Spinner) findViewById(R.id.category_spinner);
-				String categoryStr = catSpinner.getSelectedItem().toString().replaceAll("\\s", "");
+				Spinner catSpinner = 
+						(Spinner) findViewById(R.id.category_spinner);
+				String categoryStr = 
+						catSpinner.getSelectedItem()
+						.toString().replaceAll("\\s", "");
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.length() == 0 || 
-					diffStr.equals(Utility.ALL)) {
+
+				if (diffStr == null || diffStr.isEmpty() ||
+					diffStr.equals(Utility.ALL) || diffStr.length() == 0) {
 					SlideMenuInfoTransfer.diff = null;
 				} else {
 					SlideMenuInfoTransfer.diff = 

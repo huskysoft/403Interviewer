@@ -128,13 +128,12 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		String difficulty = spinner.getSelectedItem().toString();
-		
-		if (difficulty.equals(Utility.ALL)){
+
+		String diff = spinner.getSelectedItem().toString();
+		if (diff == null || diff.isEmpty() || diff.equals(Utility.ALL)) {
 			return null;
 		}
-		
-		return Difficulty.valueOf(difficulty.toUpperCase());
+		return Difficulty.valueOf(diff.toUpperCase());
 	}
 	
 	/**
