@@ -1,3 +1,10 @@
+/**
+ * Defines any UI constants we use to avoid hard-coding them into the
+ * application code
+ * 
+ * @author Cody Andrews, 05/19/2013
+ */
+
 package com.huskysoft.interviewannihilator.util;
 
 public class UIConstants {
