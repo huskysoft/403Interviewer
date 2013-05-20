@@ -1,7 +1,7 @@
 /**
  * Main UI for the application. Displays a list of questions.
  * 
- * @author Cody Andrews, Phillip Leland, 05/01/2013
+ * @author Cody Andrews, Phillip Leland, Justin Robb 05/01/2013
  * 
  */
 
@@ -27,6 +27,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -34,7 +35,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 public class MainActivity extends SlidingActivity {
-	
+
 	/**
 	 * Used to pass the String question to the child activity.
 	 * Will pass a Question object.
@@ -46,7 +47,6 @@ public class MainActivity extends SlidingActivity {
 	private LinearLayout questionLayout;
 	
 	private List<Question> questionList;
-	
 	
 	/**
 	 * Method that populates the app when the MainActivity is created.
@@ -94,12 +94,17 @@ public class MainActivity extends SlidingActivity {
 	 * @param value Selected Spinner value
 	 */
 	public void setSpinnerToSelectedValue(String value){
+		// This was causing a type error before, please don't change back 
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
-		
-		spinner.setSelection(myAdap.getPosition(value));
+		Adapter a = spinner.getAdapter();
+		for (int i = 0; i < a.getCount(); i++){
+			if (a.getItem(i).toString().equals(value)){
+				spinner.setSelection(i);
+				return;
+			}
+		}
 	}
-	
+
 	/**
 	 * Method that returns the Difficulty Enum that is 
 	 * currently selected in the Difficulty spinner input
@@ -173,16 +178,6 @@ public class MainActivity extends SlidingActivity {
 	}
 	
 	/**
-	 * Shows loading text and starts loading questions
-	 * 
-	 * @param diff
-	 */
-	private void loadQuestions(Difficulty diff){			
-		// Populate questions list. This makes a network call.
-		new FetchQuestionsTask(this, diff).execute();
-	}
-	
-	/**
 	 * Sets the questions to be displayed (does not display them).
 	 * @param questions
 	 */
@@ -190,6 +185,26 @@ public class MainActivity extends SlidingActivity {
 		questionList = questions;
 	}
 	
+	/**
+	 * Called when the user clicks on button to post a question
+	 * 
+	 * @param v The TextView that holds the selected question. 
+	 */
+	public void postQuestion(View v){
+		Intent intent = new Intent(this, PostQuestionActivity.class);
+		startActivity(intent);
+	}
+
+	public void loadQuestions(Difficulty diff){
+		// Display loading text
+		LinearLayout loadingText =
+				(LinearLayout) findViewById(R.id.loading_text_layout);
+		loadingText.setVisibility(View.VISIBLE);
+
+		// Populate questions list. This makes a network call.
+		new FetchQuestionsTask(this, diff).execute();
+	}
+
 	/**
 	 * Displays a formatted list of questions
 	 * 
@@ -207,7 +222,7 @@ public class MainActivity extends SlidingActivity {
 		
 		if(questionList == null || questionList.size() <= 0){
 			TextView t = new TextView(this);
-			
+
 			t.setText("There doesn't seem to be any questions.");
 			// special look?
 			t.setLayoutParams(llp);
@@ -225,19 +240,18 @@ public class MainActivity extends SlidingActivity {
 					t.setId(question.getQuestionId());
 					t.setTag(question);
 					t.setText(questionText);	
-					
+
 					// to make it work on older versions use this instead of
 					// setBackground
 					t.setBackgroundDrawable(getResources().
 							getDrawable(R.drawable.listitem));
-					
+
 					t.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
 							openQuestion(v);
 						}
 					});
-			
 					questionLayout.addView(t);
 				}
 			}
@@ -267,14 +281,14 @@ public class MainActivity extends SlidingActivity {
 		})
 		.create().show();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	/**
 	 * Function used as the onClickHandler of the Question tiles
 	 * on the main menu of the application.
@@ -286,7 +300,7 @@ public class MainActivity extends SlidingActivity {
 		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
 		startActivity(intent);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -297,5 +311,5 @@ public class MainActivity extends SlidingActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
 }
+

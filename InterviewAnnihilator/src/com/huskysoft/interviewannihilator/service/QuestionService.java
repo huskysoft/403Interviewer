@@ -213,11 +213,11 @@ public class QuestionService {
 		if (toPost.getDifficulty() == null) {
 			throw new IllegalArgumentException("Null difficulty in question");
 		}
-		
+
 		// Populate authorId and dateCreated (others are filled in)
 		toPost.setAuthorId(userInfo.getUserId());
 		toPost.setDateCreated(new Date());
-		
+
 		// Post the question and return result
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
@@ -236,7 +236,7 @@ public class QuestionService {
 		return networkService.deleteQuestion(
 				questionId, userInfo.getUserEmail());
 	}
-	
+
 	/**
 	 * Upvote a given Question. Returns true if upvote was received by the
 	 * server, otherwise false.
@@ -331,7 +331,7 @@ public class QuestionService {
 		if (toPost.getText() == null || toPost.getText().isEmpty()) {
 			throw new IllegalArgumentException("Null/Empty text in solution");
 		}
-		
+
 		// Populate authorId and dateCreated (others are filled in)
 		toPost.setAuthorId(userInfo.getUserId());
 		toPost.setDateCreated(new Date());
@@ -341,7 +341,7 @@ public class QuestionService {
 		String result = networkService.postQuestion(solutionStr);
 		return Integer.parseInt(result);
 	}
-	
+
 	/**
 	 * Delete a Solution. The user must be the author of the Solution.
 	 * 
@@ -425,7 +425,7 @@ public class QuestionService {
 	protected void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}
-	
+
 	/**
 	 * Set the UserInfo, for testing.
 	 * 

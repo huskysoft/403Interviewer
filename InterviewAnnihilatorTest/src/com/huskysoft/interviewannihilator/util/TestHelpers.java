@@ -21,11 +21,11 @@ import com.huskysoft.interviewannihilator.model.UserInfo;
 
 @SuppressLint("UseSparseArrays")
 public class TestHelpers {
-	
+
 	public static final int VALID_QUESTION_ID = 10;
 	public static final String TEST_USER_EMAIL = "admin@huskysoft.com";
 	public static final int TEST_USER_ID = 0;
-	
+
 	public static Question createDummyQuestion(int i) {
 		Question q = new Question();
 		q.setAuthorId(i + 1);
@@ -37,7 +37,7 @@ public class TestHelpers {
 		q.setText("Hello world" + i);
 		return q;
 	}
-	
+
 	public static Solution createDummySolution(int i) {
 		Solution s = new Solution();
 		s.setAuthorId(i + 1);
@@ -47,14 +47,14 @@ public class TestHelpers {
 		s.setText("Some solution" + i);
 		return s;
 	}
-	
+
 	public static UserInfo createTestUserInfo() {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail(TEST_USER_EMAIL);
 		userInfo.setUserId(TEST_USER_ID);
 		return userInfo;
 	}
-	
+
 	public static UserInfo createDummyUserInfo() {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail("johndoe@email.com");
@@ -65,7 +65,7 @@ public class TestHelpers {
 		userInfo.setVotedSolutions(createIntegerBooleanMap(10, 50));
 		return userInfo;
 	}
-	
+
 	private static Map<Integer, Boolean> createIntegerBooleanMap(
 			int size, int initial) {
 		Map<Integer, Boolean> m = new HashMap<Integer, Boolean>();
@@ -74,7 +74,7 @@ public class TestHelpers {
 		}
 		return m;
 	}
-	
+
 	private static SortedMap<Integer, Date> createIntegerDateMap(
 			int size, int initial) {
 		SortedMap<Integer, Date> m = new TreeMap<Integer, Date>();
