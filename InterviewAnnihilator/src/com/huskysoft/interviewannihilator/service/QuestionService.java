@@ -196,13 +196,17 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if toPost is null or its fields are set
+	 * incorrectly
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			JSONException, IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
+		}
+		if (toPost.getText() == null || toPost.getTitle() == null) {
+			throw new IllegalArgumentException("Null text/title in question");
 		}
 		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
 			throw new IllegalArgumentException("Empty text/title in question");
@@ -321,6 +325,8 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
+	 * @throws IllegalArgumentException if toPost is null or its fields are set
+	 * incorrectly
 	 */
 	public int postSolution(Solution toPost) throws NetworkException,
 			JSONException, IOException {
@@ -328,8 +334,8 @@ public class QuestionService {
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
 		}
-		if (toPost.getText().isEmpty()) {
-			throw new IllegalArgumentException("Empty text in solution");
+		if (toPost.getText() == null || toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Null/Empty text in solution");
 		}
 
 		// Populate authorId and dateCreated (others are filled in)
