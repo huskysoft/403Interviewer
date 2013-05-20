@@ -109,7 +109,8 @@ public class NetworkService {
 	 */
 	public String getQuestionsById(List<Integer> questionIds) 
 			throws NetworkException, JSONException, IOException {
-		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_BYID_URL + "?");
+		StringBuilder urlToSend = 
+				new StringBuilder(GET_QUESTIONS_BYID_URL + "?");
 		StringBuilder deliminatedQuestions = new StringBuilder();
 		for (int i = 0; i < questionIds.size(); i++) {
 			deliminatedQuestions.append(questionIds.get(i));

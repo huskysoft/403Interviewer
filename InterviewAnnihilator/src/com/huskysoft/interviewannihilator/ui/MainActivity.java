@@ -61,17 +61,26 @@ public class MainActivity extends SlidingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
-		// Get passed difficulty stored in Utility class
+		// Get passed difficulty stored in transfer class
 		Difficulty diff = SlideMenuInfoTransfer.diff;
+		
+		// Get passed category stored in Transfer class
+		Category cat = SlideMenuInfoTransfer.cat;
 		
 		// Reset PassedDifficulty
 		SlideMenuInfoTransfer.diff = null;
+		SlideMenuInfoTransfer.cat = null;
 		
 		buildSlideMenu();
 		
 		if(diff == null){
-			setSpinnerToSelectedValue("");
+			setSpinnerToSelectedValue("Difficulty", "");
 		}
+		
+		if(cat == null){
+			setSpinnerToSelectedValue("Category", "");
+		}
+		
 		
 		questionLayout = (LinearLayout) findViewById(R.id.question_layout);
 		
@@ -79,9 +88,8 @@ public class MainActivity extends SlidingActivity {
 		loadingText.setVisibility(View.VISIBLE);
 		
 		if(questionList == null){
-			loadQuestions(diff);
-		}
-		else{
+			loadQuestions(diff, cat);
+		} else{
 			displayQuestions();
 		}
 	}
@@ -93,9 +101,15 @@ public class MainActivity extends SlidingActivity {
 	 * 
 	 * @param value Selected Spinner value
 	 */
-	public void setSpinnerToSelectedValue(String value){
-		// This was causing a type error before, please don't change back 
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+	public void setSpinnerToSelectedValue(String type, String value){
+		Spinner spinner = null;
+		
+		if(type.equals("Difficulty")){
+			spinner = (Spinner) findViewById(R.id.diff_spinner);
+		} else{
+			spinner = (Spinner) findViewById(R.id.category_spinner);
+		}
+		
 		Adapter a = spinner.getAdapter();
 		for (int i = 0; i < a.getCount(); i++){
 			if (a.getItem(i).toString().equals(value)){
@@ -114,11 +128,30 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+
 		String diff = spinner.getSelectedItem().toString();
 		if (diff == null || diff.isEmpty() || diff.equals(Utility.ALL)) {
 			return null;
 		}
 		return Difficulty.valueOf(diff.toUpperCase());
+	}
+	
+	/**
+	 * Method that returns the Category Enum that is
+	 * currently selected in the Category spinner input
+	 * on the slide menu
+	 * 
+	 * @ return Category Enum
+	 */
+	public Category getCurrentCategorySetting(){
+		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
+		String category = spinner.getSelectedItem().toString();
+		if(category.equals(Utility.ALL)){
+			return null;
+		}
+		
+		category = category.replaceAll("\\s", "");
+		return Category.valueOf(category.toUpperCase());
 	}
 	
 	/**
@@ -132,7 +165,7 @@ public class MainActivity extends SlidingActivity {
 		menu.setBehindOffset((int)
 				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
 		
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 				R.array.difficulty, 
@@ -143,7 +176,19 @@ public class MainActivity extends SlidingActivity {
 				android.R.layout.simple_spinner_dropdown_item);
 		
 		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
+		diffSpinner.setAdapter(adapter);
+		
+		Spinner categorySpinner = 
+			(Spinner) findViewById(R.id.category_spinner);
+		ArrayAdapter<CharSequence> catAdapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.category, 
+				android.R.layout.simple_spinner_item);
+		
+		catAdapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		categorySpinner.setAdapter(catAdapter);
 	}
 	
 	/**
@@ -153,9 +198,9 @@ public class MainActivity extends SlidingActivity {
 	 * 
 	 * @param v Button View
 	 */
-	public void adjustDifficulty(View v){
+	public void adjustSettings(View v){
 		Difficulty diff = getCurrentDifficultySetting();
-		
+		Category cat = getCurrentCategorySetting();
 		toggle();
 		
 		// Clear current Questions
@@ -164,7 +209,7 @@ public class MainActivity extends SlidingActivity {
 		// Switch back to the loading view
 		this.switchView();
 		
-		loadQuestions(diff);
+		loadQuestions(diff, cat);
 	}
 	
 	/**
@@ -176,6 +221,8 @@ public class MainActivity extends SlidingActivity {
 				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
 		switcher.showNext();
 	}
+	
+	
 	
 	/**
 	 * Sets the questions to be displayed (does not display them).
@@ -195,14 +242,14 @@ public class MainActivity extends SlidingActivity {
 		startActivity(intent);
 	}
 
-	public void loadQuestions(Difficulty diff){
+	public void loadQuestions(Difficulty diff, Category cat){
 		// Display loading text
 		LinearLayout loadingText =
 				(LinearLayout) findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.VISIBLE);
 
 		// Populate questions list. This makes a network call.
-		new FetchQuestionsTask(this, diff).execute();
+		new FetchQuestionsTask(this, diff, cat).execute();
 	}
 
 	/**
@@ -269,7 +316,7 @@ public class MainActivity extends SlidingActivity {
 		new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				loadQuestions(null);
+				loadQuestions(null, null);
 			}
 		})
 		.setNegativeButton(R.string.retryDialog_cancel,

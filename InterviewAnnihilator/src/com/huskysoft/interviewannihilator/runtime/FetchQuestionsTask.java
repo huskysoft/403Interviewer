@@ -7,6 +7,7 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
@@ -26,6 +28,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	private MainActivity context;
 	private List<Question> questionList;
 	private Difficulty diff;
+	private Category cat;
 	private Exception exception;
 
 
@@ -33,9 +36,10 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(Activity context, Difficulty diff){
+	public FetchQuestionsTask(Activity context, Difficulty diff, Category cat){
 		this.context = (MainActivity) context;
 		this.diff = diff;
+		this.cat = cat;
 	}
 
 
@@ -48,8 +52,16 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		questionService = QuestionService.getInstance();
 
 		try {
+			// Create a List of the selected Category
+			List<Category> category = null;
+			if(cat != null){
+				category = new LinkedList<Category>();
+				category.add(cat);
+			}
+			
+			
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(null, diff, 20, 0, false);
+					questionService.getQuestions(category, diff, 20, 0, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());
