@@ -7,6 +7,7 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
+import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
@@ -86,17 +87,37 @@ public class PostSolutionActivity extends SlidingActivity {
 		// Apply the adapter to the spinner
 		spinner.setAdapter(adapter);
 		
+		
+		Spinner categorySpinner = 
+				(Spinner) findViewById(R.id.category_spinner);
+			ArrayAdapter<CharSequence> catAdapter = 
+					ArrayAdapter.createFromResource(this,
+					R.array.category, 
+					android.R.layout.simple_spinner_item);
+			
+			catAdapter.setDropDownViewResource(
+					android.R.layout.simple_spinner_dropdown_item);
+			
+			categorySpinner.setAdapter(catAdapter);
+			
+			
 		// Handle onClick of Slide-Menu button
 		Button button = (Button) findViewById(R.id.slide_menu_button);
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-				String diffStr = spinner.getSelectedItem().toString();
+				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
+				String diffStr = diffSpinner.getSelectedItem().toString();
 				
+				Spinner catSpinner = 
+						(Spinner) findViewById(R.id.category_spinner);
+				String categoryStr = 
+						catSpinner.getSelectedItem()
+						.toString().replaceAll("\\s", "");
 				toggle();
 				
 				Intent intent = new Intent(context, MainActivity.class);
+
 				if (diffStr == null || diffStr.isEmpty() ||
 					diffStr.equals(Utility.ALL)) {
 					SlideMenuInfoTransfer.diff = null;
@@ -104,6 +125,15 @@ public class PostSolutionActivity extends SlidingActivity {
 					SlideMenuInfoTransfer.diff = 
 							Difficulty.valueOf(diffStr.toUpperCase());
 				}
+				
+				if (categoryStr == null || categoryStr.length() == 0 ||
+					categoryStr.equals(Utility.ALL)){
+					SlideMenuInfoTransfer.cat = null;
+				} else{
+					SlideMenuInfoTransfer.cat = 
+							Category.valueOf(categoryStr.toUpperCase());
+				}
+				
 				
 				startActivity(intent);
 			}

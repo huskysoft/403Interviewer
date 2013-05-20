@@ -9,6 +9,28 @@
     <string name="title_activity_post_solution">PostSolution</string>
     <string name="edit_solution_msg">Enter a solution</string>
     <string name="button_post">Post</string>
+
+    <string-array name="difficulty">
+        <item>All</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+    
+    <string-array name="category">
+        <item>All</item>
+        <item>Comp Sci</item>
+        <item>Business</item>
+        <item>Management</item>
+        <item>Logic</item>
+        <item>Estimation</item>
+        <item>Brain Teaser</item>
+        <item>Game</item>
+        <item>Math</item>
+        <item>Science</item>
+    </string-array>
+
+
     <string name="button_post_solution">Submit a Solution</string>
     <string name="button_post_question">Submit a Question</string>
     <string name="error_displaying_question">Error Displaying Question!</string>
@@ -39,10 +61,5 @@
     <string name="category_post_descriptor">Category: </string>
     <string name="solution_post_descriptor">Solution: </string>
     <string name="internalError_title">The app has experienced an internal error.</string>
-    <string-array name="difficulty">
-        <item>All</item>
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
-    </string-array>
+ 
 </resources>
