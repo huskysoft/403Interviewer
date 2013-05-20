@@ -42,6 +42,9 @@ public class PostSolutionActivity extends SlidingActivity {
 	/** Reference to activity used in click handler for slide-in menu */
 	private PostSolutionActivity context;
 	
+	/** Shared SlideMenuInfo object */
+	private SlideMenuInfo slideMenuInfo;
+	
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class PostSolutionActivity extends SlidingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
+		slideMenuInfo = SlideMenuInfo.getInstance();
 		buildSlideMenu();
 		context = this;
 		
@@ -72,7 +76,7 @@ public class PostSolutionActivity extends SlidingActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
 		menu.setBehindOffset((int) 
-				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -120,18 +124,16 @@ public class PostSolutionActivity extends SlidingActivity {
 
 				if (diffStr == null || diffStr.isEmpty() ||
 					diffStr.equals(Utility.ALL)) {
-					SlideMenuInfoTransfer.diff = null;
+					slideMenuInfo.setDiff(null);
 				} else {
-					SlideMenuInfoTransfer.diff = 
-							Difficulty.valueOf(diffStr.toUpperCase());
+					slideMenuInfo.setDiff(Difficulty.valueOf(diffStr.toUpperCase()));
 				}
 				
 				if (categoryStr == null || categoryStr.length() == 0 ||
 					categoryStr.equals(Utility.ALL)){
-					SlideMenuInfoTransfer.cat = null;
+					slideMenuInfo.setCat(null);
 				} else{
-					SlideMenuInfoTransfer.cat = 
-							Category.valueOf(categoryStr.toUpperCase());
+					slideMenuInfo.setCat(Category.valueOf(categoryStr.toUpperCase()));
 				}
 				
 				

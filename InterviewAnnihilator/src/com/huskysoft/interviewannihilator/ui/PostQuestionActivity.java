@@ -36,13 +36,13 @@ import android.widget.Toast;
 public class PostQuestionActivity extends Activity {
 	
 	/**The currently selected difficulty (radio buttons)*/
-	Difficulty diff;
+	Difficulty difficulty;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
-		diff = Difficulty.EASY;
+		difficulty = Difficulty.EASY;
 		
 		// fill category spinner
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -53,7 +53,7 @@ public class PostQuestionActivity extends Activity {
 				this, android.R.layout.simple_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
-		EditText solutionText = (EditText) findViewById(R.id.edit_solution_q);
+		findViewById(R.id.edit_solution_q);
 		Spinner spinner = (Spinner) 
 				findViewById(R.id.category_spinner_question);
 
@@ -74,9 +74,9 @@ public class PostQuestionActivity extends Activity {
 	 */
 	public void sendQuestion(View v) {
 		// get all necessary fields
-		String category = ((Spinner) findViewById(
+		String categoryStr = ((Spinner) findViewById(
 				R.id.category_spinner_question)).getSelectedItem().toString();
-		Category c = Category.valueOf(category);
+		Category category = Category.valueOf(categoryStr);
 		String solutionText = ((EditText) findViewById(
 				R.id.edit_solution_q)).getText().toString();
 		String questionText = ((EditText) findViewById(
@@ -94,7 +94,7 @@ public class PostQuestionActivity extends Activity {
 		} else {
 			// all fields are correct, try and send it!
 			Question q = new Question(questionText, 
-					titleText, Category.COMPSCI, diff);
+					titleText, category, difficulty);
 			QuestionService qs = QuestionService.getInstance();
 			Solution s = new Solution(q.getQuestionId(), solutionText);
 			try {
@@ -197,7 +197,6 @@ public class PostQuestionActivity extends Activity {
 	 * @param v The radio button that was clicked
 	 */
 	public void updateRadio(View v){
-		RadioButton clicked = (RadioButton) v;
 		RadioButton easy = (RadioButton) findViewById(R.id.difficulty_easy);
 		RadioButton med = (RadioButton) findViewById(R.id.difficulty_medium);
 		RadioButton hard = (RadioButton) findViewById(R.id.difficulty_hard);
@@ -205,15 +204,15 @@ public class PostQuestionActivity extends Activity {
 		if (v.equals(easy)){
 			med.setChecked(false);
 			hard.setChecked(false);
-			diff = Difficulty.EASY;
+			difficulty = Difficulty.EASY;
 		} else if (v.equals(med)){
 			easy.setChecked(false);
 			hard.setChecked(false);
-			diff = Difficulty.MEDIUM;
+			difficulty = Difficulty.MEDIUM;
 		} else {
 			easy.setChecked(false);
 			med.setChecked(false);
-			diff = Difficulty.HARD;
+			difficulty = Difficulty.HARD;
 		}
 	}
 }
