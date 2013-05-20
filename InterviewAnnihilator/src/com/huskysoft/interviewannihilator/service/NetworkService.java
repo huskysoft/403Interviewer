@@ -143,9 +143,9 @@ public class NetworkService {
 	/**
 	 * Deletes a question from the remote DB. Returns true on success.
 	 * 
-	 * @param questionId
-	 * @param userEmail
-	 * @return
+	 * @param questionId the id of the question to be deleted
+	 * @param userEmail must be the one who posted the question to delete it
+	 * @return a bool indicating whether the deletion was successful
 	 * @throws NetworkException 
 	 */
 	public boolean deleteQuestion(int questionId, String userEmail)
@@ -156,10 +156,11 @@ public class NetworkService {
 		
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
-		dispatchPostRequest(urlToSend.toString(), userEmail);
 		
-		// TODO: detect failure
-		return true;
+		String questionIdString = 
+				dispatchPostRequest(urlToSend.toString(), userEmail);
+		int questionIdDeleted = Integer.valueOf(questionIdString);
+		return questionIdDeleted > 0;
 	}
 
 	/**
@@ -221,10 +222,26 @@ public class NetworkService {
 		Utility.ensureNotNull(json, "Solution JSON");
 		return dispatchPostRequest(POST_SOLUTION_URL, json);
 	}
-
-	public boolean deleteSolution(int solutionId, String userEmail) {
-		// TODO
-		return false;
+	
+	/**
+	 * Deletes a solution from the remote DB
+	 * 
+	 * @param solutionId the id of the solution to be deleted
+	 * @param userEmail must be the author of the solution they are deleting
+	 * @return a bool indicating whether the deletion was successful
+	 * @throws NetworkException
+	 */
+	public boolean deleteSolution(int solutionId, String userEmail) 
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(DELETE_SOLUTION_URL + "?");
+		urlToSend.append(Utility.appendParameter(
+				PARAM_SOLUTIONID, String.valueOf(solutionId)));		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		String solutionIdString = 
+				dispatchPostRequest(urlToSend.toString(), userEmail);
+		int solutionIdDeleted = Integer.valueOf(solutionIdString);
+		return solutionIdDeleted > 0;		
 	}
 
 	/**
