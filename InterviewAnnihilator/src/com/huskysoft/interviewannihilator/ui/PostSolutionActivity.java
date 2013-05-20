@@ -119,7 +119,7 @@ public class PostSolutionActivity extends SlidingActivity {
 				Intent intent = new Intent(context, MainActivity.class);
 
 				if (diffStr == null || diffStr.isEmpty() ||
-					diffStr.equals(Utility.ALL) || diffStr.length() == 0) {
+					diffStr.equals(Utility.ALL)) {
 					SlideMenuInfoTransfer.diff = null;
 				} else {
 					SlideMenuInfoTransfer.diff = 
