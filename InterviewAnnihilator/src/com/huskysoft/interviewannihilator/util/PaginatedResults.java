@@ -55,38 +55,5 @@ public abstract class PaginatedResults {
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass().equals(obj.getClass())) {
-			return false;
-		}
-		PaginatedResults other = (PaginatedResults) obj;
-		if (limit != other.limit) {
-			return false;
-		}
-		if (offset != other.offset) {
-			return false;
-		}
-		if (totalNumberOfResults != other.totalNumberOfResults) {
-			return false;
-		}
-		return true;
-	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + limit;
-		result = prime * result + offset;
-		result = prime * result + totalNumberOfResults;
-		return result;
-	}
 }
