@@ -100,6 +100,7 @@ public class PostQuestionActivity extends Activity {
 			try {
 				qs.postQuestion(q);
 				qs.postSolution(s);
+				displayMessage(1, getString(R.string.successDialog_title_q));
 			} catch (NetworkException e) {
 				Log.w("Network error", e.getMessage());
 				displayMessage(-1, getString(R.string.retryDialog_title));
@@ -107,7 +108,6 @@ public class PostQuestionActivity extends Activity {
 				Log.e("Internal Error", e.getMessage());
 				displayMessage(-1, getString(R.string.internalError_title));
 			}
-			displayMessage(1, getString(R.string.successDialog_title_q));
 		}
 		
 	}
