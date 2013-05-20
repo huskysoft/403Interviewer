@@ -22,8 +22,6 @@ import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 
 import android.os.Bundle;
-import android.app.Activity;
-
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.huskysoft.interviewannihilator.util.Utility;
@@ -41,8 +39,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 
@@ -74,14 +70,18 @@ public class QuestionActivity extends SlidingActivity {
 	/** Thread in which solutions are loaded */
 	private FetchSolutionsTask loadingThread;
 	
+	/** Shared SlideMenuInfo object */
+	private SlideMenuInfo slideMenuInfo;
+	
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_question);	
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
+		slideMenuInfo = SlideMenuInfo.getInstance();
 		buildSlideMenu();
 		
 		// Get intent
@@ -102,7 +102,7 @@ public class QuestionActivity extends SlidingActivity {
 		llp.gravity = 1; // Horizontal Center
 
 		TextView textview = (TextView) findViewById(R.id.question_text_view);
-		textview.setBackgroundDrawable(
+		textview.setBackground(
 				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
@@ -124,7 +124,7 @@ public class QuestionActivity extends SlidingActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
 		menu.setBehindOffset((int)
-				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
 		
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -169,18 +169,16 @@ public class QuestionActivity extends SlidingActivity {
 				Intent intent = new Intent(context, MainActivity.class);
 				if (diffStr == null || diffStr.length() == 0 || 
 					diffStr.equals(Utility.ALL)) {
-					SlideMenuInfoTransfer.diff = null;
+					slideMenuInfo.setDiff(null);
 				} else {
-					SlideMenuInfoTransfer.diff = 
-							Difficulty.valueOf(diffStr.toUpperCase());
+					slideMenuInfo.setDiff(Difficulty.valueOf(diffStr.toUpperCase()));
 				}
 				
 				if (categoryStr == null || categoryStr.length() == 0 ||
 					categoryStr.equals(Utility.ALL)){
-					SlideMenuInfoTransfer.cat = null;
+					slideMenuInfo.setCat(null);
 				} else{
-					SlideMenuInfoTransfer.cat = 
-							Category.valueOf(categoryStr.toUpperCase());
+					slideMenuInfo.setCat(Category.valueOf(categoryStr.toUpperCase()));
 				}
 				
 				
@@ -219,8 +217,8 @@ public class QuestionActivity extends SlidingActivity {
 					TextView t = new TextView(this);
 					
 					t.setText(solutionText);
-					t.setBackgroundDrawable(getResources().
-							getDrawable( R.drawable.listitem));
+					t.setBackground(getResources().
+							getDrawable(R.drawable.listitem));
 					t.setLayoutParams(llp);
 					t.setId(solution.getId());
 					//Hide solutions
@@ -261,7 +259,7 @@ public class QuestionActivity extends SlidingActivity {
 	/**
 	 * Reveals solutions. Should only be called once solutions are loaded.
 	 */
-	private void revealSolutions(){
+	private synchronized void revealSolutions(){
 		// Dismiss loading window
 		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);

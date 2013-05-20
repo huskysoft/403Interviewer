@@ -48,6 +48,9 @@ public class MainActivity extends SlidingActivity {
 	
 	private List<Question> questionList;
 	
+	/** Shared SlideMenuInfo object */
+	private SlideMenuInfo slideMenuInfo;
+	
 	/**
 	 * Method that populates the app when the MainActivity is created.
 	 * Initializes the questions and questionll fields. Also calls
@@ -61,15 +64,14 @@ public class MainActivity extends SlidingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
-		// Get passed difficulty stored in transfer class
-		Difficulty diff = SlideMenuInfoTransfer.diff;
-		
-		// Get passed category stored in Transfer class
-		Category cat = SlideMenuInfoTransfer.cat;
+		// Get info from transfer class
+		slideMenuInfo = SlideMenuInfo.getInstance();
+		Difficulty diff = slideMenuInfo.getDiff();
+		Category cat = slideMenuInfo.getCat();
 		
 		// Reset PassedDifficulty
-		SlideMenuInfoTransfer.diff = null;
-		SlideMenuInfoTransfer.cat = null;
+		slideMenuInfo.setDiff(null);
+		slideMenuInfo.setCat(null);
 		
 		buildSlideMenu();
 		
@@ -163,7 +165,7 @@ public class MainActivity extends SlidingActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
 		menu.setBehindOffset((int)
-				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
 		
 		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
@@ -290,7 +292,7 @@ public class MainActivity extends SlidingActivity {
 
 					// to make it work on older versions use this instead of
 					// setBackground
-					t.setBackgroundDrawable(getResources().
+					t.setBackground(getResources().
 							getDrawable(R.drawable.listitem));
 
 					t.setOnClickListener(new View.OnClickListener() {

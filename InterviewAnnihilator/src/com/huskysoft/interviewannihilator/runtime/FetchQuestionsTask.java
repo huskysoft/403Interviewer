@@ -10,7 +10,6 @@ package com.huskysoft.interviewannihilator.runtime;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -34,8 +33,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(Activity context, Difficulty diff, Category cat){
-		this.context = (MainActivity) context;
+	public FetchQuestionsTask(MainActivity context, Difficulty diff, Category cat){
+		this.context = context;
 		this.diff = diff;
 		this.cat = cat;
 	}
