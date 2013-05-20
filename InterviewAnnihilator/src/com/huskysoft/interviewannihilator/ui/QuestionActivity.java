@@ -24,8 +24,7 @@ import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import android.os.Bundle;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-import com.huskysoft.interviewannihilator.util.Utility;
-
+import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
@@ -168,17 +167,19 @@ public class QuestionActivity extends SlidingActivity {
 				
 				Intent intent = new Intent(context, MainActivity.class);
 				if (diffStr == null || diffStr.length() == 0 || 
-					diffStr.equals(Utility.ALL)) {
+					diffStr.equals(UIConstants.ALL)) {
 					slideMenuInfo.setDiff(null);
 				} else {
-					slideMenuInfo.setDiff(Difficulty.valueOf(diffStr.toUpperCase()));
+					slideMenuInfo.setDiff(
+							Difficulty.valueOf(diffStr.toUpperCase()));
 				}
 				
 				if (categoryStr == null || categoryStr.length() == 0 ||
-					categoryStr.equals(Utility.ALL)){
+					categoryStr.equals(UIConstants.ALL)){
 					slideMenuInfo.setCat(null);
 				} else{
-					slideMenuInfo.setCat(Category.valueOf(categoryStr.toUpperCase()));
+					slideMenuInfo.setCat(
+							Category.valueOf(categoryStr.toUpperCase()));
 				}
 				
 				

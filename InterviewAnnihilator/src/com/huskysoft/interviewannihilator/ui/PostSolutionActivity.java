@@ -16,7 +16,8 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
 import android.app.Dialog;
-import com.huskysoft.interviewannihilator.util.Utility;
+
+import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
@@ -123,17 +124,19 @@ public class PostSolutionActivity extends SlidingActivity {
 				Intent intent = new Intent(context, MainActivity.class);
 
 				if (diffStr == null || diffStr.isEmpty() ||
-					diffStr.equals(Utility.ALL)) {
+					diffStr.equals(UIConstants.ALL)) {
 					slideMenuInfo.setDiff(null);
 				} else {
-					slideMenuInfo.setDiff(Difficulty.valueOf(diffStr.toUpperCase()));
+					slideMenuInfo.setDiff(
+							Difficulty.valueOf(diffStr.toUpperCase()));
 				}
 				
 				if (categoryStr == null || categoryStr.length() == 0 ||
-					categoryStr.equals(Utility.ALL)){
+					categoryStr.equals(UIConstants.ALL)){
 					slideMenuInfo.setCat(null);
 				} else{
-					slideMenuInfo.setCat(Category.valueOf(categoryStr.toUpperCase()));
+					slideMenuInfo.setCat(
+							Category.valueOf(categoryStr.toUpperCase()));
 				}
 				
 				
