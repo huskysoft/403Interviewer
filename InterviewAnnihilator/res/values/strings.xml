@@ -17,6 +17,19 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
+    
+    <string-array name="category">
+        <item>All</item>
+        <item>Comp Sci</item>
+        <item>Business</item>
+        <item>Management</item>
+        <item>Logic</item>
+        <item>Estimation</item>
+        <item>Brain Teaser</item>
+        <item>Game</item>
+        <item>Math</item>
+        <item>Science</item>
+    </string-array>
 
     <string name="button_post_solution">Submit a Solution</string>
     <string name="error_displaying_question">Error Displaying Question!</string>
