@@ -229,6 +229,7 @@ public class QuestionService {
 	 * true on success.
 	 * 
 	 * @param questionId
+	 * @return whether the deletion succeeded
 	 * @throws NetworkException 
 	 */
 	public boolean deleteQuestion(int questionId) throws NetworkException {
@@ -337,7 +338,7 @@ public class QuestionService {
 
 		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
-		String result = networkService.postQuestion(solutionStr);
+		String result = networkService.postSolution(solutionStr);
 		return Integer.parseInt(result);
 	}
 
@@ -346,10 +347,13 @@ public class QuestionService {
 	 * 
 	 * @param solutionId
 	 * @param userEmail
+	 * @return bool indicating whether the deletion succeeded
+	 * @throws NetworkException
 	 */
-	public void deleteSolution(int solutionId, String userEmail) {
+	public boolean deleteSolution(int solutionId, String userEmail) 
+			throws NetworkException {
 		Utility.ensureNotNull(userInfo, "UserInfo");
-		networkService.deleteSolution(solutionId, userEmail);
+		return networkService.deleteSolution(solutionId, userEmail);
 	}
 
 	/**
