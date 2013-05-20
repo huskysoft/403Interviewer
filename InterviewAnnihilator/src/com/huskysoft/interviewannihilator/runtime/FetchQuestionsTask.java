@@ -33,7 +33,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(MainActivity context, Difficulty diff, Category cat){
+	public FetchQuestionsTask(MainActivity context, Difficulty diff, 
+			Category cat) {
 		this.context = context;
 		this.diff = diff;
 		this.cat = cat;

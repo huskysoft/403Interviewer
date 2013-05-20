@@ -74,7 +74,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 */
 	public void initializeUserInfo(File baseDir, String userEmail)
-			throws IOException, NetworkException {
+			throws NetworkException {
 		// open file
 		this.baseDir = baseDir;
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
@@ -128,7 +128,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 */
 	public List<Question> getQuestionsById(List<Integer> questionIds) 
-			throws JSONException, IOException, NetworkException {
+			throws IOException, NetworkException {
 		if (questionIds == null || questionIds.size() == 0) {
 			throw new IllegalArgumentException(
 					"Must specify at least one Question ID!");
@@ -164,7 +164,7 @@ public class QuestionService {
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
-			throws NetworkException, JSONException, IOException {
+			throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
@@ -200,7 +200,7 @@ public class QuestionService {
 	 * incorrectly
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException {
+			IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
@@ -251,8 +251,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public boolean upvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean upvoteQuestion(int questionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.upvoteQuestion(questionId);
 		// TODO Auto-generated method stub
@@ -266,8 +265,7 @@ public class QuestionService {
 	 * @param questionId
 	 * @return
 	 */
-	public boolean downvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean downvoteQuestion(int questionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.downvoteQuestion(questionId);
 		// TODO Auto-generated method stub
@@ -290,9 +288,8 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(
-			int questionId, int limit, int offset)
-			throws NetworkException, JSONException, IOException {
+	public PaginatedSolutions getSolutions(int questionId, int limit, 
+			int offset) throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
@@ -328,8 +325,8 @@ public class QuestionService {
 	 * @throws IllegalArgumentException if toPost is null or its fields are set
 	 * incorrectly
 	 */
-	public int postSolution(Solution toPost) throws NetworkException,
-			JSONException, IOException {
+	public int postSolution(Solution toPost) 
+			throws NetworkException, IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
@@ -371,8 +368,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public boolean upvoteSolution(int solutionId) throws NetworkException,
-			IOException {
+	public boolean upvoteSolution(int solutionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.upvoteSolution(solutionId);
 		// TODO Auto-generated method stub
@@ -386,16 +382,14 @@ public class QuestionService {
 	 * @param solutionId
 	 * @return
 	 */
-	public boolean downvoteSolution(int solutionId) throws NetworkException,
-			IOException {
+	public boolean downvoteSolution(int solutionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.downvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public PaginatedQuestions getFavorites(int limit, int offset)
-			throws NetworkException, IOException {
+	public PaginatedQuestions getFavorites(int limit, int offset) {
 		if (userInfo == null) {
 			throw new IllegalStateException(
 					"UserInfo has not been initialized!");
@@ -418,8 +412,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	protected int getUserId(String userEmail) throws NetworkException,
-			IOException {
+	protected int getUserId(String userEmail) throws NetworkException {
 		if (userEmail == null) {
 			throw new IllegalArgumentException("userEmail cannot be null");
 		}

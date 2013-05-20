@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
@@ -58,8 +57,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetQuestions() 
-			throws NetworkException, JSONException, IOException {
+	public void testGetQuestions() throws NetworkException, IOException {
 		PaginatedQuestions questions = 
 				questionService.getQuestions(null, null, 10, 0, false);
 		assertNotNull(questions);
@@ -74,12 +72,13 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @label Black-box test
 	 */
 	public void testGetQuestionsBadArguments()
-			throws NetworkException, JSONException, IOException {
+			throws NetworkException, IOException {
 		try {
 			questionService.getQuestions(null, null, -1, -1, false);
 			fail("Should have gotten IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 
@@ -96,8 +95,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetSolutions() 
-			throws NetworkException, JSONException, IOException {
+	public void testGetSolutions() throws NetworkException, IOException {
 		PaginatedSolutions solutions = questionService.getSolutions(
 				TestHelpers.VALID_QUESTION_ID, 10, 0);
 		assertNotNull(solutions);
@@ -118,8 +116,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testQuestionRoundTrip() 
-			throws NetworkException, JSONException, IOException {
+	public void testQuestionRoundTrip() throws NetworkException, IOException {
 		// set up
 		questionService.setUserInfo(TestHelpers.createTestUserInfo());
 		
@@ -155,8 +152,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testSolutionRoundTrip() 
-			throws NetworkException, JSONException, IOException {
+	public void testSolutionRoundTrip() throws NetworkException, IOException {
 		// set up
 		questionService.setUserInfo(TestHelpers.createTestUserInfo());
 		// create question
@@ -234,8 +230,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IllegalArgumentException
 	 * 
 	 */
-	public void testGetUserId() throws NetworkException, IOException,
-			IllegalArgumentException {
+	public void testGetUserId() throws NetworkException {
 		String userEmail = "dan.sanders@gmail.com";
 		int expectedId = 3;
 		int actualId = questionService.getUserId(userEmail);
@@ -251,13 +246,13 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IllegalArgumentException
 	 * 
 	 */
-	public void testGetUserIdWithNull() throws NetworkException, IOException,
-			IllegalArgumentException {
+	public void testGetUserIdWithNull() throws NetworkException {
 		try {
 			questionService.getUserId(null);
 			fail("Should have thrown IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 
@@ -269,8 +264,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 * @throws NetworkException
 	 */
-	public void testGetQuestionById() throws JsonParseException, 
-			JSONException, IOException, NetworkException {
+	public void testGetQuestionById() throws IOException, NetworkException {
 		List<Integer> questionIds = new ArrayList<Integer>();
 		questionIds.add(42);
 		questionIds.add(43);
