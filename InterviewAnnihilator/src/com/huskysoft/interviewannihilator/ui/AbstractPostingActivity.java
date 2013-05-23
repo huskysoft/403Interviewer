@@ -107,7 +107,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 				toggle();
 				
 
-				if (diffStr == null || diffStr.isEmpty() ||
+				if (diffStr == null || diffStr.length() == 0 ||
 					diffStr.equals(UIConstants.ALL)) {
 					slideMenuInfo.setDiff(null);
 				} else {
