@@ -244,7 +244,7 @@ public class UserInfo {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!getClass().equals(obj.getClass()))
 			return false;
 		UserInfo other = (UserInfo) obj;
 		if (favoriteQuestions == null) {

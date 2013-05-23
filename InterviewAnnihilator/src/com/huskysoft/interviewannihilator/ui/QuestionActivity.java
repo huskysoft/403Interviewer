@@ -14,29 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.model.Category;
-import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 
 import android.os.Bundle;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
-import android.util.DisplayMetrics;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
 
@@ -44,7 +34,7 @@ import android.content.Intent;
 /**
  * Activity for viewing a question before reading solutions
  */
-public class QuestionActivity extends SlidingActivity {
+public class QuestionActivity extends AbstractPostingActivity {
 
 	public final static String EXTRA_MESSAGE = 
 			"com.huskysoft.interviewannihilator.QUESTION";
@@ -54,8 +44,6 @@ public class QuestionActivity extends SlidingActivity {
 	
 	/** The question the user is viewing */
 	private Question question;
-	
-	private QuestionActivity context;
 	
 	/** List of TextViews containing solutions */
 	private List<TextView> solutionTextViews;
@@ -69,8 +57,6 @@ public class QuestionActivity extends SlidingActivity {
 	/** Thread in which solutions are loaded */
 	private FetchSolutionsTask loadingThread;
 	
-	/** Shared SlideMenuInfo object */
-	private SlideMenuInfo slideMenuInfo;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -79,10 +65,7 @@ public class QuestionActivity extends SlidingActivity {
 		setContentView(R.layout.activity_question);	
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
-		
-		slideMenuInfo = SlideMenuInfo.getInstance();
 		buildSlideMenu();
-		
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
@@ -105,8 +88,6 @@ public class QuestionActivity extends SlidingActivity {
 				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(question.getText());
 		textview.setLayoutParams(llp);
-		
-		context = this;
 				
 		// Initialize values
 		solutionsLoaded = false;
@@ -117,77 +98,6 @@ public class QuestionActivity extends SlidingActivity {
 		loadSolutions();		
 	}
 	
-	public void buildSlideMenu(){
-		SlidingMenu menu = getSlidingMenu();
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int)
-				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
-		
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.difficulty, 
-				android.R.layout.simple_spinner_item);
-		
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
-		
-		Spinner categorySpinner = 
-				(Spinner) findViewById(R.id.category_spinner);
-			ArrayAdapter<CharSequence> catAdapter = 
-					ArrayAdapter.createFromResource(this,
-					R.array.category, 
-					android.R.layout.simple_spinner_item);
-			
-			catAdapter.setDropDownViewResource(
-					android.R.layout.simple_spinner_dropdown_item);
-			
-			categorySpinner.setAdapter(catAdapter);
-		
-		// Handle onClick of Slide-Menu button
-		Button button = (Button) findViewById(R.id.slide_menu_button);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
-				String diffStr = diffSpinner.getSelectedItem().toString();
-				
-				Spinner catSpinner = 
-						(Spinner) findViewById(R.id.category_spinner);
-				String categoryStr = 
-						catSpinner.getSelectedItem()
-						.toString().replaceAll("\\s", "");
-				toggle();
-				
-				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.length() == 0 || 
-					diffStr.equals(UIConstants.ALL)) {
-					slideMenuInfo.setDiff(null);
-				} else {
-					slideMenuInfo.setDiff(
-							Difficulty.valueOf(diffStr.toUpperCase()));
-				}
-				
-				if (categoryStr == null || categoryStr.length() == 0 ||
-					categoryStr.equals(UIConstants.ALL)){
-					slideMenuInfo.setCat(null);
-				} else{
-					slideMenuInfo.setCat(
-							Category.valueOf(categoryStr.toUpperCase()));
-				}
-				
-				
-				startActivity(intent);
-			}
-		});
-		
-	}
 	
 	/**
 	 * Appends a list of solutions to a hidden list.
@@ -330,39 +240,18 @@ public class QuestionActivity extends SlidingActivity {
 		});
 		dialog.show();
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.question, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	/** Called when the user clicks the post solution button */
 	public void postSolution(View view) {
-		Intent intent = new Intent(this, PostSolutionActivity.class);
-		intent.putExtra(EXTRA_MESSAGE, question);
-		startActivity(intent);
+		if (initializedUser){
+			Intent intent = new Intent(this, PostSolutionActivity.class);
+			intent.putExtra(EXTRA_MESSAGE, question);
+			startActivity(intent);
+		} else {
+			// helpful message
+			onValidationIssue();
+		}
 	}
 	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
-	}
 
 }

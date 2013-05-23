@@ -14,26 +14,27 @@ import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-public class MainActivity extends SlidingActivity {
+public class MainActivity extends AbstractPostingActivity {
 
 	/**
 	 * Used to pass the String question to the child activity.
@@ -47,9 +48,6 @@ public class MainActivity extends SlidingActivity {
 	
 	private List<Question> questionList;
 	
-	/** Shared SlideMenuInfo object */
-	private SlideMenuInfo slideMenuInfo;
-	
 	/**
 	 * Method that populates the app when the MainActivity is created.
 	 * Initializes the questions and questionll fields. Also calls
@@ -57,11 +55,16 @@ public class MainActivity extends SlidingActivity {
 	 */
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
+		
+		if (!initializedUser && tryInitialize){
+			this.initializeUserInfo();
+		}
+		
 		
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
@@ -87,7 +90,6 @@ public class MainActivity extends SlidingActivity {
 		
 		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.VISIBLE);
-		
 		if(questionList == null){
 			loadQuestions(diff, cat);
 		} else{
@@ -158,6 +160,7 @@ public class MainActivity extends SlidingActivity {
 	/**
 	 * Helper method that builds the slide menu on the current activity.
 	 */
+	@Override
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -224,7 +227,6 @@ public class MainActivity extends SlidingActivity {
 	}
 	
 	
-	
 	/**
 	 * Sets the questions to be displayed (does not display them).
 	 * @param questions
@@ -233,15 +235,7 @@ public class MainActivity extends SlidingActivity {
 		questionList = questions;
 	}
 	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
-	}
+	
 
 	public void loadQuestions(Difficulty diff, Category cat){
 		// Display loading text
@@ -309,25 +303,40 @@ public class MainActivity extends SlidingActivity {
 	/**
 	 * Pops up a dialog menu with "Retry" and "Cancel" options when a network
 	 * operation fails.
+	 * 
+	 * EDIT: looks the same as all other dialog boxes now.
+	 * It's more cumbersome to make but consistency is important.
+	 * 
 	 */
 	public void onNetworkError(){		
-		// Create a dialog
-		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
-		.setPositiveButton(R.string.retryDialog_retry,
-		new DialogInterface.OnClickListener(){
+		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.retrydialogcustom);
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		text.setText(getString(R.string.retryDialog_title));
+		Button dialogButton = (Button) 
+				dialog.findViewById(R.id.button_retry);
+		// if button is clicked, send the solution
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_retry, Toast.LENGTH_LONG).show();
 				loadQuestions(null, null);
+				dialog.dismiss();
 			}
-		})
-		.setNegativeButton(R.string.retryDialog_cancel,
-		new DialogInterface.OnClickListener() {
+		});
+		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_return, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
 			}
-		})
-		.create().show();
+		});
+		dialog.show();
 	}
 
 	@Override
