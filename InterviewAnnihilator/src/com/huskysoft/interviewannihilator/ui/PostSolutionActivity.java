@@ -7,45 +7,26 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.model.Category;
-import com.huskysoft.interviewannihilator.model.Difficulty;
-import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
-import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
 import android.app.Dialog;
 
-import com.huskysoft.interviewannihilator.util.UIConstants;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 
-public class PostSolutionActivity extends SlidingActivity {
+public class PostSolutionActivity extends AbstractPostingActivity {
 	/** The question being answered **/
 	private Question question;
 	
-	/** Reference to activity used in click handler for slide-in menu */
-	private PostSolutionActivity context;
-	
-	/** Shared SlideMenuInfo object */
-	private SlideMenuInfo slideMenuInfo;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -54,10 +35,7 @@ public class PostSolutionActivity extends SlidingActivity {
 		setContentView(R.layout.activity_post_solution);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
-		
-		slideMenuInfo = SlideMenuInfo.getInstance();
 		buildSlideMenu();
-		context = this;
 		
 		// Get intent
 		Intent intent = getIntent();
@@ -69,100 +47,7 @@ public class PostSolutionActivity extends SlidingActivity {
 		tv.setText(question.getText());
 	}
 	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	public void buildSlideMenu(){
-		SlidingMenu menu = getSlidingMenu();
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) 
-				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
-		
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.difficulty, 
-				android.R.layout.simple_spinner_item);
-		
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
-		
-		
-		Spinner categorySpinner = 
-				(Spinner) findViewById(R.id.category_spinner);
-			ArrayAdapter<CharSequence> catAdapter = 
-					ArrayAdapter.createFromResource(this,
-					R.array.category, 
-					android.R.layout.simple_spinner_item);
-			
-			catAdapter.setDropDownViewResource(
-					android.R.layout.simple_spinner_dropdown_item);
-			
-			categorySpinner.setAdapter(catAdapter);
-			
-			
-		// Handle onClick of Slide-Menu button
-		Button button = (Button) findViewById(R.id.slide_menu_button);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
-				String diffStr = diffSpinner.getSelectedItem().toString();
-				
-				Spinner catSpinner = 
-						(Spinner) findViewById(R.id.category_spinner);
-				String categoryStr = 
-						catSpinner.getSelectedItem()
-						.toString().replaceAll("\\s", "");
-				toggle();
-				
-				Intent intent = new Intent(context, MainActivity.class);
 
-				if (diffStr == null || diffStr.isEmpty() ||
-					diffStr.equals(UIConstants.ALL)) {
-					slideMenuInfo.setDiff(null);
-				} else {
-					slideMenuInfo.setDiff(
-							Difficulty.valueOf(diffStr.toUpperCase()));
-				}
-				
-				if (categoryStr == null || categoryStr.length() == 0 ||
-					categoryStr.equals(UIConstants.ALL)){
-					slideMenuInfo.setCat(null);
-				} else{
-					slideMenuInfo.setCat(
-							Category.valueOf(categoryStr.toUpperCase()));
-				}
-				
-				
-				startActivity(intent);
-			}
-		});
-		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.post_solution, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	/** Called when the user clicks the post button */
 	public void sendSolution(View view) {
@@ -202,14 +87,15 @@ public class PostSolutionActivity extends SlidingActivity {
 	public void displayMessage(int status){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
 		}else{
 			dialog.setContentView(R.layout.retrydialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text);
 		}
-
 		// set the custom dialog components - text, buttons
-		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
 			text.setText(getString(R.string.successDialog_title_q));
 			Button dialogButton = (Button) 
@@ -266,15 +152,5 @@ public class PostSolutionActivity extends SlidingActivity {
 			});
 		}
 		dialog.show();
-	}
-	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
 	}
 }

@@ -7,7 +7,6 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
-import java.io.File;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
@@ -15,7 +14,6 @@ import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -36,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-public class MainActivity extends SlidingActivity {
+public class MainActivity extends AbstractPostingActivity {
 
 	/**
 	 * Used to pass the String question to the child activity.
@@ -49,12 +47,6 @@ public class MainActivity extends SlidingActivity {
 	private LinearLayout questionLayout;
 	
 	private List<Question> questionList;
-	
-	/** Shared SlideMenuInfo object */
-	private SlideMenuInfo slideMenuInfo;
-	
-	/** Do we have to initialize this user? **/
-	private static boolean initializedUser = false;
 	
 	/**
 	 * Method that populates the app when the MainActivity is created.
@@ -168,6 +160,7 @@ public class MainActivity extends SlidingActivity {
 	/**
 	 * Helper method that builds the slide menu on the current activity.
 	 */
+	@Override
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -234,7 +227,6 @@ public class MainActivity extends SlidingActivity {
 	}
 	
 	
-	
 	/**
 	 * Sets the questions to be displayed (does not display them).
 	 * @param questions
@@ -243,15 +235,7 @@ public class MainActivity extends SlidingActivity {
 		questionList = questions;
 	}
 	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
-	}
+	
 
 	public void loadQuestions(Difficulty diff, Category cat){
 		// Display loading text
@@ -325,12 +309,11 @@ public class MainActivity extends SlidingActivity {
 	 * 
 	 */
 	public void onNetworkError(){		
-		initializedUser = false;
 		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.retrydialogcustom);
 		// set the custom dialog components - text, buttons
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		text.setText(getString(R.string.retryDialog_title));
-		dialog.setContentView(R.layout.retrydialogcustom);
 		Button dialogButton = (Button) 
 				dialog.findViewById(R.id.button_retry);
 		// if button is clicked, send the solution
@@ -384,54 +367,6 @@ public class MainActivity extends SlidingActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-	/**
-	 * Attempts to initialize the user's information on database
-	 * 
-	 */
-	public void initializeUserInfo(){
-		File dir = getFilesDir();
-		new InitializeUserTask(this, dir, "Anon@example.com").execute();
-	}
-	
-	/**
-	 * Lets the application know that user info is initialized and user can post
-	 * 
-	 */
-	public void userInfoSuccessFunction(){
-		initializedUser = true;
-	}
-	public void onInitializeError(){
-		initializedUser = false;
-		final Dialog dialog = new Dialog(this);
-		// set the custom dialog components - text, buttons
-		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
-		text.setText(getString(R.string.userInfoError_title));
-		dialog.setContentView(R.layout.retrydialogcustom);
-		Button dialogButton = (Button) 
-				dialog.findViewById(R.id.button_retry);
-		// if button is clicked, send the solution
-		dialogButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), 
-						R.string.toast_retry, Toast.LENGTH_LONG).show();
-				dialog.dismiss();
-				initializeUserInfo();
-				dialog.dismiss();
-			}
-		});
-		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
-		// if button is clicked, close the custom dialog
-		dialogButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), 
-						R.string.toast_return, Toast.LENGTH_LONG).show();
-				dialog.dismiss();
-			}
-		});
-		dialog.show();
 	}
 }
 

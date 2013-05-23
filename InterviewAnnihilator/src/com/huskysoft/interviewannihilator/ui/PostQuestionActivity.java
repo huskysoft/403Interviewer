@@ -40,6 +40,11 @@ public class PostQuestionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
+		
+		// VALIDATE
+		assert(MainActivity.initializedUser);
+		
+		
 		difficulty = Difficulty.EASY;
 		
 		// fill category spinner
@@ -116,14 +121,16 @@ public class PostQuestionActivity extends Activity {
 	public void displayMessage(int status, String message){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
 		}else{
 			dialog.setContentView(R.layout.retrydialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text);
 		}
 
 		// set the custom dialog components - text, buttons
-		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
 			text.setText(getString(R.string.successDialog_title));
 			Button dialogButton = (Button) 

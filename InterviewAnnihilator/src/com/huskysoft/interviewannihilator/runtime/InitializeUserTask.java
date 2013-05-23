@@ -14,11 +14,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.huskysoft.interviewannihilator.service.QuestionService;
-import com.huskysoft.interviewannihilator.ui.MainActivity;
+import com.huskysoft.interviewannihilator.ui.AbstractPostingActivity;
 
 public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 
-	private MainActivity context;
+	private AbstractPostingActivity context;
 	private Exception exception;
 	private File baseDir;
 	private String email;
@@ -26,10 +26,10 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 
 	/**
 	 * 
-	 * @param context reference to MainActivity
+	 * @param context2 reference to MainActivity
 	 */
-	public InitializeUserTask(MainActivity context,File baseDir, String email) {
-		this.context = context;
+	public InitializeUserTask(AbstractPostingActivity context2,File baseDir, String email) {
+		this.context = context2;
 		this.baseDir = baseDir;
 		this.email = email;
 	}
