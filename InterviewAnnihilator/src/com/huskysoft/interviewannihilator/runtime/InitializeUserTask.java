@@ -28,8 +28,9 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 	 * 
 	 * @param context2 reference to MainActivity
 	 */
-	public InitializeUserTask(AbstractPostingActivity context2,File baseDir, String email) {
-		this.context = context2;
+	public InitializeUserTask(AbstractPostingActivity context, 
+			File baseDir, String email) {
+		this.context = context;
 		this.baseDir = baseDir;
 		this.email = email;
 	}
@@ -64,7 +65,7 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 	 * This event fires when doInBackground() is complete
 	 */
 	@Override
-	protected void onPostExecute(Integer result){
+	protected void onPostExecute(Integer result) {
 		context.userInfoSuccessFunction();
 	}
 }

@@ -29,7 +29,8 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public PostQuestionsTask(PostQuestionActivity context, Question question, Solution solution) {
+	public PostQuestionsTask(PostQuestionActivity context, 
+			Question question, Solution solution) {
 		this.context = context;
 		this.solution = solution;
 		this.question = question;

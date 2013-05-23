@@ -30,13 +30,12 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 	
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		buildSlideMenu();
-		
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
@@ -97,7 +96,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 		}
 		// set the custom dialog components - text, buttons
 		if (status == 1){
-			text.setText(getString(R.string.successDialog_title_q));
+			text.setText(getString(R.string.successDialog_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog

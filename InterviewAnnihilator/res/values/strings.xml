@@ -62,6 +62,8 @@
     <string name="solution_post_descriptor">Solution: </string>
     <string name="internalError_title">The app has experienced an internal error.</string>
     <string name="userInfoError_title">Communication Error with database, Validation of user id failed. You must validate your device before you can post. Do you wish to continue without validation?</string>
-   <string name="userInfoHelp_title">You must be validated to use this feature!</string>							
+    <string name="userInfoHelp_title">You must be validated to use this feature!</string>
+    <string name="userInfoHelp_retry">   Try again   </string>	
+    <string name="userInfoHelp_cancel">   Continue unvalidated   </string>							
  
 </resources>

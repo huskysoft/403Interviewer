@@ -66,7 +66,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		buildSlideMenu();
-		
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
@@ -250,6 +249,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 			startActivity(intent);
 		} else {
 			// helpful message
+			onValidationIssue();
 		}
 	}
 	

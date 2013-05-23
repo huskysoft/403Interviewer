@@ -37,24 +37,24 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	/** Do we have to initialize this user? **/
 	protected static boolean initializedUser = false;
 	
+	/** Do we have to initialize this user? **/
+	protected static boolean tryInitialize = true;
+	
 	/** Shared SlideMenuInfo object */
 	protected SlideMenuInfo slideMenuInfo;
-	
-	private AbstractPostingActivity context;
 	
 	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
-		context = this;
+
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
-		onInitializeError();
 	}
 	
 	/////////////////////////sliding menu stuff/////////////////////////
 	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
+	 * Set up the Slide menu
 	 */
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
@@ -106,7 +106,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 						.toString().replaceAll("\\s", "");
 				toggle();
 				
-				Intent intent = new Intent(context, MainActivity.class);
 
 				if (diffStr == null || diffStr.isEmpty() ||
 					diffStr.equals(UIConstants.ALL)) {
@@ -124,8 +123,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 							Category.valueOf(categoryStr.toUpperCase()));
 				}
 				
-				
-				startActivity(intent);
 			}
 		});
 		
@@ -155,30 +152,36 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 */
 	public void postQuestion(View v){
 		if (initializedUser){
-		  Intent intent = new Intent(this, PostQuestionActivity.class);
-		  startActivity(intent);
+			Intent intent = new Intent(this, PostQuestionActivity.class);
+			startActivity(intent);
 		} else {
 			// helpful message
-			final Dialog dialog = new Dialog(this);
-			dialog.setContentView(R.layout.alertdialogcustom);
-			// set the custom dialog components - text, buttons
-			TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-			text.setText(getString(R.string.userInfoHelp_title));
-			Button dialogButton = (Button) 
-					dialog.findViewById(R.id.dialogButtonOK);
-			// if button is clicked, send the solution
-			dialogButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(getApplicationContext(), 
-							R.string.toast_retry, Toast.LENGTH_LONG).show();
-					dialog.dismiss();
-				}
-			});
-			dialog.show();
+			onValidationIssue();
 		}
 	}
 	
+	/**
+	 * Displays a message explaining why a user can't post something
+	 */
+	public void onValidationIssue(){
+		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.alertdialogcustom);
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
+		text.setText(getString(R.string.userInfoHelp_title));
+		Button dialogButton = (Button) 
+				dialog.findViewById(R.id.dialogButtonOK);
+		// if button is clicked, send the solution
+		dialogButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_return, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
 	
 	//////////////////User Validation stuff//////////////////////////
 	
@@ -199,6 +202,10 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		initializedUser = true;
 	}
 	
+	/**
+	 * Explains to the user the concept of validation
+	 * and asks them if they want to retry
+	 */
 	public void onInitializeError(){
 		initializedUser = false;
 		final Dialog dialog = new Dialog(this);
@@ -208,6 +215,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		text.setText(getString(R.string.userInfoError_title));
 		Button dialogButton = (Button) 
 				dialog.findViewById(R.id.button_retry);
+		dialogButton.setText(getString(R.string.userInfoHelp_retry));
 		// if button is clicked, send the solution
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -218,12 +226,14 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			}
 		});
 		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		dialogButton.setText(getString(R.string.userInfoHelp_cancel));
 		// if button is clicked, close the custom dialog
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), 
 						R.string.toast_return, Toast.LENGTH_LONG).show();
+				tryInitialize = false;
 				dialog.dismiss();
 			}
 		});

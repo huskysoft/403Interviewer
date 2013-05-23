@@ -55,13 +55,13 @@ public class MainActivity extends AbstractPostingActivity {
 	 */
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
-		if (!initializedUser){
+		if (!initializedUser && tryInitialize){
 			this.initializeUserInfo();
 		}
 		
