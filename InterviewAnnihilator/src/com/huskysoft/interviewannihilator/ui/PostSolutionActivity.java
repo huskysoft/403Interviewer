@@ -12,6 +12,7 @@ import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
@@ -179,26 +180,11 @@ public class PostSolutionActivity extends SlidingActivity {
 		String message = editText.getText().toString();  
 		if (message.trim().equals("")){
 			// Fail due to bad solution
-			displayMessage(0, getString(R.string.badInputDialog_title));
+			displayMessage(0);
 			return;
 		}
 		Solution solution = new Solution(question.getQuestionId(), message);
-		QuestionService qs = QuestionService.getInstance();
-		try{
-			qs.postSolution(solution);
-		} catch (NetworkException e){
-			// Retry or cancel
-			// Complains that i need to log the error, 
-			// not sure how to do that
-			Log.w("Network Error", e.getMessage());
-			displayMessage(-1, getString(R.string.retryDialog_title));
-			return;
-		} catch (Exception e) {
-			Log.e("Internal Error", e.getMessage());
-			displayMessage(-2, getString(R.string.internalError_title));
-			return;
-		}
-		displayMessage(1, getString(R.string.successDialog_title));
+		new PostSolutionsTask(this, solution).execute();
 	}
 	
 	/**
@@ -209,12 +195,11 @@ public class PostSolutionActivity extends SlidingActivity {
     * 		 be passed as one of the following:
     *              1 if the user is finished on this page
     *              0 if the solution was not valid upon trying to post
-    *              Any other number to indicate an error
-    *              
-    * @param message The string to display to the user, 
-    * 				 telling them what was invalid          
+    *              -1 to indicate network error
+    *              Any other number to indicate an internal error
+    *                      
     */
-	private void displayMessage(int status, String message){
+	public void displayMessage(int status){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		if (status == 1 || status == 0){
@@ -226,7 +211,7 @@ public class PostSolutionActivity extends SlidingActivity {
 		// set the custom dialog components - text, buttons
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
-			text.setText(message);
+			text.setText(getString(R.string.successDialog_title_q));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
@@ -240,7 +225,7 @@ public class PostSolutionActivity extends SlidingActivity {
 				}
 			});
 		}else if (status == 0){
-			text.setText(message);
+			text.setText(getString(R.string.badInputDialog_solution));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
@@ -253,7 +238,10 @@ public class PostSolutionActivity extends SlidingActivity {
 				}
 			});
 		}else{
-			text.setText(message);
+			if (status == -1)
+				text.setText(getString(R.string.retryDialog_title));
+			else
+				text.setText(getString(R.string.internalError_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.button_retry);
 			// if button is clicked, send the solution

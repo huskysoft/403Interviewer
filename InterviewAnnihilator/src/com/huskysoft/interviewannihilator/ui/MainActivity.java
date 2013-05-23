@@ -7,6 +7,7 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
+import java.io.File;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
@@ -19,18 +20,20 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 public class MainActivity extends SlidingActivity {
@@ -50,6 +53,9 @@ public class MainActivity extends SlidingActivity {
 	/** Shared SlideMenuInfo object */
 	private SlideMenuInfo slideMenuInfo;
 	
+	/** Do we have to initialize this user? **/
+	private static boolean initializedUser = false;
+	
 	/**
 	 * Method that populates the app when the MainActivity is created.
 	 * Initializes the questions and questionll fields. Also calls
@@ -62,6 +68,11 @@ public class MainActivity extends SlidingActivity {
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
+		
+		if (!initializedUser){
+			this.initializeUserInfo();
+		}
+		
 		
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
@@ -87,7 +98,6 @@ public class MainActivity extends SlidingActivity {
 		
 		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.VISIBLE);
-		
 		if(questionList == null){
 			loadQuestions(diff, cat);
 		} else{
@@ -309,25 +319,41 @@ public class MainActivity extends SlidingActivity {
 	/**
 	 * Pops up a dialog menu with "Retry" and "Cancel" options when a network
 	 * operation fails.
+	 * 
+	 * EDIT: looks the same as all other dialog boxes now.
+	 * It's more cumbersome to make but consistency is important.
+	 * 
 	 */
 	public void onNetworkError(){		
-		// Create a dialog
-		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
-		.setPositiveButton(R.string.retryDialog_retry,
-		new DialogInterface.OnClickListener(){
+		initializedUser = false;
+		final Dialog dialog = new Dialog(this);
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		text.setText(getString(R.string.retryDialog_title));
+		dialog.setContentView(R.layout.retrydialogcustom);
+		Button dialogButton = (Button) 
+				dialog.findViewById(R.id.button_retry);
+		// if button is clicked, send the solution
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_retry, Toast.LENGTH_LONG).show();
 				loadQuestions(null, null);
+				dialog.dismiss();
 			}
-		})
-		.setNegativeButton(R.string.retryDialog_cancel,
-		new DialogInterface.OnClickListener() {
+		});
+		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_return, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
 			}
-		})
-		.create().show();
+		});
+		dialog.show();
 	}
 
 	@Override
@@ -358,6 +384,54 @@ public class MainActivity extends SlidingActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	/**
+	 * Attempts to initialize the user's information on database
+	 * 
+	 */
+	public void initializeUserInfo(){
+		File dir = getFilesDir();
+		new InitializeUserTask(this, dir, "Anon@example.com").execute();
+	}
+	
+	/**
+	 * Lets the application know that user info is initialized and user can post
+	 * 
+	 */
+	public void userInfoSuccessFunction(){
+		initializedUser = true;
+	}
+	public void onInitializeError(){
+		initializedUser = false;
+		final Dialog dialog = new Dialog(this);
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		text.setText(getString(R.string.userInfoError_title));
+		dialog.setContentView(R.layout.retrydialogcustom);
+		Button dialogButton = (Button) 
+				dialog.findViewById(R.id.button_retry);
+		// if button is clicked, send the solution
+		dialogButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_retry, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
+				initializeUserInfo();
+				dialog.dismiss();
+			}
+		});
+		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_return, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
 	}
 }
 

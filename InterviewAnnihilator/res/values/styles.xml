@@ -25,7 +25,7 @@
 	<color name="gold">#C79900</color>
 	
 	<color name="sliding_menu">#e6e4e9</color>
-	<color name="button">#e6e4e9</color>
+	<color name="button">#B5B5B5</color>
 	
 	<!-- Default theme for the App -->
     <style name="AppTheme" parent="android:Theme.Light">

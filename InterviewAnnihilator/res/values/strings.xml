@@ -61,5 +61,8 @@
     <string name="category_post_descriptor">Category: </string>
     <string name="solution_post_descriptor">Solution: </string>
     <string name="internalError_title">The app has experienced an internal error.</string>
+    <string name="userInfoError_title">Communication Error with database.\n
+        								Validation of user id failed.\n
+        								You must validate your devide before you can post.</string>
  
 </resources>
