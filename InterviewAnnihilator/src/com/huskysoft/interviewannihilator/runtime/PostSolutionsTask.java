@@ -1,0 +1,72 @@
+
+/**
+ * Asynchronous thread designed to post solutions to the database.
+ * On completion or failure, displays message.
+ * 
+ * @author Justin Robb, 05/22/2013
+ */
+
+package com.huskysoft.interviewannihilator.runtime;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.ui.PostSolutionActivity;
+
+public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
+
+	private PostSolutionActivity context;
+	private Solution solution;
+	private Exception exception;
+
+
+	/**
+	 * 
+	 * @param context reference to MainActivity
+	 */
+	public PostSolutionsTask(PostSolutionActivity context, Solution solution) {
+		this.context = context;
+		this.solution = solution;
+	}
+
+
+	/**
+	 * This is the main function of the AsyncTask thread. This post a solution.
+	 * @return 
+	 */
+	@Override
+	protected Integer doInBackground(Void... result) {
+		QuestionService questionService = QuestionService.getInstance();
+		try {
+			questionService.postSolution(solution);
+		} catch (Exception e){
+			Log.e("FetchSolutionsTask", e.getMessage());
+			exception = e;
+			this.cancel(true);
+		}
+		return 0;
+	}
+
+	@Override
+	protected void onCancelled(){
+		//TODO: handle specific error cases
+		if(exception != null){
+			if (exception.getClass().equals(NetworkException.class)){
+				context.displayMessage(-1);
+			} else{
+				context.displayMessage(-2);
+			}
+		}
+	}
+
+	/**
+	 * This event fires when doInBackground() is complete
+	 */
+	@Override
+	protected void onPostExecute(Integer r){
+		context.displayMessage(1);
+	}
+}
