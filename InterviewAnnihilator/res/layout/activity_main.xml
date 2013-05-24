@@ -38,7 +38,7 @@
 				android:id="@+id/layout_loading_more"/>
             
             <!-- Button bar at the bottom -->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/main_bottom_button_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,20 +48,24 @@
 	            <Button style="@android:attr/buttonBarStyle"
 	                android:id="@+id/button_post_question"
 	                android:text="@string/button_post_question"
-	                android:layout_width="wrap_content"
+	                android:layout_width="150dp"
 	                android:layout_height="wrap_content" 
-	                android:onClick="postQuestion" />
+	                android:background="@color/button"
+	                android:onClick="postQuestion" 
+	                android:layout_alignParentLeft="true"
+	                android:layout_margin="@dimen/activity_horizontal_margin"/>
 	            
-	            <Button
+	            <Button	style="@android:attr/buttonBarStyle"
 	                android:id="@+id/button_show_me_more"
-	                style="@android:attr/buttonBarStyle"
-	                android:layout_width="wrap_content"
+	                android:text="@string/button_show_me_more" 
+	                android:layout_width="150dp"
 	                android:layout_height="wrap_content"
-	                android:gravity="center_vertical|center_horizontal"
+	                android:background="@color/button"
 	                android:onClick="loadMoreQuestions"
-	                android:text="@string/button_show_me_more" />
+	                android:layout_alignParentRight="true"
+	                android:layout_margin="@dimen/activity_horizontal_margin"/>
 	            
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
