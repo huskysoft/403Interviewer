@@ -14,8 +14,12 @@ import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
 import android.os.Bundle;
 import android.app.Dialog;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,10 +44,31 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				QuestionActivity.EXTRA_MESSAGE);
-		
+		this.setTitle(question.getTitle());
 		//setup question view
+		//build text
+		String questionBody = question.getText();
+		String questionDate = question.getDateCreated().toString();
+				
+		int pos = 0;
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		// body
+		sb.append(questionBody);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append('\n');
+		pos += questionBody.length() + 1;
+		// date
+		sb.append('\n');
+		sb.append(questionDate);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				
+		// done
 		TextView tv = (TextView) findViewById(R.id.question_view);
-		tv.setText(question.getText());
+		tv.setText(sb);
 	}
 	
 
@@ -86,6 +111,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 	public void displayMessage(int status){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);

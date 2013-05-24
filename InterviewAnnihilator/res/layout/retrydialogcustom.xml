@@ -10,9 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:layout_marginTop="32dp"
         android:gravity="center_horizontal"
         android:text="@string/retryDialog_title"
         android:textColor="@color/pitch_black" 
+        android:textSize="10pt"
         android:focusable="false" />
 
     <Button

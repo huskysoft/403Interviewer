@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,6 +122,7 @@ public class PostQuestionActivity extends Activity {
 	public void displayMessage(int status, String message){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);
@@ -188,7 +190,6 @@ public class PostQuestionActivity extends Activity {
 		}
 		dialog.show();
 	}
-	
 	/**
 	 * Manages the radio buttons 
 	 * 

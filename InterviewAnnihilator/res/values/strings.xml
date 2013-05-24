@@ -6,7 +6,7 @@
     <string name="edit_message">Enter Message</string>
     <string name="button_solutions">Solutions</string>
     <string name="title_activity_question">Question</string>
-    <string name="title_activity_post_solution">PostSolution</string>
+    <string name="title_activity_post_solution">Post Solution</string>
     <string name="edit_solution_msg">Enter a solution</string>
     <string name="button_post">Post</string>
 
@@ -47,8 +47,7 @@
     <string name="loading_text">Loading&#8230;</string>
     <string name="toast_return">Returning&#8230; </string>
     <string name="toast_retry">Trying again&#8230; </string>
-    <string name="title_activity_post_result">PostResult</string>
-    <string name="title_activity_post_question">PostQuestionActivity</string>
+    <string name="title_activity_post_question">Post A Question</string>
     <string name="hello_world">Hello world!</string>
     <string name="edit_question_msg">Enter a question</string>
     <string name="edit_question_title_msg">Enter a descriptive title</string>
