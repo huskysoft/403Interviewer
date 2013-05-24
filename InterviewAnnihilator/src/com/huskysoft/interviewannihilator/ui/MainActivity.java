@@ -20,11 +20,15 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -274,15 +278,55 @@ public class MainActivity extends AbstractPostingActivity {
 				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
 					
-					String questionText = question.getTitle();
+					//build text
+					String questionTitle = question.getTitle();
+					String questionBody = question.getText();
+					String questionDiff = question.getDifficulty().toString();
+					String questionCat = question.getCategory().toString();
+					String questionDate = question.getDateCreated().toString();
 					
+					// abbreviate
+					if (questionBody.length() > 150){
+						questionBody = questionBody.substring(0, 150);
+						questionBody += "...";
+					}
+					int pos = 0;
+					SpannableStringBuilder sb = new SpannableStringBuilder();
+					// title
+					sb.append(questionTitle);
+					sb.setSpan(new  TextAppearanceSpan(this, R.style.question_title_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					pos += questionTitle.length();
+					
+					// descriptors
+					sb.append("\n");
+					sb.append(questionCat);
+					sb.append("\t\t\t");
+					sb.append(questionDiff);
+					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_descriptors_appearance), pos, 
+							sb.length(), 
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					sb.append("\n\n");
+					pos += questionDiff.length() + questionCat.length() + 5;
+					
+					// body
+					sb.append(questionBody);
+					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_body_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					sb.append("\n");
+					pos += questionBody.length() + 1;
+					// date
+					sb.append("\n");
+					sb.append(questionDate);
+					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					
+					// done
 					TextView t = new TextView(this);
-					
 					t.setLayoutParams(llp);
 					t.setId(question.getQuestionId());
 					t.setTag(question);
-					t.setText(questionText);	
-
+					t.setText(sb);	
 					// to make it work on older versions use this instead of
 					// setBackground
 					t.setBackground(getResources().
@@ -310,6 +354,7 @@ public class MainActivity extends AbstractPostingActivity {
 	 */
 	public void onNetworkError(){		
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.retrydialogcustom);
 		// set the custom dialog components - text, buttons
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
@@ -338,6 +383,7 @@ public class MainActivity extends AbstractPostingActivity {
 		});
 		dialog.show();
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

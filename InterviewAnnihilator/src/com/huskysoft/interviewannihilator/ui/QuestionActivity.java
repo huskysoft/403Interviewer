@@ -23,8 +23,12 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -77,16 +81,37 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		// Create TextView that holds Question
 		LinearLayout.LayoutParams llp =  new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f);
 		
 		// TODO: Move to XML or constants file - haven't yet figured out how
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1; // Horizontal Center
 
+		//build text
+		String questionBody = question.getText();
+		String questionDate = question.getDateCreated().toString();
+		
+		int pos = 0;
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		
+		// body
+		sb.append(questionBody);
+		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append("\n");
+		pos += questionBody.length() + 1;
+		// date
+		sb.append("\n");
+		sb.append(questionDate);
+		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		// done
 		TextView textview = (TextView) findViewById(R.id.question_text_view);
+		
 		textview.setBackground(
 				getResources().getDrawable( R.drawable.listitem));
-		textview.setText(question.getText());
+		textview.setText(sb);
 		textview.setLayoutParams(llp);
 				
 		// Initialize values
@@ -123,11 +148,29 @@ public class QuestionActivity extends AbstractPostingActivity {
 			for(int i = 0; i < solutions.size(); i++){
 				Solution solution = solutions.get(i);
 				if(solution != null && solution.getText() != null){
-					String solutionText = solution.getText();
+					//build text
+					String solutionBody = solution.getText();
+					String solutionDate = solution.getDateCreated().toString();
 					
+					int pos = 0;
+					SpannableStringBuilder sb = new SpannableStringBuilder();
+					
+					// body
+					sb.append(solutionBody);
+					sb.setSpan(new  TextAppearanceSpan(this,R.style.solution_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					sb.append("\n");
+					pos += solutionBody.length() + 1;
+					// date
+					sb.append("\n");
+					sb.append(solutionDate);
+					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					
+					// done
 					TextView t = new TextView(this);
 					
-					t.setText(solutionText);
+					t.setText(sb);
 					t.setBackground(getResources().
 							getDrawable(R.drawable.listitem));
 					t.setLayoutParams(llp);
@@ -213,9 +256,10 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// Stop loadingDialog
 		View loadingText = findViewById(R.id.loading_text_layout);
 		loadingText.setVisibility(View.GONE);
-		
+
 		// Create a dialog
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.retrydialogcustom);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		text.setText(R.string.retryDialog_title);
