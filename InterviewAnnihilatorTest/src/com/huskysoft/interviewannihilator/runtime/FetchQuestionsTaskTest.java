@@ -8,6 +8,7 @@ package com.huskysoft.interviewannihilator.runtime;
 
 import java.util.List;
 
+import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.util.UIConstants;
@@ -26,7 +27,8 @@ public class FetchQuestionsTaskTest extends TestCase {
 	 * @label Black-box testing
 	 */
 	public void testLoadQuestions(){
-		FetchQuestionsTask task = new FetchQuestionsTask(null, null, null);
+		FetchQuestionsTask task = new FetchQuestionsTask(null,
+				null, null, UIConstants.DEFAULT_QUESTIONS_TO_LOAD, 0);
 		List<Question> questionList = task.doInBackground();
 		
 		assertNotNull(questionList);
@@ -43,7 +45,7 @@ public class FetchQuestionsTaskTest extends TestCase {
 	public void testDifficulty(){
 		//Test easy questions
 		FetchQuestionsTask task =
-				new FetchQuestionsTask(null, Difficulty.MEDIUM, null);
+				new FetchQuestionsTask(null,  Category.COMPSCI, Difficulty.MEDIUM, 1, 0);
 		List<Question> questionList = task.doInBackground();
 		
 		assertNotNull(questionList);

@@ -27,17 +27,23 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	private Difficulty diff;
 	private Category cat;
 	private Exception exception;
-
+	private int numQuestions;
+	private int questionOffset;
 
 	/**
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(MainActivity context, Difficulty diff, 
-			Category cat) {
+	public FetchQuestionsTask(MainActivity context, 
+			Category cat,
+			Difficulty diff, 
+			int numQuestions,
+			int questionOffset) {
 		this.context = context;
 		this.diff = diff;
 		this.cat = cat;
+		this.numQuestions = numQuestions;
+		this.questionOffset = questionOffset;
 	}
 
 
@@ -60,7 +66,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 			
 			
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(category, diff, 20, 0, false);
+					questionService.getQuestions(category,
+							diff, numQuestions, questionOffset, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());
@@ -86,8 +93,9 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 */
 	@Override
 	protected void onPostExecute(List<Question> questionList){
-		context.setQuestions(questionList);
-		context.displayQuestions();
-		context.switchView();
+		context.appendQuestionsToView(questionList);
+		context.hideLoadingView1();
+		context.hideLoadingView2();
+		context.showMainView();
 	}
 }
