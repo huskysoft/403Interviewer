@@ -294,31 +294,35 @@ public class MainActivity extends AbstractPostingActivity {
 					SpannableStringBuilder sb = new SpannableStringBuilder();
 					// title
 					sb.append(questionTitle);
-					sb.setSpan(new  TextAppearanceSpan(this, R.style.question_title_appearance), pos, 
+					sb.setSpan(new  TextAppearanceSpan(this, 
+							R.style.question_title_appearance), pos, 
 							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					pos += questionTitle.length();
 					
 					// descriptors
-					sb.append("\n");
+					sb.append('\n');
 					sb.append(questionCat);
 					sb.append("\t\t\t");
 					sb.append(questionDiff);
-					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_descriptors_appearance), pos, 
-							sb.length(), 
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_descriptors_appearance),
+							pos, sb.length(), 
 							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					sb.append("\n\n");
 					pos += questionDiff.length() + questionCat.length() + 5;
 					
 					// body
 					sb.append(questionBody);
-					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_body_appearance), pos, 
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_body_appearance), pos, 
 							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					sb.append("\n");
+					sb.append('\n');
 					pos += questionBody.length() + 1;
 					// date
-					sb.append("\n");
+					sb.append('\n');
 					sb.append(questionDate);
-					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_date_appearance), pos, 
 							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					
 					// done

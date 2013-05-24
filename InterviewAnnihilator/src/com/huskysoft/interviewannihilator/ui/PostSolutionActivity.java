@@ -44,7 +44,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				QuestionActivity.EXTRA_MESSAGE);
-		
+		this.setTitle(question.getTitle());
 		//setup question view
 		//build text
 		String questionBody = question.getText();
@@ -54,14 +54,16 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 		SpannableStringBuilder sb = new SpannableStringBuilder();
 		// body
 		sb.append(questionBody);
-		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_appearance), pos, 
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_appearance), pos, 
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append("\n");
+		sb.append('\n');
 		pos += questionBody.length() + 1;
 		// date
-		sb.append("\n");
+		sb.append('\n');
 		sb.append(questionDate);
-		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				
 		// done

@@ -74,7 +74,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				MainActivity.EXTRA_MESSAGE);
-		
+		this.setTitle(question.getTitle());
 		// Grab Linear Layout
 		solutionsLayout =
 				(LinearLayout) findViewById(R.id.question_layout_solutions);
@@ -96,14 +96,16 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		// body
 		sb.append(questionBody);
-		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_appearance), pos, 
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_appearance), pos, 
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append("\n");
+		sb.append('\n');
 		pos += questionBody.length() + 1;
 		// date
-		sb.append("\n");
+		sb.append('\n');
 		sb.append(questionDate);
-		sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		
 		// done
@@ -157,14 +159,16 @@ public class QuestionActivity extends AbstractPostingActivity {
 					
 					// body
 					sb.append(solutionBody);
-					sb.setSpan(new  TextAppearanceSpan(this,R.style.solution_appearance), pos, 
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.solution_appearance), pos, 
 							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					sb.append("\n");
+					sb.append('\n');
 					pos += solutionBody.length() + 1;
 					// date
-					sb.append("\n");
+					sb.append('\n');
 					sb.append(solutionDate);
-					sb.setSpan(new  TextAppearanceSpan(this,R.style.question_date_appearance), pos, 
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_date_appearance), pos, 
 							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					
 					// done
