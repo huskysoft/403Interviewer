@@ -1,24 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity_view_switcher"
-    android:background="@color/light_purple"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-        	
-	<include layout="@layout/loading_anim"/>
-	    
-	<ScrollView 
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:clickable="true" >
-	    
-		<LinearLayout android:id="@+id/question_layout"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical">	    
-		</LinearLayout>
+    android:layout_height="wrap_content"
+    android:background="@color/light_purple" >
 
-	</ScrollView>
-</ViewSwitcher>
+    <!-- Main loading animation -->
+    <include layout="@layout/loading_anim"
+        android:id="@+id/layout_loading"/>
+
+    <!-- Main view -->
+
+    <ScrollView
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="visible" >
+
+        <!-- Contains everything to align vertically -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+			
+            <!-- Question TextViews get inserted in this layout -->
+            <LinearLayout
+                android:id="@+id/question_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+            
+            <!-- Loading animation when "Show me more" is clicked -->
+            <include layout="@layout/loading_anim"
+				android:id="@+id/layout_loading_more"/>
+            
+            <!-- Button bar at the bottom -->
+            <RelativeLayout
+                android:id="@+id/main_bottom_button_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                
+                <!-- Android was complaining unless these had buttonBarStyle -->
+	            <Button style="@android:attr/buttonBarStyle"
+	                android:id="@+id/button_post_question"
+	                android:text="@string/button_post_question"
+	                android:layout_width="150dp"
+	                android:layout_height="wrap_content" 
+	                android:background="@color/button"
+	                android:onClick="postQuestion" 
+	                android:layout_alignParentLeft="true"
+	                android:layout_margin="@dimen/activity_horizontal_margin"/>
+	            
+	            <Button	style="@android:attr/buttonBarStyle"
+	                android:id="@+id/button_show_me_more"
+	                android:text="@string/button_show_me_more" 
+	                android:layout_width="150dp"
+	                android:layout_height="wrap_content"
+	                android:background="@color/button"
+	                android:onClick="loadMoreQuestions"
+	                android:layout_alignParentRight="true"
+	                android:layout_margin="@dimen/activity_horizontal_margin"/>
+	            
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

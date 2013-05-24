@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 public class MainActivity extends AbstractPostingActivity {
 
@@ -47,10 +47,11 @@ public class MainActivity extends AbstractPostingActivity {
 	public final static String EXTRA_MESSAGE =
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
-	/** Layout element that holds the questions */
-	private LinearLayout questionLayout;
-	
-	private List<Question> questionList;
+	/** 
+	 * Number of questions currently being displayed,used to index
+	 * into the db
+	 */
+	private int questionOffset = 0;
 	
 	/**
 	 * Method that populates the app when the MainActivity is created.
@@ -88,17 +89,10 @@ public class MainActivity extends AbstractPostingActivity {
 		if(cat == null){
 			setSpinnerToSelectedValue("Category", "");
 		}
-		
-		
-		questionLayout = (LinearLayout) findViewById(R.id.question_layout);
-		
-		View loadingText = findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.VISIBLE);
-		if(questionList == null){
-			loadQuestions(diff, cat);
-		} else{
-			displayQuestions();
-		}
+
+		hideMainView();
+		showLoadingView1();
+		loadQuestions();
 	}
 	
 	/**
@@ -207,57 +201,92 @@ public class MainActivity extends AbstractPostingActivity {
 	 * @param v Button View
 	 */
 	public void adjustSettings(View v){
-		Difficulty diff = getCurrentDifficultySetting();
-		Category cat = getCurrentCategorySetting();
 		toggle();
 		
 		// Clear current Questions
-		questionLayout.removeAllViews();
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
+		questionView.removeAllViews();
+		questionOffset = 0;
 		
-		// Switch back to the loading view
-		this.switchView();
-		
-		loadQuestions(diff, cat);
+		hideMainView();
+		showLoadingView1();
+		loadQuestions();
 	}
 	
 	/**
-	 * Changes from the loading view to the question list view and vice versa
+	 * Shows loading text
 	 */
-	public void switchView(){
-		// Switch views
-		ViewSwitcher switcher =
-				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
-		switcher.showNext();
-	}
-	
-	
-	/**
-	 * Sets the questions to be displayed (does not display them).
-	 * @param questions
-	 */
-	public void setQuestions(List<Question> questions){
-		questionList = questions;
-	}
-	
-	
-
-	public void loadQuestions(Difficulty diff, Category cat){
-		// Display loading text
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+	public void showLoadingView1(){
+		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.VISIBLE);
-
-		// Populate questions list. This makes a network call.
-		new FetchQuestionsTask(this, diff, cat).execute();
+	}
+	
+	/**
+	 * Hides loading text
+	 */
+	public void hideLoadingView1(){
+		View loadingText = findViewById(R.id.layout_loading);
+		loadingText.setVisibility(View.GONE);
+	}
+	
+	/**
+	 * Shows loading text
+	 */
+	public void showLoadingView2(){
+		View loadingText = findViewById(R.id.layout_loading_more);
+		loadingText.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Hides loading text
+	 */
+	public void hideLoadingView2(){
+		View loadingText = findViewById(R.id.layout_loading_more);
+		loadingText.setVisibility(View.GONE);
 	}
 
+	/**
+	 * Shows main question list and buttons
+	 */
+	public void showMainView(){
+		View mainView = findViewById(R.id.main_view);
+		mainView.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Hides main question list and buttons
+	 */
+	public void hideMainView(){
+		View mainView = findViewById(R.id.main_view);
+		mainView.setVisibility(View.GONE);
+	}
+	
+	public void loadQuestions(){
+		// Populate questions list. This makes a network call.
+		new FetchQuestionsTask(this,
+				getCurrentCategorySetting(),
+				getCurrentDifficultySetting(),
+				UIConstants.DEFAULT_QUESTIONS_TO_LOAD,
+				questionOffset).execute();
+	}
+	
+	/**
+	 * This is called when the "Show me more" button is pressed. 
+	 * 
+	 * @param v button being pressed
+	 */
+	public void loadMoreQuestions(View v){
+		showLoadingView2();
+		loadQuestions();
+	}
+	
 	/**
 	 * Displays a formatted list of questions
 	 * 
 	 * @param questions
 	 */
-	@SuppressLint("NewApi")
-	public void displayQuestions() {
+	public void appendQuestionsToView(List<Question> questionList) {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
 		
@@ -265,15 +294,25 @@ public class MainActivity extends AbstractPostingActivity {
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1;  // Horizontal Center
 		
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
 		
 		if(questionList == null || questionList.size() <= 0){
-			TextView t = new TextView(this);
-
-			t.setText("There doesn't seem to be any questions.");
-			// special look?
-			t.setLayoutParams(llp);
-			questionLayout.addView(t);
+			// No new questions
+			if(questionView.getChildCount() == 0){
+				// No existing questions
+				TextView t = new TextView(this);
+	
+				t.setText("There doesn't seem to be any questions.");
+				// special look?
+				t.setLayoutParams(llp);
+				questionView.addView(t);
+			}
 		}else{
+			// Increase the question offset so that next time we access the db, we
+			// get the next set of questions
+			questionOffset += questionList.size();
+			
 			for(int i = 0; i < questionList.size(); i++){
 				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
@@ -286,8 +325,9 @@ public class MainActivity extends AbstractPostingActivity {
 					String questionDate = question.getDateCreated().toString();
 					
 					// abbreviate
-					if (questionBody.length() > 150){
-						questionBody = questionBody.substring(0, 150);
+					if (questionBody.length() > UIConstants.TEXT_PREVIEW_LENGTH){
+						questionBody = questionBody.substring(
+								0, UIConstants.TEXT_PREVIEW_LENGTH);
 						questionBody += "...";
 					}
 					int pos = 0;
@@ -342,7 +382,7 @@ public class MainActivity extends AbstractPostingActivity {
 							openQuestion(v);
 						}
 					});
-					questionLayout.addView(t);
+					questionView.addView(t);
 				}
 			}
 		}
@@ -371,7 +411,7 @@ public class MainActivity extends AbstractPostingActivity {
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), 
 						R.string.toast_retry, Toast.LENGTH_LONG).show();
-				loadQuestions(null, null);
+				loadQuestions();
 				dialog.dismiss();
 			}
 		});
