@@ -17,4 +17,7 @@ public class UIConstants {
 	
 	/** For difficulty "All" special-case for slide-in menu */
 	public static final String ALL = "All";
+	
+	/** The length of the text to be displayed in the preview of a question */
+	public static final int TEXT_PREVIEW_LENGTH = 150;
 }

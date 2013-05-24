@@ -11,12 +11,13 @@
         android:id="@+id/layout_loading"/>
 
     <!-- Main view -->
+
     <ScrollView
         android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:visibility="gone">
+        android:visibility="visible" >
 
         <!-- Contains everything to align vertically -->
         <LinearLayout
@@ -43,18 +44,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
                 
-	            <Button
+                <!-- Android was complaining unless these had buttonBarStyle -->
+	            <Button style="@android:attr/buttonBarStyle"
 	                android:id="@+id/button_post_question"
 	                android:text="@string/button_post_question"
 	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content" />
+	                android:layout_height="wrap_content" 
+	                android:onClick="postQuestion" />
 	            
 	            <Button
 	                android:id="@+id/button_show_me_more"
-	                android:text="@string/button_show_me_more"
+	                style="@android:attr/buttonBarStyle"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:onClick="loadMoreQuestions" />
+	                android:gravity="center_vertical|center_horizontal"
+	                android:onClick="loadMoreQuestions"
+	                android:text="@string/button_show_me_more" />
 	            
             </LinearLayout>
         </LinearLayout>

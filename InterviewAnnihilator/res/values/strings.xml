@@ -29,7 +29,9 @@
         <item>Math</item>
         <item>Science</item>
     </string-array>
-
+	
+    <string name="spinner_difficulty_text">Difficulty</string>
+    <string name="spinner_category_text">Category</string>
 	<string name="button_show_me_more">Show me more</string>
     <string name="button_post_solution">Submit a Solution</string>
     <string name="button_post_question">Submit a Question</string>

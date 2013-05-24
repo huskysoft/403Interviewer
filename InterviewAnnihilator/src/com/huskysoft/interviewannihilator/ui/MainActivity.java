@@ -47,9 +47,9 @@ public class MainActivity extends AbstractPostingActivity {
 	public final static String EXTRA_MESSAGE =
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
-	/** Number of questions currently being displayed,used to index
+	/** 
+	 * Number of questions currently being displayed,used to index
 	 * into the db
-	 * 
 	 */
 	private int questionOffset = 0;
 	
@@ -204,7 +204,8 @@ public class MainActivity extends AbstractPostingActivity {
 		toggle();
 		
 		// Clear current Questions
-		ViewGroup questionView = (ViewGroup)findViewById(R.id.question_layout);
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
 		questionView.removeAllViews();
 		questionOffset = 0;
 		
@@ -293,7 +294,8 @@ public class MainActivity extends AbstractPostingActivity {
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1;  // Horizontal Center
 		
-		ViewGroup questionView = (ViewGroup)findViewById(R.id.question_layout);
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
 		
 		if(questionList == null || questionList.size() <= 0){
 			// No new questions
@@ -323,8 +325,9 @@ public class MainActivity extends AbstractPostingActivity {
 					String questionDate = question.getDateCreated().toString();
 					
 					// abbreviate
-					if (questionBody.length() > 150){
-						questionBody = questionBody.substring(0, 150);
+					if (questionBody.length() > UIConstants.TEXT_PREVIEW_LENGTH){
+						questionBody = questionBody.substring(
+								0, UIConstants.TEXT_PREVIEW_LENGTH);
 						questionBody += "...";
 					}
 					int pos = 0;
