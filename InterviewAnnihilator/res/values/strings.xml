@@ -30,7 +30,7 @@
         <item>Science</item>
     </string-array>
 
-
+	<string name="button_show_me_more">Show me more</string>
     <string name="button_post_solution">Submit a Solution</string>
     <string name="button_post_question">Submit a Question</string>
     <string name="error_displaying_question">Error Displaying Question!</string>

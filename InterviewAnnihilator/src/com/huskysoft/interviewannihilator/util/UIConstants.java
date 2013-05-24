@@ -10,7 +10,7 @@ package com.huskysoft.interviewannihilator.util;
 public class UIConstants {
 	
 	/** Default number of Questions to fetch */
-	public static final int DEFAULT_QUESTIONS_TO_LOAD = 20;
+	public static final int DEFAULT_QUESTIONS_TO_LOAD = 10;
 	
 	/** Default number of Solutions to fetch */
 	public static final int DEFAULT_SOLUTIONS_TO_LOAD = 10;
