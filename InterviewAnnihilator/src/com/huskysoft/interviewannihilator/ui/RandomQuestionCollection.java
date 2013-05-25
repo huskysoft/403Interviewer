@@ -1,3 +1,11 @@
+/**
+ * Singleton class that holds the list of RandomQuestions.
+ * At any time, this list should hold at least one
+ * question.
+ * 
+ * @author Phillip Leland
+ */
+
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.LinkedList;
@@ -19,7 +27,7 @@ public class RandomQuestionCollection {
 	}
 	
 	/**
-	 * Get the singleton SlideMenuInfoTransfer instance.
+	 * Get the singleton RandomQuestionCollection instance.
 	 * 
 	 * @return
 	 */
@@ -51,6 +59,12 @@ public class RandomQuestionCollection {
 		return q;
 	}
 	
+	/**
+	 * Appends the param list to the list of random 
+	 * questions. Called by FetchRandomQuestionsTask.
+	 * 
+	 * @param newQuestions
+	 */
 	public void appendList(List<Question> newQuestions){
 		questionList.addAll(newQuestions);
 	}
