@@ -70,6 +70,8 @@ public class QuestionActivity extends AbstractPostingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		buildSlideMenu();
+		RandomQuestionCollection.getInstance().load();
+
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(

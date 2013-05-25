@@ -1,8 +1,8 @@
 /**
  * Asynchronous thread designed to load questions from the database.
- * On completion, populates MainActivity with TextViews containing questions.
+ * On completion, populates RandomQuestionCollection
  * 
- * @author Cody Andrews, 05/01/2013
+ * @author Phillip Leland
  */
 
 package com.huskysoft.interviewannihilator.runtime;
@@ -22,35 +22,18 @@ import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.ui.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
-public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
+public class FetchRandomQuestionsTask 
+	extends AsyncTask<Void, Void, List<Question>>{
 
-	private MainActivity context;
-	private Difficulty diff;
-	private Category cat;
 	private Exception exception;
-	private int numQuestions;
-	private int questionOffset;
-
-	/**
-	 * 
-	 * @param context reference to MainActivity
-	 */
-	public FetchQuestionsTask(MainActivity context, 
-			Category cat,
-			Difficulty diff, 
-			int numQuestions,
-			int questionOffset) {
-		this.context = context;
-		this.diff = diff;
-		this.cat = cat;
-		this.numQuestions = numQuestions;
-		this.questionOffset = questionOffset;
+	
+	public FetchRandomQuestionsTask() {
+		
 	}
 
 
 	/**
-	 * This is the main function of the AsyncTask thread. This will populate
-	 * questionList with Questions so that they may be displayed afterwards.
+	 * This is the main function of the AsyncTask thread.
 	 */
 	@Override
 	protected List<Question> doInBackground(Void... params) {
@@ -58,17 +41,10 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 		List<Question> questionList = null;
 		
 		try {
-			// Create a List of the selected Category
-			List<Category> category = null;
-			if(cat != null){
-				category = new LinkedList<Category>();
-				category.add(cat);
-			}
-			
 			
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(category,
-							diff, numQuestions, questionOffset, false);
+					questionService.getQuestions(null,
+							null, 10, 0, true);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());
@@ -83,9 +59,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	@Override
 	protected void onCancelled(){
 		//TODO: handle specific error cases
-		if(exception != null){
-			context.onNetworkError();
-		}
+		
 	}
 
 	/**
@@ -94,9 +68,6 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 */
 	@Override
 	protected void onPostExecute(List<Question> questionList){
-		context.appendQuestionsToView(questionList);
-		context.hideLoadingView1();
-		context.hideLoadingView2();
-		context.showMainView();
+		RandomQuestionCollection.getInstance().appendList(questionList);
 	}
 }

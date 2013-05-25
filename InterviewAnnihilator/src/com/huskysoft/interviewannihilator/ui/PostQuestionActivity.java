@@ -32,19 +32,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PostQuestionActivity extends Activity {
+public class PostQuestionActivity extends AbstractPostingActivity {
 	
 	/**The currently selected difficulty (radio buttons)*/
 	Difficulty difficulty;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
+		setBehindContentView(R.layout.activity_menu);
+		getActionBar().setHomeButtonEnabled(true);
+		buildSlideMenu();
 		
 		// VALIDATE
 		assert(MainActivity.initializedUser);
 		
+		RandomQuestionCollection.getInstance().load();
 		
 		difficulty = Difficulty.EASY;
 		
