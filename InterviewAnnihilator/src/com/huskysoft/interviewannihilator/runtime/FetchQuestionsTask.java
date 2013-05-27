@@ -19,7 +19,6 @@ import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
-import com.huskysoft.interviewannihilator.ui.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
 public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{

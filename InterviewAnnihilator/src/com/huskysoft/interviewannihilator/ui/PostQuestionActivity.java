@@ -15,6 +15,7 @@ import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.PostQuestionsTask;
 
 import android.os.Bundle;
@@ -48,7 +49,6 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		// VALIDATE
 		assert(MainActivity.initializedUser);
 		
-		RandomQuestionCollection.getInstance().load();
 		
 		difficulty = Difficulty.EASY;
 		

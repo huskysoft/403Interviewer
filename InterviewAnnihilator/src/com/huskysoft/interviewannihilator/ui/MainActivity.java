@@ -71,7 +71,6 @@ public class MainActivity extends AbstractPostingActivity {
 			this.initializeUserInfo();
 		}
 		
-		RandomQuestionCollection.getInstance().load();
 		
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();

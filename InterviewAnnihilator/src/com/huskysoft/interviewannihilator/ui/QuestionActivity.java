@@ -15,8 +15,9 @@ import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
-
 import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
+
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 
 import android.os.Bundle;
@@ -70,7 +71,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		buildSlideMenu();
-		RandomQuestionCollection.getInstance().load();
 
 		// Get intent
 		Intent intent = getIntent();

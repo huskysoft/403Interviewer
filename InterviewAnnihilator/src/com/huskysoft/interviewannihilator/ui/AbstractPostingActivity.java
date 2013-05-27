@@ -14,6 +14,8 @@ import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
+import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
 import com.huskysoft.interviewannihilator.runtime.InitializeUserTask;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -149,11 +151,16 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			return true;
 			
 		case R.id.random_question:
-			Question rand = 
-				RandomQuestionCollection.getInstance().getQuestion();
-			Intent intent = new Intent(this, QuestionActivity.class);
-			intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
-			startActivity(intent);
+			if(RandomQuestionCollection.getInstance().isEmpty()){
+				new FetchRandomQuestionsTask(this).execute();
+			}else{
+				System.out.println("Hello");
+				Question rand = 
+						RandomQuestionCollection.getInstance().getQuestion();
+				Intent intent = new Intent(this, QuestionActivity.class);
+				intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
+				startActivity(intent);
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}

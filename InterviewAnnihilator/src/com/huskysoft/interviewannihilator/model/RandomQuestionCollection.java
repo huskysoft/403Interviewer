@@ -6,24 +6,32 @@
  * @author Phillip Leland
  */
 
-package com.huskysoft.interviewannihilator.ui;
+package com.huskysoft.interviewannihilator.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import com.huskysoft.interviewannihilator.model.Question;
+import android.app.Activity;
+import android.app.Dialog;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
 
 public class RandomQuestionCollection {
 
 	
 	private static RandomQuestionCollection instance;
-	private List<Question> questionList;
-	
+	private List<Question> questionList;	
 	
 	private RandomQuestionCollection(){
 		questionList = new LinkedList<Question>();
-		load();
 	}
 	
 	/**
@@ -38,23 +46,15 @@ public class RandomQuestionCollection {
 		return instance;
 	}
 	
-	/**
-	 * Called at beginning of every activity method.
-	 * Makes sure that there are random questions
-	 * loaded into the list.
-	 */
-	public void load(){
-		if(questionList.isEmpty()){
-			// Get new questions
-			new FetchRandomQuestionsTask().execute();
-		}
-	}
-	
 	public int getSize(){
 		return questionList.size();
 	}
 	
-	public Question getQuestion(){
+	public boolean isEmpty(){
+		return questionList.isEmpty();
+	}
+	
+	public Question getQuestion(){	
 		Question q = questionList.remove(0);
 		return q;
 	}
