@@ -15,6 +15,7 @@ import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.PostQuestionsTask;
 
 import android.os.Bundle;
@@ -32,15 +33,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PostQuestionActivity extends Activity {
+public class PostQuestionActivity extends AbstractPostingActivity {
 	
 	/**The currently selected difficulty (radio buttons)*/
 	Difficulty difficulty;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
+		setBehindContentView(R.layout.activity_menu);
+		getActionBar().setHomeButtonEnabled(true);
+		buildSlideMenu();
 		
 		// VALIDATE
 		assert(MainActivity.initializedUser);

@@ -8,16 +8,21 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import java.io.File;
+import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
+import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
+import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
 import com.huskysoft.interviewannihilator.runtime.InitializeUserTask;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class AbstractPostingActivity extends SlidingActivity{
-	
+		
 	/** Do we have to initialize this user? **/
 	protected static boolean initializedUser = false;
 	
@@ -123,7 +128,9 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 					slideMenuInfo.setCat(
 							Category.valueOf(categoryStr.toUpperCase()));
 				}
-				
+				Intent intent = new Intent(getApplicationContext(), 
+						MainActivity.class);
+				startActivity(intent);
 			}
 		});
 		
@@ -142,8 +149,20 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		case android.R.id.home:
 			toggle();
 			return true;
+			
+		case R.id.random_question:
+			if(RandomQuestionCollection.getInstance().isEmpty()){
+				new FetchRandomQuestionsTask(this).execute();
+			}else{
+				Question rand = 
+						RandomQuestionCollection.getInstance().getQuestion();
+				Intent intent = new Intent(this, QuestionActivity.class);
+				intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
+				startActivity(intent);
+			}
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	/**
