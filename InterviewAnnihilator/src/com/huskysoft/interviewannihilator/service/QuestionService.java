@@ -50,7 +50,6 @@ public class QuestionService {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		this.userInfo = Utility.createTestUserInfo();
 	}
 
 	/**
@@ -74,7 +73,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 */
 	public void initializeUserInfo(File baseDir, String userEmail)
-			throws IOException, NetworkException {
+			throws NetworkException {
 		// open file
 		this.baseDir = baseDir;
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
@@ -128,7 +127,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 */
 	public List<Question> getQuestionsById(List<Integer> questionIds) 
-			throws JSONException, IOException, NetworkException {
+			throws IOException, NetworkException {
 		if (questionIds == null || questionIds.size() == 0) {
 			throw new IllegalArgumentException(
 					"Must specify at least one Question ID!");
@@ -164,13 +163,20 @@ public class QuestionService {
 	 */
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
-			throws NetworkException, JSONException, IOException {
+			throws NetworkException, IOException {
+		return getQuestions(
+				categories, difficulty, limit, offset, random, null);
+	}
+	
+	private PaginatedQuestions getQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset, boolean random,
+			Integer authorId) throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getQuestions(difficulty, categories,
-				limit, offset, random);
+				limit, offset, random, authorId);
 		PaginatedQuestions databaseQuestions;
 
 		// deserialize "flat parameters"
@@ -187,6 +193,20 @@ public class QuestionService {
 		return databaseQuestions;
 	}
 
+	public PaginatedQuestions getMyQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset, boolean random)
+			throws NetworkException, IOException {
+		requireUserInfo();
+		return getQuestions(categories, difficulty, limit, offset,
+				random, userInfo.getUserId());
+	}
+
+	public PaginatedQuestions getFavoriteQuestions(int limit, int offset) {
+		requireUserInfo();
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * Posts a question to the server.
 	 * 
@@ -200,7 +220,7 @@ public class QuestionService {
 	 * incorrectly
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
-			JSONException, IOException {
+			IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
@@ -233,12 +253,18 @@ public class QuestionService {
 	 * true on success.
 	 * 
 	 * @param questionId
+	 * @return whether the deletion succeeded
 	 * @throws NetworkException 
 	 */
 	public boolean deleteQuestion(int questionId) throws NetworkException {
 		Utility.ensureNotNull(userInfo, "UserInfo");
-		return networkService.deleteQuestion(
+		boolean success = networkService.deleteQuestion(
 				questionId, userInfo.getUserEmail());
+		if (success) {
+			userInfo.clearFavoriteQuestion(questionId);
+			userInfo.novoteQuestion(questionId);
+		}
+		return success;
 	}
 
 	/**
@@ -250,8 +276,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public boolean upvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean upvoteQuestion(int questionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.upvoteQuestion(questionId);
 		// TODO Auto-generated method stub
@@ -265,8 +290,7 @@ public class QuestionService {
 	 * @param questionId
 	 * @return
 	 */
-	public boolean downvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean downvoteQuestion(int questionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.downvoteQuestion(questionId);
 		// TODO Auto-generated method stub
@@ -289,9 +313,8 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(
-			int questionId, int limit, int offset)
-			throws NetworkException, JSONException, IOException {
+	public PaginatedSolutions getSolutions(int questionId, int limit, 
+			int offset) throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
@@ -327,8 +350,8 @@ public class QuestionService {
 	 * @throws IllegalArgumentException if toPost is null or its fields are set
 	 * incorrectly
 	 */
-	public int postSolution(Solution toPost) throws NetworkException,
-			JSONException, IOException {
+	public int postSolution(Solution toPost) 
+			throws NetworkException, IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
@@ -343,7 +366,7 @@ public class QuestionService {
 
 		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
-		String result = networkService.postQuestion(solutionStr);
+		String result = networkService.postSolution(solutionStr);
 		return Integer.parseInt(result);
 	}
 
@@ -352,10 +375,13 @@ public class QuestionService {
 	 * 
 	 * @param solutionId
 	 * @param userEmail
+	 * @return bool indicating whether the deletion succeeded
+	 * @throws NetworkException
 	 */
-	public void deleteSolution(int solutionId, String userEmail) {
+	public boolean deleteSolution(int solutionId, String userEmail) 
+			throws NetworkException {
 		Utility.ensureNotNull(userInfo, "UserInfo");
-		networkService.deleteSolution(solutionId, userEmail);
+		return networkService.deleteSolution(solutionId, userEmail);
 	}
 
 	/**
@@ -367,8 +393,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public boolean upvoteSolution(int solutionId) throws NetworkException,
-			IOException {
+	public boolean upvoteSolution(int solutionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.upvoteSolution(solutionId);
 		// TODO Auto-generated method stub
@@ -382,26 +407,22 @@ public class QuestionService {
 	 * @param solutionId
 	 * @return
 	 */
-	public boolean downvoteSolution(int solutionId) throws NetworkException,
-			IOException {
+	public boolean downvoteSolution(int solutionId) {
 		Utility.ensureNotNull(userInfo, "UserInfo");
 		userInfo.downvoteSolution(solutionId);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public PaginatedQuestions getFavorites(int limit, int offset)
-			throws NetworkException, IOException {
+	public void clearAllFavorites() {
+		userInfo.getFavoriteQuestions().clear();
+	}
+
+	private void requireUserInfo() {
 		if (userInfo == null) {
 			throw new IllegalStateException(
 					"UserInfo has not been initialized!");
 		}
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void clearAllFavorites() {
-		userInfo.getFavoriteQuestions().clear();
 	}
 
 	/**
@@ -414,8 +435,7 @@ public class QuestionService {
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	protected int getUserId(String userEmail) throws NetworkException,
-			IOException {
+	protected int getUserId(String userEmail) throws NetworkException {
 		if (userEmail == null) {
 			throw new IllegalArgumentException("userEmail cannot be null");
 		}

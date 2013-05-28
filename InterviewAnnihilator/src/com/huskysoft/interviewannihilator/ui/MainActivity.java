@@ -12,29 +12,33 @@ import java.util.List;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
-import com.huskysoft.interviewannihilator.util.Utility;
-
+import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
+import android.widget.Toast;
 
-public class MainActivity extends SlidingActivity {
+public class MainActivity extends AbstractPostingActivity {
 
 	/**
 	 * Used to pass the String question to the child activity.
@@ -43,10 +47,11 @@ public class MainActivity extends SlidingActivity {
 	public final static String EXTRA_MESSAGE =
 			"com.huskysoft.interviewannihilator.QUESTION";
 	
-	/** Layout element that holds the questions */
-	private LinearLayout questionLayout;
-	
-	private List<Question> questionList;
+	/** 
+	 * Number of questions currently being displayed,used to index
+	 * into the db
+	 */
+	private int questionOffset = 0;
 	
 	/**
 	 * Method that populates the app when the MainActivity is created.
@@ -55,35 +60,40 @@ public class MainActivity extends SlidingActivity {
 	 */
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
-		// Get passed difficulty stored in Utility class
-		Difficulty diff = SlideMenuInfoTransfer.diff;
+		
+		if (!initializedUser && tryInitialize){
+			this.initializeUserInfo();
+		}
+		
+		
+		// Get info from transfer class
+		slideMenuInfo = SlideMenuInfo.getInstance();
+		Difficulty diff = slideMenuInfo.getDiff();
+		Category cat = slideMenuInfo.getCat();
 		
 		// Reset PassedDifficulty
-		SlideMenuInfoTransfer.diff = null;
+		slideMenuInfo.setDiff(null);
+		slideMenuInfo.setCat(null);
 		
 		buildSlideMenu();
 		
 		if(diff == null){
-			setSpinnerToSelectedValue("");
+			setSpinnerToSelectedValue("Difficulty", "");
 		}
 		
-		questionLayout = (LinearLayout) findViewById(R.id.question_layout);
-		
-		View loadingText = findViewById(R.id.loading_text_layout);
-		loadingText.setVisibility(View.VISIBLE);
-		
-		if(questionList == null){
-			loadQuestions(diff);
+		if(cat == null){
+			setSpinnerToSelectedValue("Category", "");
 		}
-		else{
-			displayQuestions();
-		}
+
+		hideMainView();
+		showLoadingView1();
+		loadQuestions();
 	}
 	
 	/**
@@ -93,9 +103,15 @@ public class MainActivity extends SlidingActivity {
 	 * 
 	 * @param value Selected Spinner value
 	 */
-	public void setSpinnerToSelectedValue(String value){
-		// This was causing a type error before, please don't change back 
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+	public void setSpinnerToSelectedValue(String type, String value){
+		Spinner spinner = null;
+		
+		if(type.equals("Difficulty")){
+			spinner = (Spinner) findViewById(R.id.diff_spinner);
+		} else{
+			spinner = (Spinner) findViewById(R.id.category_spinner);
+		}
+		
 		Adapter a = spinner.getAdapter();
 		for (int i = 0; i < a.getCount(); i++){
 			if (a.getItem(i).toString().equals(value)){
@@ -114,25 +130,45 @@ public class MainActivity extends SlidingActivity {
 	 */
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+
 		String diff = spinner.getSelectedItem().toString();
-		if (diff == null || diff.isEmpty() || diff.equals(Utility.ALL)) {
+		if (diff == null || diff.isEmpty() || diff.equals(UIConstants.ALL)) {
 			return null;
 		}
 		return Difficulty.valueOf(diff.toUpperCase());
 	}
 	
 	/**
+	 * Method that returns the Category Enum that is
+	 * currently selected in the Category spinner input
+	 * on the slide menu
+	 * 
+	 * @ return Category Enum
+	 */
+	public Category getCurrentCategorySetting(){
+		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
+		String category = spinner.getSelectedItem().toString();
+		if(category.equals(UIConstants.ALL)){
+			return null;
+		}
+		
+		category = category.replaceAll("\\s", "");
+		return Category.valueOf(category.toUpperCase());
+	}
+	
+	/**
 	 * Helper method that builds the slide menu on the current activity.
 	 */
+	@Override
 	public void buildSlideMenu(){
 		SlidingMenu menu = getSlidingMenu();
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int width = (int) ((double) metrics.widthPixels);
 		menu.setBehindOffset((int)
-				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
+				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
 		
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
+		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 				R.array.difficulty, 
@@ -143,7 +179,19 @@ public class MainActivity extends SlidingActivity {
 				android.R.layout.simple_spinner_dropdown_item);
 		
 		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
+		diffSpinner.setAdapter(adapter);
+		
+		Spinner categorySpinner = 
+			(Spinner) findViewById(R.id.category_spinner);
+		ArrayAdapter<CharSequence> catAdapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.category, 
+				android.R.layout.simple_spinner_item);
+		
+		catAdapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		categorySpinner.setAdapter(catAdapter);
 	}
 	
 	/**
@@ -153,65 +201,93 @@ public class MainActivity extends SlidingActivity {
 	 * 
 	 * @param v Button View
 	 */
-	public void adjustDifficulty(View v){
-		Difficulty diff = getCurrentDifficultySetting();
-		
+	public void adjustSettings(View v){
 		toggle();
 		
 		// Clear current Questions
-		questionLayout.removeAllViews();
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
+		questionView.removeAllViews();
+		questionOffset = 0;
 		
-		// Switch back to the loading view
-		this.switchView();
-		
-		loadQuestions(diff);
+		hideMainView();
+		showLoadingView1();
+		loadQuestions();
 	}
 	
 	/**
-	 * Changes from the loading view to the question list view and vice versa
+	 * Shows loading text
 	 */
-	public void switchView(){
-		// Switch views
-		ViewSwitcher switcher =
-				(ViewSwitcher) findViewById(R.id.main_activity_view_switcher);
-		switcher.showNext();
-	}
-	
-	/**
-	 * Sets the questions to be displayed (does not display them).
-	 * @param questions
-	 */
-	public void setQuestions(List<Question> questions){
-		questionList = questions;
-	}
-	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
-	}
-
-	public void loadQuestions(Difficulty diff){
-		// Display loading text
-		LinearLayout loadingText =
-				(LinearLayout) findViewById(R.id.loading_text_layout);
+	public void showLoadingView1(){
+		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.VISIBLE);
-
-		// Populate questions list. This makes a network call.
-		new FetchQuestionsTask(this, diff).execute();
+	}
+	
+	/**
+	 * Hides loading text
+	 */
+	public void hideLoadingView1(){
+		View loadingText = findViewById(R.id.layout_loading);
+		loadingText.setVisibility(View.GONE);
+	}
+	
+	/**
+	 * Shows loading text
+	 */
+	public void showLoadingView2(){
+		View loadingText = findViewById(R.id.layout_loading_more);
+		loadingText.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Hides loading text
+	 */
+	public void hideLoadingView2(){
+		View loadingText = findViewById(R.id.layout_loading_more);
+		loadingText.setVisibility(View.GONE);
 	}
 
+	/**
+	 * Shows main question list and buttons
+	 */
+	public void showMainView(){
+		View mainView = findViewById(R.id.main_view);
+		mainView.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Hides main question list and buttons
+	 */
+	public void hideMainView(){
+		View mainView = findViewById(R.id.main_view);
+		mainView.setVisibility(View.GONE);
+	}
+	
+	public void loadQuestions(){
+		// Populate questions list. This makes a network call.
+		new FetchQuestionsTask(this,
+				getCurrentCategorySetting(),
+				getCurrentDifficultySetting(),
+				UIConstants.DEFAULT_QUESTIONS_TO_LOAD,
+				questionOffset).execute();
+	}
+	
+	/**
+	 * This is called when the "Show me more" button is pressed. 
+	 * 
+	 * @param v button being pressed
+	 */
+	public void loadMoreQuestions(View v){
+		showLoadingView2();
+		loadQuestions();
+	}
+	
 	/**
 	 * Displays a formatted list of questions
 	 * 
 	 * @param questions
 	 */
-	@SuppressLint("NewApi")
-	public void displayQuestions() {
+	public void appendQuestionsToView(List<Question> questionList) {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
 		
@@ -219,31 +295,87 @@ public class MainActivity extends SlidingActivity {
 		llp.setMargins(40, 10, 40, 10);
 		llp.gravity = 1;  // Horizontal Center
 		
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
 		
 		if(questionList == null || questionList.size() <= 0){
-			TextView t = new TextView(this);
-
-			t.setText("There doesn't seem to be any questions.");
-			// special look?
-			t.setLayoutParams(llp);
-			questionLayout.addView(t);
+			// No new questions
+			if(questionView.getChildCount() == 0){
+				// No existing questions
+				TextView t = new TextView(this);
+	
+				t.setText("There doesn't seem to be any questions.");
+				// special look?
+				t.setLayoutParams(llp);
+				questionView.addView(t);
+			}
 		}else{
+			// Increase the question offset so that next time we access the db, we
+			// get the next set of questions
+			questionOffset += questionList.size();
+			
 			for(int i = 0; i < questionList.size(); i++){
 				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
 					
-					String questionText = question.getTitle();
+					//build text
+					String questionTitle = question.getTitle();
+					String questionBody = question.getText();
+					String questionDiff = question.getDifficulty().toString();
+					String questionCat = question.getCategory().toString();
+					String questionDate = question.getDateCreated().toString();
 					
+					// abbreviate
+					if (questionBody.length() > 
+							UIConstants.TEXT_PREVIEW_LENGTH){
+						questionBody = questionBody.substring(
+								0, UIConstants.TEXT_PREVIEW_LENGTH);
+						questionBody += "...";
+					}
+					int pos = 0;
+					SpannableStringBuilder sb = new SpannableStringBuilder();
+					// title
+					sb.append(questionTitle);
+					sb.setSpan(new  TextAppearanceSpan(this, 
+							R.style.question_title_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					pos += questionTitle.length();
+					
+					// descriptors
+					sb.append('\n');
+					sb.append(questionCat);
+					sb.append("\t\t\t");
+					sb.append(questionDiff);
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_descriptors_appearance),
+							pos, sb.length(), 
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					sb.append("\n\n");
+					pos += questionDiff.length() + questionCat.length() + 5;
+					
+					// body
+					sb.append(questionBody);
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_body_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					sb.append('\n');
+					pos += questionBody.length() + 1;
+					// date
+					sb.append('\n');
+					sb.append(questionDate);
+					sb.setSpan(new  TextAppearanceSpan(
+							this, R.style.question_date_appearance), pos, 
+							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					
+					// done
 					TextView t = new TextView(this);
-					
 					t.setLayoutParams(llp);
 					t.setId(question.getQuestionId());
 					t.setTag(question);
-					t.setText(questionText);	
-
+					t.setText(sb);	
 					// to make it work on older versions use this instead of
 					// setBackground
-					t.setBackgroundDrawable(getResources().
+					t.setBackground(getResources().
 							getDrawable(R.drawable.listitem));
 
 					t.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +384,7 @@ public class MainActivity extends SlidingActivity {
 							openQuestion(v);
 						}
 					});
-					questionLayout.addView(t);
+					questionView.addView(t);
 				}
 			}
 		}
@@ -261,26 +393,43 @@ public class MainActivity extends SlidingActivity {
 	/**
 	 * Pops up a dialog menu with "Retry" and "Cancel" options when a network
 	 * operation fails.
+	 * 
+	 * EDIT: looks the same as all other dialog boxes now.
+	 * It's more cumbersome to make but consistency is important.
+	 * 
 	 */
 	public void onNetworkError(){		
-		// Create a dialog
-		new AlertDialog.Builder(this).setTitle(R.string.retryDialog_title)
-		.setPositiveButton(R.string.retryDialog_retry,
-		new DialogInterface.OnClickListener(){
+		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.retrydialogcustom);
+		// set the custom dialog components - text, buttons
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		text.setText(getString(R.string.retryDialog_title));
+		Button dialogButton = (Button) 
+				dialog.findViewById(R.id.button_retry);
+		// if button is clicked, send the solution
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				loadQuestions(null);
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_retry, Toast.LENGTH_LONG).show();
+				loadQuestions();
+				dialog.dismiss();
 			}
-		})
-		.setNegativeButton(R.string.retryDialog_cancel,
-		new DialogInterface.OnClickListener() {
+		});
+		dialogButton = (Button) dialog.findViewById(R.id.button_cancel);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_return, Toast.LENGTH_LONG).show();
+				dialog.dismiss();
 			}
-		})
-		.create().show();
+		});
+		dialog.show();
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -301,15 +450,5 @@ public class MainActivity extends SlidingActivity {
 		startActivity(intent);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 }
 

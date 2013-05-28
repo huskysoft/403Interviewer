@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import com.huskysoft.interviewannihilator.model.Likeable;
-import com.huskysoft.interviewannihilator.model.UserInfo;
 
 public class Utility {
 	
@@ -38,11 +37,6 @@ public class Utility {
 	/** The minimum number of likes needed to have to have a valid positive 
 	 * rating */
 	private static final int MIN_LIKES = 5;
-	
-	/** 
-	 * For difficulty "All" special-case for slide-in menu
-	 */
-	public static final String ALL = "All";
 	
 	/**
 	 * Calculates the rank based on the number of likes and
@@ -147,14 +141,5 @@ public class Utility {
 		if (o == null) {
 			throw new IllegalStateException(objectName + " cannot be null!");
 		}
-	}
-	
-	// TODO: Remove this once userEmail is implemented in front end.
-	@Deprecated
-	public static UserInfo createTestUserInfo() {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setUserEmail("admin@huskysoft.com");
-		userInfo.setUserId(0);
-		return userInfo;
 	}
 }

@@ -1,37 +1,32 @@
 /**
- * The class contains tests for the QuestionService class
+ * The class contains unit tests for exceptions in the QuestionService class
  * 
- * @author Bennett Ng, 5/9/2013
+ * @author Kevin Loh, 5/20/2013
  */
 
 package com.huskysoft.interviewannihilator.service;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class QuestionServiceTest extends TestCase {
 
 	private QuestionService questionService;
-	private ObjectMapper mapper;
-
+	
 	/**
 	 * Construct new test instance
 	 * 
-	 * @param name
-	 *            the test name
+	 * @param name the test name
 	 */
 	public QuestionServiceTest(String name) {
 		super(name);
 		questionService = QuestionService.getInstance();
-		mapper = new ObjectMapper();
 	}
 
 	/**
@@ -46,7 +41,7 @@ public class QuestionServiceTest extends TestCase {
 			IOException {
 		try {
 			questionService.postQuestion(null);
-			Assert.fail("Posting null question should not be allowed.");
+			fail("Posting null question should not be allowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -65,7 +60,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setText(null);
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with empty text is disallowed.");
+			fail("Posting question with empty text is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -84,7 +79,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setTitle(null);
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with empty title is disallowed.");
+			fail("Posting question with empty title is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -103,7 +98,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setText("");
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with empty text is disallowed.");
+			fail("Posting question with empty text is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -122,7 +117,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setTitle("");
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with empty title is disallowed.");
+			fail("Posting question with empty title is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -141,7 +136,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setCategory(null);
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with null category is disallowed.");
+			fail("Posting question with null category is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -160,7 +155,7 @@ public class QuestionServiceTest extends TestCase {
 			Question question = TestHelpers.createDummyQuestion(0);
 			question.setDifficulty(null);
 			questionService.postQuestion(question);
-			Assert.fail("Posting question with null difficulty is disallowed.");
+			fail("Posting question with null difficulty is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -177,7 +172,7 @@ public class QuestionServiceTest extends TestCase {
 			IOException {
 		try {
 			questionService.postSolution(null);
-			Assert.fail("Posting null solution should not be allowed.");
+			fail("Posting null solution should not be allowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -196,7 +191,7 @@ public class QuestionServiceTest extends TestCase {
 			Solution solution = TestHelpers.createDummySolution(0);
 			solution.setText(null);
 			questionService.postSolution(solution);
-			Assert.fail("Posting solution with null text is disallowed.");
+			fail("Posting solution with null text is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
@@ -215,7 +210,7 @@ public class QuestionServiceTest extends TestCase {
 			Solution solution = TestHelpers.createDummySolution(0);
 			solution.setText("");
 			questionService.postSolution(solution);
-			Assert.fail("Posting solution with empty text is disallowed.");
+			fail("Posting solution with empty text is disallowed.");
 		} catch (IllegalArgumentException e) {
 		}
 	}

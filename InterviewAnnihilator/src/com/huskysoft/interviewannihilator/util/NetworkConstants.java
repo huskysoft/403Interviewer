@@ -45,6 +45,10 @@ public interface NetworkConstants {
 	public static final String DELETE_QUESTION_URL =
 			BASE_URI + QUESTION + "deleteQuestion.php";
 	
+	/** The script for deleteSolution */
+	public static final String DELETE_SOLUTION_URL =
+			BASE_URI + SOLUTION + "deleteSolution.php";
+	
 	/** The script for getUserId */
 	public static final String GET_USERID_URL =
 			BASE_URI + AUTHENTICATION + "getUserId.php";
@@ -64,6 +68,14 @@ public interface NetworkConstants {
 	public static final String PARAM_DIFFICULTY = "difficulty";
 	public static final String PARAM_CATEGORY = "category";
 	public static final String PARAM_QUESTIONID = "questionId";
+	public static final String PARAM_SOLUTIONID = "solutionId";
 	public static final String PARAM_RANDOM = "random";
 	public static final String PARAM_EMAIL = "email";
+	public static final String PARAM_AUTHORID = "authorId";
+	
+	/** The default connection timeout (ms) */
+	public static final int CONN_TIMEOUT = 5000;
+	
+	/** The default socket timeout (ms) */
+	public static final int SOCK_TIMEOUT = 8000;
 }

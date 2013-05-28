@@ -11,7 +11,6 @@ import android.annotation.SuppressLint;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 
 @SuppressLint("UseSparseArrays")
 public class UserInfo {
@@ -55,7 +54,7 @@ public class UserInfo {
 		return viewedQuestions;
 	}
 
-	public void setViewedQuestions(SortedMap<Integer, Date> viewedQuestions) {
+	public void setViewedQuestions(Map<Integer, Date> viewedQuestions) {
 		this.viewedQuestions = viewedQuestions;
 	}
 
@@ -63,8 +62,7 @@ public class UserInfo {
 		return favoriteQuestions;
 	}
 
-	public void setFavoriteQuestions(
-			SortedMap<Integer, Date> favoriteQuestions) {
+	public void setFavoriteQuestions(Map<Integer, Date> favoriteQuestions) {
 		this.favoriteQuestions = favoriteQuestions;
 	}
 
@@ -114,7 +112,7 @@ public class UserInfo {
 	}
 
 	/**
-	 * Clear all favorite Questions
+	 * Clear a specific favorite Question
 	 * 
 	 * @param questionId
 	 * @return
@@ -160,6 +158,17 @@ public class UserInfo {
 	public void novoteQuestion(int questionId) {
 		votedQuestions.remove(questionId);
 	}
+	
+	/**
+	 * Get the vote status of a given Question. Returns 'true' if upvoted,
+	 * 'false' if downvoted, or 'null' if no vote has been submitted.
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	public Boolean getQuestionVote(int questionId) {
+		return votedQuestions.get(questionId);
+	}
 
 	/**
 	 * Upvote a Solution. Will overwrite a downvote.
@@ -185,9 +194,23 @@ public class UserInfo {
 	 * @param solutionId
 	 */
 	public void novoteSolution(int solutionId) {
-		votedQuestions.remove(solutionId);
+		votedSolutions.remove(solutionId);
+	}
+	
+	/**
+	 * Get the vote status of a given Solution. Returns 'true' if upvoted,
+	 * 'false' if downvoted, or 'null' if no vote has been submitted.
+	 * 
+	 * @param solutionId
+	 * @return
+	 */
+	public Boolean getSolutionVote(int solutionId) {
+		return votedSolutions.get(solutionId);
 	}
 
+	/**
+	 * Clears all user data, preserving the user's email and ID
+	 */
 	public void clear() {
 		viewedQuestions.clear();
 		favoriteQuestions.clear();
@@ -221,7 +244,7 @@ public class UserInfo {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!getClass().equals(obj.getClass()))
 			return false;
 		UserInfo other = (UserInfo) obj;
 		if (favoriteQuestions == null) {

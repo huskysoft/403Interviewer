@@ -9,6 +9,8 @@
 
 package com.huskysoft.interviewannihilator.service;
 
+import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,16 +24,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.accounts.NetworkErrorException;
 
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.Utility;
-
-import static com.huskysoft.interviewannihilator.util.NetworkConstants.*;
 
 public class NetworkService {
 
@@ -43,6 +46,11 @@ public class NetworkService {
 
 	private NetworkService() {
 		httpClient = new DefaultHttpClient();
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(
+				httpParameters, NetworkConstants.CONN_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(
+				httpParameters, NetworkConstants.SOCK_TIMEOUT);
 	}
 
 	/**
@@ -64,7 +72,7 @@ public class NetworkService {
 	 */
 	public String getQuestions(Difficulty difficulty,
 			Collection<Category> categories, int limit, int offset,
-			boolean random) throws NetworkException {
+			boolean random, Integer authorId) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
 		urlToSend.append(Utility.appendParameter
 				(PARAM_LIMIT, String.valueOf(limit)));
@@ -90,7 +98,12 @@ public class NetworkService {
 		if (random) {
 			urlToSend.append(Utility.appendParameter(PARAM_RANDOM, ""));
 		}
-
+		if (authorId != null) {
+			String str = Utility.appendParameter(
+					PARAM_AUTHORID, String.valueOf(authorId));
+			urlToSend.append(str);
+		}
+		
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
 
@@ -108,8 +121,9 @@ public class NetworkService {
 	 * @throws NetworkException
 	 */
 	public String getQuestionsById(List<Integer> questionIds) 
-			throws NetworkException, JSONException, IOException {
-		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_BYID_URL + "?");
+			throws NetworkException {
+		StringBuilder urlToSend = 
+				new StringBuilder(GET_QUESTIONS_BYID_URL + "?");
 		StringBuilder deliminatedQuestions = new StringBuilder();
 		for (int i = 0; i < questionIds.size(); i++) {
 			deliminatedQuestions.append(questionIds.get(i));
@@ -142,9 +156,9 @@ public class NetworkService {
 	/**
 	 * Deletes a question from the remote DB. Returns true on success.
 	 * 
-	 * @param questionId
-	 * @param userEmail
-	 * @return
+	 * @param questionId the id of the question to be deleted
+	 * @param userEmail must be the one who posted the question to delete it
+	 * @return a bool indicating whether the deletion was successful
 	 * @throws NetworkException 
 	 */
 	public boolean deleteQuestion(int questionId, String userEmail)
@@ -155,10 +169,11 @@ public class NetworkService {
 		
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
-		dispatchPostRequest(urlToSend.toString(), userEmail);
 		
-		// TODO: detect failure
-		return true;
+		String questionIdString = 
+				dispatchPostRequest(urlToSend.toString(), userEmail);
+		int questionIdDeleted = Integer.valueOf(questionIdString);
+		return questionIdDeleted > 0;
 	}
 
 	/**
@@ -220,10 +235,26 @@ public class NetworkService {
 		Utility.ensureNotNull(json, "Solution JSON");
 		return dispatchPostRequest(POST_SOLUTION_URL, json);
 	}
-
-	public boolean deleteSolution(int solutionId, String userEmail) {
-		// TODO
-		return false;
+	
+	/**
+	 * Deletes a solution from the remote DB
+	 * 
+	 * @param solutionId the id of the solution to be deleted
+	 * @param userEmail must be the author of the solution they are deleting
+	 * @return a bool indicating whether the deletion was successful
+	 * @throws NetworkException
+	 */
+	public boolean deleteSolution(int solutionId, String userEmail) 
+			throws NetworkException {
+		StringBuilder urlToSend = new StringBuilder(DELETE_SOLUTION_URL + "?");
+		urlToSend.append(Utility.appendParameter(
+				PARAM_SOLUTIONID, String.valueOf(solutionId)));		
+		// delete the trailing ampersand from the url
+		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
+		String solutionIdString = 
+				dispatchPostRequest(urlToSend.toString(), userEmail);
+		int solutionIdDeleted = Integer.valueOf(solutionIdString);
+		return solutionIdDeleted > 0;		
 	}
 
 	/**

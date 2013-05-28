@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ import android.os.Environment;
 
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
@@ -45,26 +45,24 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	}
 
 	/**
-	 * testGetAllQuestions actually gets a number of questions from the
+	 * testGetQuestions actually gets a number of questions from the
 	 * database, and tests whether the questions retrieved and the data in the
 	 * paginatedQuestions object is what it should be
 	 * 
 	 * @label white-box test
 	 * Vertically test the ability to get Questions from the DB
 	 * 
-	 * @testtype WhiteBox
+	 * @label WhiteBox
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetQuestions() 
-			throws NetworkException, JSONException, IOException {
+	public void testGetQuestions() throws NetworkException, IOException {
 		PaginatedQuestions questions = 
 				questionService.getQuestions(null, null, 10, 0, false);
 		assertNotNull(questions);
 		assertEquals(Math.min(10, questions.getTotalNumberOfResults()),
 				questions.getQuestions().size());
-		System.out.println(questions);
 	}
 
 	/**
@@ -73,12 +71,34 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @label Black-box test
 	 */
 	public void testGetQuestionsBadArguments()
-			throws NetworkException, JSONException, IOException {
+			throws NetworkException, IOException {
 		try {
 			questionService.getQuestions(null, null, -1, -1, false);
 			fail("Should have gotten IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+	
+	/**
+	 * Test fetching Questions which I authored
+	 * @throws IOException 
+	 * @throws NetworkException 
+	 * 
+	 * @label White-box test
+	 */
+	public void testGetMyQuestions() throws NetworkException, IOException {
+		UserInfo uinfo = TestHelpers.createTestUserInfo();
+		questionService.setUserInfo(uinfo);
+		PaginatedQuestions questions = 
+				questionService.getMyQuestions(null, null, 10, 0, false);
+		assertNotNull(questions);
+		assertTrue(questions.getTotalNumberOfResults() > 0);
+		assertEquals(Math.min(10, questions.getTotalNumberOfResults()),
+				questions.getQuestions().size());
+		for (Question q : questions.getQuestions()) {
+			assertEquals(uinfo.getUserId(), Integer.valueOf(q.getAuthorId()));
 		}
 	}
 
@@ -90,19 +110,17 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * Vertically test the ability to get Solutions for a given Question from
 	 * the DB
 	 * 
-	 * @testtype WhiteBox
+	 * @label WhiteBox
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testGetSolutions() 
-			throws NetworkException, JSONException, IOException {
+	public void testGetSolutions() throws NetworkException, IOException {
 		PaginatedSolutions solutions = questionService.getSolutions(
 				TestHelpers.VALID_QUESTION_ID, 10, 0);
 		assertNotNull(solutions);
 		assertEquals(Math.min(10, solutions.getTotalNumberOfResults()), 
 				solutions.getSolutions().size());
-		System.out.println(solutions);
 	}
 
 	/**
@@ -117,8 +135,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void testQuestionRoundTrip() 
-			throws NetworkException, JSONException, IOException {
+	public void testQuestionRoundTrip() throws NetworkException, IOException {
 		// set up
 		questionService.setUserInfo(TestHelpers.createTestUserInfo());
 		
@@ -137,11 +154,56 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		assertEquals(qInit, qCreated);
 		
 		// delete
-		questionService.deleteQuestion(qId);
+		boolean successDelete = questionService.deleteQuestion(qId);
+		assertTrue(successDelete);
 		qList = questionService.getQuestionsById(qIdList);
 		assertEquals(0, qList.size());
 	}
 
+	/**
+	 * Round-trip test the ability to create, read, and delete a specific \
+	 * Solution.
+	 * 
+	 * This was also written using TDD (Test-Driven Development)
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	public void testSolutionRoundTrip() throws NetworkException, IOException {
+		// set up
+		questionService.setUserInfo(TestHelpers.createTestUserInfo());
+		// create question
+		Question qInit = TestHelpers.createDummyQuestion(42);
+		int qId = questionService.postQuestion(qInit);
+		// create solution
+		Solution sInit = TestHelpers.createDummySolution(qId);
+		int sId = questionService.postSolution(sInit);
+		sInit.setSolutionId(sId);
+		
+		// read
+		PaginatedSolutions results = questionService.getSolutions(qId, 1, 0);
+		assertEquals(1, results.getTotalNumberOfResults());
+		List<Solution> solutionList = results.getSolutions();
+		assertEquals(1, solutionList.size());
+		sInit.setDateCreated(solutionList.get(0).getDateCreated());
+		assertEquals(sInit, solutionList.get(0));
+		
+		// delete
+		boolean successDelete = questionService.deleteSolution
+				(sId, TestHelpers.TEST_USER_EMAIL);
+		assertTrue(successDelete);
+		results = questionService.getSolutions(qId, 1, 0);
+		assertEquals(0, results.getTotalNumberOfResults());
+		successDelete = questionService.deleteQuestion(qId);
+		assertTrue(successDelete);
+		List<Integer> qList = new ArrayList<Integer>();
+		qList.add(qId);
+		List<Question> qListResults = questionService.getQuestionsById(qList);
+		assertEquals(0, qListResults.size());
+	}
+	
 	/**
 	 * Tests the local storage of information our app will use.
 	 * 
@@ -187,8 +249,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IllegalArgumentException
 	 * 
 	 */
-	public void testGetUserId() throws NetworkException, IOException,
-			IllegalArgumentException {
+	public void testGetUserId() throws NetworkException {
 		String userEmail = "dan.sanders@gmail.com";
 		int expectedId = 3;
 		int actualId = questionService.getUserId(userEmail);
@@ -204,13 +265,13 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IllegalArgumentException
 	 * 
 	 */
-	public void testGetUserIdWithNull() throws NetworkException, IOException,
-			IllegalArgumentException {
+	public void testGetUserIdWithNull() throws NetworkException {
 		try {
 			questionService.getUserId(null);
 			fail("Should have thrown IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 
@@ -222,8 +283,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 * @throws NetworkException
 	 */
-	public void testGetQuestionById() throws JsonParseException, 
-			JSONException, IOException, NetworkException {
+	public void testGetQuestionById() throws IOException, NetworkException {
 		List<Integer> questionIds = new ArrayList<Integer>();
 		questionIds.add(42);
 		questionIds.add(43);

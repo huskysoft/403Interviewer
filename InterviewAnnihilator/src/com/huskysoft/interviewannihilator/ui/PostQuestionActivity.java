@@ -13,18 +13,18 @@ import java.util.List;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
-import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
+import com.huskysoft.interviewannihilator.runtime.PostQuestionsTask;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,16 +33,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PostQuestionActivity extends Activity {
+public class PostQuestionActivity extends AbstractPostingActivity {
 	
 	/**The currently selected difficulty (radio buttons)*/
-	Difficulty diff;
+	Difficulty difficulty;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
-		diff = Difficulty.EASY;
+		setBehindContentView(R.layout.activity_menu);
+		getActionBar().setHomeButtonEnabled(true);
+		buildSlideMenu();
+		
+		// VALIDATE
+		assert(MainActivity.initializedUser);
+		
+		
+		difficulty = Difficulty.EASY;
 		
 		// fill category spinner
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -53,7 +61,7 @@ public class PostQuestionActivity extends Activity {
 				this, android.R.layout.simple_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
-		EditText solutionText = (EditText) findViewById(R.id.edit_solution_q);
+		findViewById(R.id.edit_solution_q);
 		Spinner spinner = (Spinner) 
 				findViewById(R.id.category_spinner_question);
 
@@ -74,9 +82,9 @@ public class PostQuestionActivity extends Activity {
 	 */
 	public void sendQuestion(View v) {
 		// get all necessary fields
-		String category = ((Spinner) findViewById(
+		String categoryStr = ((Spinner) findViewById(
 				R.id.category_spinner_question)).getSelectedItem().toString();
-		Category c = Category.valueOf(category);
+		Category category = Category.valueOf(categoryStr);
 		String solutionText = ((EditText) findViewById(
 				R.id.edit_solution_q)).getText().toString();
 		String questionText = ((EditText) findViewById(
@@ -84,7 +92,7 @@ public class PostQuestionActivity extends Activity {
 		String titleText = ((EditText) findViewById(
 				R.id.edit_question_title)).getText().toString();
 		
-		// chack fields for correctness
+		// check fields for correctness
 		if (titleText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_title));
 		} else if (questionText.trim().equals("")){
@@ -94,22 +102,10 @@ public class PostQuestionActivity extends Activity {
 		} else {
 			// all fields are correct, try and send it!
 			Question q = new Question(questionText, 
-					titleText, Category.COMPSCI, diff);
-			QuestionService qs = QuestionService.getInstance();
+					titleText, category, difficulty);
 			Solution s = new Solution(q.getQuestionId(), solutionText);
-			try {
-				qs.postQuestion(q);
-				qs.postSolution(s);
-			} catch (NetworkException e) {
-				Log.w("Network error", e.getMessage());
-				displayMessage(-1, getString(R.string.retryDialog_title));
-			} catch (Exception e) {
-				Log.e("Internal Error", e.getMessage());
-				displayMessage(-1, getString(R.string.internalError_title));
-			}
-			displayMessage(1, getString(R.string.successDialog_title_q));
+			new PostQuestionsTask(this, q, s).execute();
 		}
-		
 	}
 	
 	/**
@@ -120,24 +116,29 @@ public class PostQuestionActivity extends Activity {
     * 		 be passed as one of the following:
     *              1 if the user is finished on this page
     *              0 if the solution was not valid upon trying to post
-    *              Any other number to indicate an error
+    *              -1 for network error
+    *              any other number for internal error
     *              
     * @param message The string to display to the user, 
-    * 				 telling them what was invalid          
+    * 				 telling them what was invalid.
+    * 				only needed when status == 0     
     */
-	private void displayMessage(int status, String message){
+	public void displayMessage(int status, String message){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
 		}else{
 			dialog.setContentView(R.layout.retrydialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text);
 		}
 
 		// set the custom dialog components - text, buttons
-		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
-			text.setText(message);
+			text.setText(getString(R.string.successDialog_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
@@ -164,7 +165,10 @@ public class PostQuestionActivity extends Activity {
 				}
 			});
 		}else{
-			text.setText(message);
+			if (status == -1)
+				text.setText(getString(R.string.retryDialog_title));
+			else
+				text.setText(getString(R.string.internalError_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.button_retry);
 			// if button is clicked, send the solution
@@ -190,14 +194,12 @@ public class PostQuestionActivity extends Activity {
 		}
 		dialog.show();
 	}
-	
 	/**
 	 * Manages the radio buttons 
 	 * 
 	 * @param v The radio button that was clicked
 	 */
 	public void updateRadio(View v){
-		RadioButton clicked = (RadioButton) v;
 		RadioButton easy = (RadioButton) findViewById(R.id.difficulty_easy);
 		RadioButton med = (RadioButton) findViewById(R.id.difficulty_medium);
 		RadioButton hard = (RadioButton) findViewById(R.id.difficulty_hard);
@@ -205,15 +207,15 @@ public class PostQuestionActivity extends Activity {
 		if (v.equals(easy)){
 			med.setChecked(false);
 			hard.setChecked(false);
-			diff = Difficulty.EASY;
+			difficulty = Difficulty.EASY;
 		} else if (v.equals(med)){
 			easy.setChecked(false);
 			hard.setChecked(false);
-			diff = Difficulty.MEDIUM;
+			difficulty = Difficulty.MEDIUM;
 		} else {
 			easy.setChecked(false);
 			med.setChecked(false);
-			diff = Difficulty.HARD;
+			difficulty = Difficulty.HARD;
 		}
 	}
 }

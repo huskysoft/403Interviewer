@@ -7,35 +7,43 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
-public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
+public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 
-	private QuestionService questionService;
 	private MainActivity context;
-	private List<Question> questionList;
 	private Difficulty diff;
+	private Category cat;
 	private Exception exception;
-
+	private int numQuestions;
+	private int questionOffset;
 
 	/**
 	 * 
 	 * @param context reference to MainActivity
 	 */
-	public FetchQuestionsTask(Activity context, Difficulty diff){
-		this.context = (MainActivity) context;
+	public FetchQuestionsTask(MainActivity context, 
+			Category cat,
+			Difficulty diff, 
+			int numQuestions,
+			int questionOffset) {
+		this.context = context;
 		this.diff = diff;
+		this.cat = cat;
+		this.numQuestions = numQuestions;
+		this.questionOffset = questionOffset;
 	}
 
 
@@ -44,12 +52,22 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 * questionList with Questions so that they may be displayed afterwards.
 	 */
 	@Override
-	protected Void doInBackground(Void... params) {
-		questionService = QuestionService.getInstance();
-
+	protected List<Question> doInBackground(Void... params) {
+		QuestionService questionService = QuestionService.getInstance();
+		List<Question> questionList = null;
+		
 		try {
+			// Create a List of the selected Category
+			List<Category> category = null;
+			if(cat != null){
+				category = new LinkedList<Category>();
+				category.add(cat);
+			}
+			
+			
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(null, diff, 20, 0, false);
+					questionService.getQuestions(category,
+							diff, numQuestions, questionOffset, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", e.getMessage());
@@ -58,7 +76,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 		}
 
 
-		return null;
+		return questionList;
 	}
 
 	@Override
@@ -74,9 +92,10 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, Void>{
 	 * the MainActivity question area.
 	 */
 	@Override
-	protected void onPostExecute(Void result){
-		context.setQuestions(questionList);
-		context.displayQuestions();
-		context.switchView();
+	protected void onPostExecute(List<Question> questionList){
+		context.appendQuestionsToView(questionList);
+		context.hideLoadingView1();
+		context.hideLoadingView2();
+		context.showMainView();
 	}
 }

@@ -18,11 +18,9 @@ import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 
-public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
+public class FetchSolutionsTask extends AsyncTask<Void, Void, List<Solution>>{
 
-	private QuestionService questionService;
 	private QuestionActivity context;
-	private List<Solution> solutionList;
 	private Question question;
 	private Exception exception;
 
@@ -41,9 +39,10 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	 * solutionList with Solutions so that they may be displayed afterwards.
 	 */
 	@Override
-	protected Void doInBackground(Void... params) {
-		questionService = QuestionService.getInstance();
-
+	protected List<Solution> doInBackground(Void... params) {
+		QuestionService questionService = QuestionService.getInstance();
+		List<Solution> solutionList = null;
+		
 		try {
 			PaginatedSolutions paginatedSolutions =
 					questionService.getSolutions(
@@ -56,7 +55,7 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 			this.cancel(true);
 		}
 
-		return null;
+		return solutionList;
 	}
 
 	/** 
@@ -75,7 +74,7 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, Void>{
 	 * the MainActivity question area.
 	 */
 	@Override
-	protected void onPostExecute(Void result){
+	protected void onPostExecute(List<Solution> solutionList){
 		context.addSolutions(solutionList);
 	}
 }

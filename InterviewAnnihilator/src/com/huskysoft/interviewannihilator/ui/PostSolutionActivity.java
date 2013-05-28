@@ -7,126 +7,73 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.model.Difficulty;
-import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
+import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
 
 import android.os.Bundle;
 import android.app.Dialog;
-import com.huskysoft.interviewannihilator.util.Utility;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 
-public class PostSolutionActivity extends SlidingActivity {
+public class PostSolutionActivity extends AbstractPostingActivity {
 	/** The question being answered **/
 	private Question question;
 	
-	/** Reference to activity used in click handler for slide-in menu */
-	private PostSolutionActivity context;
 	
 	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_solution);
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
-		
 		buildSlideMenu();
-		context = this;
-		
+
 		// Get intent
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				QuestionActivity.EXTRA_MESSAGE);
-		
+		this.setTitle(question.getTitle());
 		//setup question view
+		//build text
+		String questionBody = question.getText();
+		String questionDate = question.getDateCreated().toString();
+				
+		int pos = 0;
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		// body
+		sb.append(questionBody);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append('\n');
+		pos += questionBody.length() + 1;
+		// date
+		sb.append('\n');
+		sb.append(questionDate);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				
+		// done
 		TextView tv = (TextView) findViewById(R.id.question_view);
-		tv.setText(question.getText());
+		tv.setText(sb);
 	}
 	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	public void buildSlideMenu(){
-		SlidingMenu menu = getSlidingMenu();
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int) 
-				(width * SlideMenuInfoTransfer.SLIDE_MENU_WIDTH));
-		
-		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.difficulty, 
-				android.R.layout.simple_spinner_item);
-		
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
-		
-		// Handle onClick of Slide-Menu button
-		Button button = (Button) findViewById(R.id.slide_menu_button);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-				String diffStr = spinner.getSelectedItem().toString();
-				
-				toggle();
-				
-				Intent intent = new Intent(context, MainActivity.class);
-				if (diffStr == null || diffStr.isEmpty() ||
-					diffStr.equals(Utility.ALL)) {
-					SlideMenuInfoTransfer.diff = null;
-				} else {
-					SlideMenuInfoTransfer.diff = 
-							Difficulty.valueOf(diffStr.toUpperCase());
-				}
-				
-				startActivity(intent);
-			}
-		});
-		
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.post_solution, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	/** Called when the user clicks the post button */
 	public void sendSolution(View view) {
@@ -144,26 +91,11 @@ public class PostSolutionActivity extends SlidingActivity {
 		String message = editText.getText().toString();  
 		if (message.trim().equals("")){
 			// Fail due to bad solution
-			displayMessage(0, getString(R.string.badInputDialog_title));
+			displayMessage(0);
 			return;
 		}
 		Solution solution = new Solution(question.getQuestionId(), message);
-		QuestionService qs = QuestionService.getInstance();
-		try{
-			qs.postSolution(solution);
-		} catch (NetworkException e){
-			// Retry or cancel
-			// Complains that i need to log the error, 
-			// not sure how to do that
-			Log.w("Network Error", e.getMessage());
-			displayMessage(-1, getString(R.string.retryDialog_title));
-			return;
-		} catch (Exception e) {
-			Log.e("Internal Error", e.getMessage());
-			displayMessage(-2, getString(R.string.internalError_title));
-			return;
-		}
-		displayMessage(1, getString(R.string.successDialog_title));
+		new PostSolutionsTask(this, solution).execute();
 	}
 	
 	/**
@@ -174,24 +106,25 @@ public class PostSolutionActivity extends SlidingActivity {
     * 		 be passed as one of the following:
     *              1 if the user is finished on this page
     *              0 if the solution was not valid upon trying to post
-    *              Any other number to indicate an error
-    *              
-    * @param message The string to display to the user, 
-    * 				 telling them what was invalid          
+    *              -1 to indicate network error
+    *              Any other number to indicate an internal error
+    *                      
     */
-	private void displayMessage(int status, String message){
+	public void displayMessage(int status){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		TextView text;
 		if (status == 1 || status == 0){
 			dialog.setContentView(R.layout.alertdialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
 		}else{
 			dialog.setContentView(R.layout.retrydialogcustom);
+			text = (TextView) dialog.findViewById(R.id.dialog_text);
 		}
-
 		// set the custom dialog components - text, buttons
-		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		if (status == 1){
-			text.setText(message);
+			text.setText(getString(R.string.successDialog_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
@@ -205,7 +138,7 @@ public class PostSolutionActivity extends SlidingActivity {
 				}
 			});
 		}else if (status == 0){
-			text.setText(message);
+			text.setText(getString(R.string.badInputDialog_solution));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
 			// if button is clicked, close the custom dialog
@@ -218,7 +151,10 @@ public class PostSolutionActivity extends SlidingActivity {
 				}
 			});
 		}else{
-			text.setText(message);
+			if (status == -1)
+				text.setText(getString(R.string.retryDialog_title));
+			else
+				text.setText(getString(R.string.internalError_title));
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.button_retry);
 			// if button is clicked, send the solution
@@ -243,15 +179,5 @@ public class PostSolutionActivity extends SlidingActivity {
 			});
 		}
 		dialog.show();
-	}
-	
-	/**
-	 * Called when the user clicks on button to post a question
-	 * 
-	 * @param v The TextView that holds the selected question. 
-	 */
-	public void postQuestion(View v){
-		Intent intent = new Intent(this, PostQuestionActivity.class);
-		startActivity(intent);
 	}
 }
