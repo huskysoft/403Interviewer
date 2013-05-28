@@ -50,7 +50,6 @@ public class QuestionService {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		this.userInfo = Utility.createTestUserInfo();
 	}
 
 	/**
@@ -165,12 +164,19 @@ public class QuestionService {
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, IOException {
+		return getQuestions(
+				categories, difficulty, limit, offset, random, null);
+	}
+	
+	private PaginatedQuestions getQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset, boolean random,
+			Integer authorId) throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
 		}
 		String json = networkService.getQuestions(difficulty, categories,
-				limit, offset, random);
+				limit, offset, random, authorId);
 		PaginatedQuestions databaseQuestions;
 
 		// deserialize "flat parameters"
@@ -185,6 +191,20 @@ public class QuestionService {
 		databaseQuestions.setQuestions(questions);
 
 		return databaseQuestions;
+	}
+
+	public PaginatedQuestions getMyQuestions(List<Category> categories,
+			Difficulty difficulty, int limit, int offset, boolean random)
+			throws NetworkException, IOException {
+		requireUserInfo();
+		return getQuestions(categories, difficulty, limit, offset,
+				random, userInfo.getUserId());
+	}
+
+	public PaginatedQuestions getFavoriteQuestions(int limit, int offset) {
+		requireUserInfo();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -238,8 +258,13 @@ public class QuestionService {
 	 */
 	public boolean deleteQuestion(int questionId) throws NetworkException {
 		Utility.ensureNotNull(userInfo, "UserInfo");
-		return networkService.deleteQuestion(
+		boolean success = networkService.deleteQuestion(
 				questionId, userInfo.getUserEmail());
+		if (success) {
+			userInfo.clearFavoriteQuestion(questionId);
+			userInfo.novoteQuestion(questionId);
+		}
+		return success;
 	}
 
 	/**
@@ -389,17 +414,15 @@ public class QuestionService {
 		return false;
 	}
 
-	public PaginatedQuestions getFavorites(int limit, int offset) {
+	public void clearAllFavorites() {
+		userInfo.getFavoriteQuestions().clear();
+	}
+
+	private void requireUserInfo() {
 		if (userInfo == null) {
 			throw new IllegalStateException(
 					"UserInfo has not been initialized!");
 		}
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void clearAllFavorites() {
-		userInfo.getFavoriteQuestions().clear();
 	}
 
 	/**

@@ -24,12 +24,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.accounts.NetworkErrorException;
 
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.Utility;
 
 public class NetworkService {
@@ -42,6 +46,11 @@ public class NetworkService {
 
 	private NetworkService() {
 		httpClient = new DefaultHttpClient();
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(
+				httpParameters, NetworkConstants.CONN_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(
+				httpParameters, NetworkConstants.SOCK_TIMEOUT);
 	}
 
 	/**
@@ -63,7 +72,7 @@ public class NetworkService {
 	 */
 	public String getQuestions(Difficulty difficulty,
 			Collection<Category> categories, int limit, int offset,
-			boolean random) throws NetworkException {
+			boolean random, Integer authorId) throws NetworkException {
 		StringBuilder urlToSend = new StringBuilder(GET_QUESTIONS_URL + "?");
 		urlToSend.append(Utility.appendParameter
 				(PARAM_LIMIT, String.valueOf(limit)));
@@ -89,7 +98,12 @@ public class NetworkService {
 		if (random) {
 			urlToSend.append(Utility.appendParameter(PARAM_RANDOM, ""));
 		}
-
+		if (authorId != null) {
+			String str = Utility.appendParameter(
+					PARAM_AUTHORID, String.valueOf(authorId));
+			urlToSend.append(str);
+		}
+		
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));
 
