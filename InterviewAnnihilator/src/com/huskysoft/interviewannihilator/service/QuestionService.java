@@ -257,7 +257,7 @@ public class QuestionService {
 	 * @throws NetworkException 
 	 */
 	public boolean deleteQuestion(int questionId) throws NetworkException {
-		Utility.ensureNotNull(userInfo, "UserInfo");
+		requireUserInfo();
 		boolean success = networkService.deleteQuestion(
 				questionId, userInfo.getUserEmail());
 		if (success) {
@@ -278,7 +278,7 @@ public class QuestionService {
 	 */
 	public boolean upvoteQuestion(int questionId) throws NetworkException,
 			IOException {
-		return voteQuestion(questionId, UserInfo.UPVOTE.booleanValue());
+		return voteQuestion(questionId, UserInfo.UPVOTE);
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class QuestionService {
 	 */
 	public boolean downvoteQuestion(int questionId) throws NetworkException,
 			IOException {
-		return voteQuestion(questionId, UserInfo.DOWNVOTE.booleanValue());
+		return voteQuestion(questionId, UserInfo.DOWNVOTE);
 
 	}
 
@@ -405,7 +405,7 @@ public class QuestionService {
 	 */
 	public boolean deleteSolution(int solutionId) 
 			throws NetworkException {
-		Utility.ensureNotNull(userInfo, "UserInfo");
+		requireUserInfo();
 		return networkService.deleteSolution(solutionId,
 				userInfo.getUserEmail());
 	}
@@ -421,7 +421,7 @@ public class QuestionService {
 	 */
 	public boolean upvoteSolution(int solutionId) throws NetworkException,
 			IOException {
-		return voteSolution(solutionId, UserInfo.UPVOTE.booleanValue());
+		return voteSolution(solutionId, UserInfo.UPVOTE);
 	}
 
 	/**
@@ -435,7 +435,7 @@ public class QuestionService {
 	 */
 	public boolean downvoteSolution(int solutionId) throws NetworkException, 
 			IOException {
-		return voteSolution(solutionId, UserInfo.DOWNVOTE.booleanValue());
+		return voteSolution(solutionId, UserInfo.DOWNVOTE);
 	}
 	
 	/**

@@ -173,7 +173,7 @@ public class NetworkService {
 		String questionIdString = 
 				dispatchPostRequest(urlToSend.toString(), userEmail);
 		int questionIdDeleted = Integer.valueOf(questionIdString);
-		return questionIdDeleted > 0;
+		return questionIdDeleted >= 0;
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class NetworkService {
 		String solutionIdString = 
 				dispatchPostRequest(urlToSend.toString(), userEmail);
 		int solutionIdDeleted = Integer.valueOf(solutionIdString);
-		return solutionIdDeleted > 0;		
+		return solutionIdDeleted >= 0;		
 	}
 
 	/**
