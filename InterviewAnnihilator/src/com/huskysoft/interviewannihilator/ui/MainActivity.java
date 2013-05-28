@@ -66,6 +66,7 @@ public class MainActivity extends AbstractPostingActivity {
 		setBehindContentView(R.layout.activity_menu);
 		getActionBar().setHomeButtonEnabled(true);
 		
+		
 		if (!initializedUser && tryInitialize){
 			this.initializeUserInfo();
 		}
@@ -325,7 +326,8 @@ public class MainActivity extends AbstractPostingActivity {
 					String questionDate = question.getDateCreated().toString();
 					
 					// abbreviate
-					if (questionBody.length() > UIConstants.TEXT_PREVIEW_LENGTH){
+					if (questionBody.length() > 
+							UIConstants.TEXT_PREVIEW_LENGTH){
 						questionBody = questionBody.substring(
 								0, UIConstants.TEXT_PREVIEW_LENGTH);
 						questionBody += "...";
@@ -448,15 +450,5 @@ public class MainActivity extends AbstractPostingActivity {
 		startActivity(intent);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 }
 
