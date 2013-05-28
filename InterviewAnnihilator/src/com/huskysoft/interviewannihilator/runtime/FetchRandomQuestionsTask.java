@@ -7,7 +7,6 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,14 +15,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
-import com.huskysoft.interviewannihilator.model.Category;
-import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
+import com.huskysoft.interviewannihilator.util.UIConstants;
 
 public class FetchRandomQuestionsTask 
 	extends AsyncTask<Void, Void, List<Question>>{
@@ -48,10 +46,10 @@ public class FetchRandomQuestionsTask
 			
 			PaginatedQuestions currentQuestions =
 					questionService.getQuestions(null,
-							null, 11, 0, true);
+							null, UIConstants.DEFAULT_QUESTIONS_TO_LOAD, 0, true);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchRandomQuestionsTask", e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}

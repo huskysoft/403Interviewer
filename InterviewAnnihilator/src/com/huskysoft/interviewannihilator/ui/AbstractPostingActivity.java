@@ -154,7 +154,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			if(RandomQuestionCollection.getInstance().isEmpty()){
 				new FetchRandomQuestionsTask(this).execute();
 			}else{
-				System.out.println("Hello");
 				Question rand = 
 						RandomQuestionCollection.getInstance().getQuestion();
 				Intent intent = new Intent(this, QuestionActivity.class);

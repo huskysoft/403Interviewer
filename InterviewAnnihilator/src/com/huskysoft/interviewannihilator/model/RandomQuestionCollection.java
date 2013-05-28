@@ -10,19 +10,6 @@ package com.huskysoft.interviewannihilator.model;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import android.app.Activity;
-import android.app.Dialog;
-import android.view.View;
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
 
 public class RandomQuestionCollection {
 
@@ -55,6 +42,9 @@ public class RandomQuestionCollection {
 	}
 	
 	public Question getQuestion(){	
+		if(questionList.isEmpty()){
+			return null;
+		}
 		Question q = questionList.remove(0);
 		return q;
 	}
