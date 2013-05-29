@@ -60,13 +60,15 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:onClick="addCategory"
-	            android:text="@string/add_category"/>
+	            android:text="@string/add_category"
+	            android:textSize="13sp"/>
 	        <Button 
 	            android:id="@+id/remove_category_button" 
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:onClick="removeCategory"
 	            android:text="@string/remove_category"
+	            android:textSize="13sp"
 	            android:visibility="gone"/>
 	        
 	    </LinearLayout>
