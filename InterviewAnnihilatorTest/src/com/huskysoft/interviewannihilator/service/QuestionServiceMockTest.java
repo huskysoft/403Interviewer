@@ -1,33 +1,49 @@
+/**
+ * This is a class for testing QuestionService using EasyMock.
+ * 
+ * @author Kevin Loh, 5/28/2013
+ */
+
 package com.huskysoft.interviewannihilator.service;
 
-import java.io.IOException;
+import android.test.ActivityInstrumentationTestCase2;
+import com.huskysoft.interviewannihilator.ui.MainActivity;
+import com.huskysoft.interviewannihilator.service.QuestionService;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.jmock.integration.junit3.MockObjectTestCase;
-import org.jmock.Expectations;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
-import com.huskysoft.interviewannihilator.model.NetworkException;
-import com.huskysoft.interviewannihilator.model.Question;
-import com.huskysoft.interviewannihilator.util.TestHelpers;
-
-public class QuestionServiceMockTest extends MockObjectTestCase {
+public class QuestionServiceMockTest extends ActivityInstrumentationTestCase2<MainActivity> {
 	
-	public QuestionServiceMockTest(String name) {
-		super(name);
+	private QuestionService questionService;
+	private NetworkServiceInterface mock;
+
+	/**
+	 * Construct new test instance
+	 *
+	 * @param name the test name
+	 */
+	public QuestionServiceMockTest() {
+		super("com.huskysoft.interviewannihilator.ui", MainActivity.class);
+	}
+
+	/**
+	 * Perform pre-test initialization
+	 *
+	 * @throws Exception
+	 *
+	 * @see TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		questionService = QuestionService.getInstance();
+		mock = createNiceMock(NetworkServiceInterface.class);
 	}
 	
-	public void testOneNetworkServicePostQuestion() throws NetworkException,
-			JsonGenerationException, JsonMappingException, IOException {
-		final NetworkService networkService = mock(NetworkService.class);
-		Question question = TestHelpers.createDummyQuestion(0);
-		ObjectMapper mapper = new ObjectMapper();
-		final String questionStr = mapper.writeValueAsString(question);
-		checking(new Expectations() {
-			{
-				oneOf(networkService).postQuestion(questionStr);
-			}
-		});
+	public void test() {
+		assertTrue(true);
 	}
 }
