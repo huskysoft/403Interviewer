@@ -9,6 +9,15 @@ package com.huskysoft.interviewannihilator.util;
 
 public class UIConstants {
 	
+	/** Base number of rows in the Slide menu table */
+	public static final int BASE_NUM_MENU_ROWS = 3;
+	
+	/** Default padding for slide menu spinners */
+	public static final int SLIDE_MENU_PADDING = 5;
+	
+	/** Default size for slide menu text */
+	public static final int SLIDE_MENU_TEXT_SIZE = 20;
+	
 	/** Default number of Questions to fetch */
 	public static final int DEFAULT_QUESTIONS_TO_LOAD = 10;
 	

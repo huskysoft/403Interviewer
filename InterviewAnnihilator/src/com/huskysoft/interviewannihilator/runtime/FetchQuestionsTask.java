@@ -25,7 +25,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 
 	private MainActivity context;
 	private Difficulty diff;
-	private Category cat;
+	private List<Category> cat;
 	private Exception exception;
 	private int numQuestions;
 	private int questionOffset;
@@ -35,7 +35,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 * @param context reference to MainActivity
 	 */
 	public FetchQuestionsTask(MainActivity context, 
-			Category cat,
+			List<Category> cat,
 			Difficulty diff, 
 			int numQuestions,
 			int questionOffset) {
@@ -57,16 +57,13 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 		List<Question> questionList = null;
 		
 		try {
-			// Create a List of the selected Category
-			List<Category> category = null;
-			if(cat != null){
-				category = new LinkedList<Category>();
-				category.add(cat);
+			
+			if(cat.isEmpty()){
+				cat = null;
 			}
 			
-			
 			PaginatedQuestions currentQuestions =
-					questionService.getQuestions(category,
+					questionService.getQuestions(cat,
 							diff, numQuestions, questionOffset, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){

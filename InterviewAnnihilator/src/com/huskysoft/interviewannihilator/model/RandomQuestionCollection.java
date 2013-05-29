@@ -11,6 +11,7 @@ package com.huskysoft.interviewannihilator.model;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class RandomQuestionCollection {
 
 	

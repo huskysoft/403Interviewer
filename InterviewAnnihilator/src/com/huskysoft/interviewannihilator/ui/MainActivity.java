@@ -7,6 +7,7 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
@@ -25,7 +26,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -35,6 +35,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,56 +77,103 @@ public class MainActivity extends AbstractPostingActivity {
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
 		Difficulty diff = slideMenuInfo.getDiff();
-		Category cat = slideMenuInfo.getCat();
-		
-		
+		List<Category> cat = slideMenuInfo.getCat();
 		
 		buildSlideMenu();
 		
 		if(diff == null){
-			setSpinnerToSelectedValue("Difficulty", "");
+
+			setDifficultyToSelectedValue( "");
 		}else{
-			setSpinnerToSelectedValue("Difficulty", 
-				diff.toString().toUpperCase());
-		}
-		
-		if(cat == null){
-			setSpinnerToSelectedValue("Category", "");
-		}else{
-			setSpinnerToSelectedValue("Category", 
-				cat.toString().toUpperCase());
+			setDifficultyToSelectedValue(
+				diff.toString().toUpperCase());			
 		}
 
+		setCategorySpinners(cat);
+		
 		hideMainView();
 		showLoadingView1();
 		loadQuestions();
 	}
 	
 	/**
-	 * Function that will make set the currently selected spinner
+	 * Function that will make set the currently selected difficulty spinner
 	 * value to the passed in string. Used when the difficulty
 	 * menu is changed from a SolutionActivity or PostSolutionActivity.
 	 * 
 	 * @param value Selected Spinner value
 	 */
-	public void setSpinnerToSelectedValue(String type, String value){
-		Spinner spinner = null;
-		
-		if(type.equals("Difficulty")){
-			spinner = (Spinner) findViewById(R.id.diff_spinner);
-		} else{
-			spinner = (Spinner) findViewById(R.id.category_spinner);
-		}
+	public void setDifficultyToSelectedValue(String value){
+		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
 		
 		Adapter a = spinner.getAdapter();
 		for (int i = 0; i < a.getCount(); i++){
+
 			if (a.getItem(i).toString().toUpperCase().equals(value)){
+
 				spinner.setSelection(i);
 				return;
 			}
 		}
 	}
-
+	
+	/**
+	 * Sets the category spinners of the Slide In menu
+	 * to the passed list of values. Creates new 
+	 * sliders for extra categories.
+	 * @param cats
+	 */
+	@SuppressLint("NewApi")
+	public void setCategorySpinners(List<Category> cats){
+		for(int i = 0; i < cats.size(); i++){
+			String catStrUp = cats.get(i).toString().toUpperCase();
+			
+			if(i == 0){
+				Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
+				Adapter a = spinner.getAdapter();
+				for (int x = 0; x < a.getCount(); x++){
+					
+					String possible = a.getItem(x).toString().toUpperCase();
+					
+					System.out.println(possible + " "  + catStrUp);
+					
+					if (possible.equals(catStrUp)){
+						spinner.setSelection(x);
+					}
+				}
+			}else{// Add new Spinner with that selection
+				Spinner newSpin = newCategorySpinner(cats.get(i).toString());
+				TableLayout table = 
+					(TableLayout) findViewById(R.id.slide_table);
+				TableRow row = new TableRow(this);
+				
+				int pad = UIConstants.SLIDE_MENU_PADDING;
+				row.setPaddingRelative(pad, pad, pad, pad);
+				
+				TextView categoryText = new TextView(this);
+				
+				categoryText.setText("Category");
+				categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
+				
+				TableRow.LayoutParams params = new TableRow.LayoutParams(
+						TableRow.LayoutParams.FILL_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT);
+				
+				row.addView(categoryText, params);
+				
+				row.addView(newSpin);
+				
+				
+				table.addView(row, table.getChildCount() - 1);
+			}
+		}
+		if(cats.size() > 1){ // Add Remove button
+			Button removeButton = 
+				(Button) findViewById(R.id.remove_category_button);
+			removeButton.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	/**
 	 * Method that returns the Difficulty Enum that is 
 	 * currently selected in the Difficulty spinner input
@@ -140,83 +189,6 @@ public class MainActivity extends AbstractPostingActivity {
 			return null;
 		}
 		return Difficulty.valueOf(diff.toUpperCase());
-	}
-	
-	/**
-	 * Method that returns the Category Enum that is
-	 * currently selected in the Category spinner input
-	 * on the slide menu
-	 * 
-	 * @ return Category Enum
-	 */
-	public Category getCurrentCategorySetting(){
-		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-		String category = spinner.getSelectedItem().toString();
-		if(category.equals(UIConstants.ALL)){
-			return null;
-		}
-		
-		category = category.replaceAll("\\s", "");
-		return Category.valueOf(category.toUpperCase());
-	}
-	
-	/**
-	 * Helper method that builds the slide menu on the current activity.
-	 */
-	@Override
-	public void buildSlideMenu(){
-		SlidingMenu menu = getSlidingMenu();
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int)
-				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
-		
-		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.difficulty, 
-				android.R.layout.simple_spinner_item);
-		
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		// Apply the adapter to the spinner
-		diffSpinner.setAdapter(adapter);
-		
-		Spinner categorySpinner = 
-			(Spinner) findViewById(R.id.category_spinner);
-		ArrayAdapter<CharSequence> catAdapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.category, 
-				android.R.layout.simple_spinner_item);
-		
-		catAdapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		categorySpinner.setAdapter(catAdapter);
-	}
-	
-	/**
-	 * Click handler for the slide-in menu difficulty selection.
-	 * Will repopulate the list of questions with new questions
-	 * that have the selected difficulty.
-	 * 
-	 * @param v Button View
-	 */
-	public void adjustSettings(View v){
-		toggle();
-		
-		// Clear current Questions
-		ViewGroup questionView =
-				(ViewGroup) findViewById(R.id.question_layout);
-		questionView.removeAllViews();
-		questionOffset = 0;
-		
-		hideMainView();
-		showLoadingView1();
-		loadQuestions();
 	}
 	
 	/**
@@ -270,7 +242,7 @@ public class MainActivity extends AbstractPostingActivity {
 	public void loadQuestions(){
 		// Populate questions list. This makes a network call.
 		new FetchQuestionsTask(this,
-				getCurrentCategorySetting(),
+				getCurrentCategories(),
 				getCurrentDifficultySetting(),
 				UIConstants.DEFAULT_QUESTIONS_TO_LOAD,
 				questionOffset).execute();
