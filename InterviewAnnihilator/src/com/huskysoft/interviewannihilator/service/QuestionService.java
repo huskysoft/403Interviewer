@@ -42,7 +42,7 @@ public class QuestionService {
 	private static final String RESULTS_KEY = "results";
 	private static final String TAG = "QUESTION_SERVICE";
 	private static QuestionService instance;
-	private NetworkService networkService;
+	private NetworkServiceInterface networkService;
 	private ObjectMapper mapper;
 	private UserInfo userInfo;
 	private File baseDir;
@@ -527,7 +527,7 @@ public class QuestionService {
 	 * 
 	 * @param networkService
 	 */
-	protected void setNetworkService(NetworkService networkService) {
+	protected void setNetworkService(NetworkServiceInterface networkService) {
 		this.networkService = networkService;
 	}
 
