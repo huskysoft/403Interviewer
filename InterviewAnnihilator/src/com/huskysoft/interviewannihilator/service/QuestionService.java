@@ -45,8 +45,8 @@ public class QuestionService {
 	private UserInfo userInfo;
 	private File baseDir;
 
-	private QuestionService(NetworkServiceInterface networkService) {
-		this.networkService = networkService;
+	private QuestionService() {
+		this.networkService = NetworkService.getInstance();
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -55,10 +55,9 @@ public class QuestionService {
 	/**
 	 * Get the singleton QuestionService.
 	 */
-	public static QuestionService getInstance(
-			NetworkServiceInterface networkService) {
+	public static QuestionService getInstance() {
 		if (instance == null) {
-			instance = new QuestionService(networkService);
+			instance = new QuestionService();
 		}
 		return instance;
 	}
@@ -497,7 +496,7 @@ public class QuestionService {
 	 * 
 	 * @param networkService
 	 */
-	protected void setNetworkService(NetworkService networkService) {
+	protected void setNetworkService(NetworkServiceInterface networkService) {
 		this.networkService = networkService;
 	}
 
