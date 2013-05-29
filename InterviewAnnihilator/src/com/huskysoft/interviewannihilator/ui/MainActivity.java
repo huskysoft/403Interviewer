@@ -77,18 +77,20 @@ public class MainActivity extends AbstractPostingActivity {
 		Difficulty diff = slideMenuInfo.getDiff();
 		Category cat = slideMenuInfo.getCat();
 		
-		// Reset PassedDifficulty
-		slideMenuInfo.setDiff(null);
-		slideMenuInfo.setCat(null);
+		
 		
 		buildSlideMenu();
 		
 		if(diff == null){
 			setSpinnerToSelectedValue("Difficulty", "");
+		}else{
+			setSpinnerToSelectedValue("Difficulty", diff.toString().toUpperCase());
 		}
 		
 		if(cat == null){
 			setSpinnerToSelectedValue("Category", "");
+		}else{
+			setSpinnerToSelectedValue("Category", cat.toString().toUpperCase());
 		}
 
 		hideMainView();
@@ -114,7 +116,7 @@ public class MainActivity extends AbstractPostingActivity {
 		
 		Adapter a = spinner.getAdapter();
 		for (int i = 0; i < a.getCount(); i++){
-			if (a.getItem(i).toString().equals(value)){
+			if (a.getItem(i).toString().toUpperCase().equals(value)){
 				spinner.setSelection(i);
 				return;
 			}

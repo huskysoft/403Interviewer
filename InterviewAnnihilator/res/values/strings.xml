@@ -19,12 +19,12 @@
     
     <string-array name="category">
         <item>All</item>
-        <item>Comp Sci</item>
+        <item>CompSci</item>
         <item>Business</item>
         <item>Management</item>
         <item>Logic</item>
         <item>Estimation</item>
-        <item>Brain Teaser</item>
+        <item>BrainTeaser</item>
         <item>Game</item>
         <item>Math</item>
         <item>Science</item>
