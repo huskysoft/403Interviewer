@@ -8,6 +8,7 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
@@ -32,9 +33,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +63,130 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	}
 	
 	/////////////////////////sliding menu stuff/////////////////////////
+	
+	/**
+	 * Cycles through the current categories selected in the Slide
+	 * In Menu and places them in a list.
+	 * 
+	 * @return List of selected Categories
+	 */
+	public List<Category> getCurrentCategories(){
+		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
+		List<Category> categories = new LinkedList<Category>();
+		
+		for(int i = 1; i < table.getChildCount() - 1; i++){
+			TableRow row = (TableRow) table.getChildAt(i);
+			Spinner catSpinner = (Spinner) row.getChildAt(1);
+			
+			String categoryStr = 
+					catSpinner.getSelectedItem()
+					.toString().replaceAll("\\s", "");
+						
+			if (categoryStr == null || categoryStr.length() == 0 ||
+				categoryStr.equals(UIConstants.ALL)){
+				categories.clear();
+			} else{
+				categories.add(
+					Category.valueOf(categoryStr.toUpperCase()));
+			}
+		}
+		return categories;
+	}
+	
+	/**
+	 * Builds a new Spinner object for a new Category.
+	 * Sets the selected value to the passed in parameter.
+	 * 
+	 * Called by MainActivity
+	 * 
+	 * @param selected
+	 * @return Spinner object.
+	 */
+	public Spinner newCategorySpinner(String selected){
+		Spinner newCategory = new Spinner(this);
+		
+		ArrayAdapter<CharSequence> adapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.category, 
+				android.R.layout.simple_spinner_item);
+		
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		// Apply the adapter to the spinner
+		newCategory.setAdapter(adapter);
+		
+		if(!selected.equals("")){
+			Adapter a = newCategory.getAdapter();
+			for (int x = 0; x < a.getCount(); x++){
+				String possible = a.getItem(x).toString().toUpperCase();
+				if (possible.equals(selected.toUpperCase())){
+					newCategory.setSelection(x);
+				}
+			}
+		}
+		
+		return newCategory;
+	}
+	
+	/**
+	 * Add another category spinner in the slide menu
+	 */
+	@SuppressLint("NewApi")
+	public void addCategory(View v){
+		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
+		
+		if(table.getChildCount() < Category.values().length + 3){
+			TableRow row = new TableRow(this);
+			
+			int pad = UIConstants.SLIDE_MENU_PADDING;
+			row.setPaddingRelative(pad, pad, pad, pad);
+			
+			TextView categoryText = new TextView(this);
+			
+			categoryText.setText("Category");
+			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
+			
+			TableRow.LayoutParams params = new TableRow.LayoutParams(
+					TableRow.LayoutParams.FILL_PARENT,
+					TableRow.LayoutParams.WRAP_CONTENT);
+			
+			row.addView(categoryText, params);
+			
+			row.addView(newCategorySpinner(""), params);
+			
+			// Add new row before the buttons
+			table.addView(row, table.getChildCount() - 1);
+			
+			// Set Remove button visible
+			Button removeButton = 
+				(Button) findViewById(R.id.remove_category_button);
+			removeButton.setVisibility(View.VISIBLE);
+		}
+		
+	}
+	
+	/**
+	 * OnClick handler for the remove category button of the
+	 * slide menu.
+	 * 
+	 * @param v
+	 */
+	public void removeCategory(View v){
+		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
+		int baseRows = UIConstants.BASE_NUM_MENU_ROWS;
+		
+		if(table.getChildCount() > baseRows){
+			table.removeViewAt(table.getChildCount() - (baseRows - 1));
+		}
+		if(table.getChildCount() == baseRows){
+			Button removeButton = 
+				(Button) findViewById(R.id.remove_category_button);
+			removeButton.setVisibility(View.GONE);
+		}
+	}
+	
 	/**
 	 * Set up the Slide menu
 	 */
@@ -96,23 +224,17 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			
 			categorySpinner.setAdapter(catAdapter);
 			
-			
 		// Handle onClick of Slide-Menu button
 		Button button = (Button) findViewById(R.id.slide_menu_button);
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				slideMenuInfo.setCat(getCurrentCategories());
+				
 				Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
 				String diffStr = diffSpinner.getSelectedItem().toString();
 				
-				Spinner catSpinner = 
-						(Spinner) findViewById(R.id.category_spinner);
-				String categoryStr = 
-						catSpinner.getSelectedItem()
-						.toString().replaceAll("\\s", "");
-				toggle();
-				
-
 				if (diffStr == null || diffStr.length() == 0 ||
 					diffStr.equals(UIConstants.ALL)) {
 					slideMenuInfo.setDiff(null);
@@ -121,13 +243,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 							Difficulty.valueOf(diffStr.toUpperCase()));
 				}
 				
-				if (categoryStr == null || categoryStr.length() == 0 ||
-					categoryStr.equals(UIConstants.ALL)){
-					slideMenuInfo.setCat(null);
-				} else{
-					slideMenuInfo.setCat(
-							Category.valueOf(categoryStr.toUpperCase()));
-				}
+				toggle();
 				Intent intent = new Intent(getApplicationContext(), 
 						MainActivity.class);
 				startActivity(intent);
@@ -142,7 +258,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		getMenuInflater().inflate(R.menu.post_solution, menu);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
