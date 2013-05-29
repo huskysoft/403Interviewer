@@ -83,13 +83,15 @@ public class MainActivity extends AbstractPostingActivity {
 		
 		if(diff == null){
 
-			setDifficultyToSelectedValue( "");
+			setDifficultyToSelectedValue("");
 		}else{
 			setDifficultyToSelectedValue(
 				diff.toString().toUpperCase());			
 		}
-
-		setCategorySpinners(cat);
+		
+		if(!cat.isEmpty()){
+			setCategorySpinners(cat);
+		}
 		
 		hideMainView();
 		showLoadingView1();
@@ -125,47 +127,46 @@ public class MainActivity extends AbstractPostingActivity {
 	 */
 	@SuppressLint("NewApi")
 	public void setCategorySpinners(List<Category> cats){
-		for(int i = 0; i < cats.size(); i++){
-			String catStrUp = cats.get(i).toString().toUpperCase();
+		String catStrUp = cats.get(0).toString().toUpperCase();
+		
+		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
+		Adapter a = spinner.getAdapter();
+		for (int x = 0; x < a.getCount(); x++){
 			
-			if(i == 0){
-				Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-				Adapter a = spinner.getAdapter();
-				for (int x = 0; x < a.getCount(); x++){
-					
-					String possible = a.getItem(x).toString().toUpperCase();
-					
-					System.out.println(possible + " "  + catStrUp);
-					
-					if (possible.equals(catStrUp)){
-						spinner.setSelection(x);
-					}
-				}
-			}else{// Add new Spinner with that selection
-				Spinner newSpin = newCategorySpinner(cats.get(i).toString());
-				TableLayout table = 
-					(TableLayout) findViewById(R.id.slide_table);
-				TableRow row = new TableRow(this);
-				
-				int pad = UIConstants.SLIDE_MENU_PADDING;
-				row.setPaddingRelative(pad, pad, pad, pad);
-				
-				TextView categoryText = new TextView(this);
-				
-				categoryText.setText("Category");
-				categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
-				
-				TableRow.LayoutParams params = new TableRow.LayoutParams(
-						TableRow.LayoutParams.FILL_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT);
-				
-				row.addView(categoryText, params);
-				
-				row.addView(newSpin);
-				
-				
-				table.addView(row, table.getChildCount() - 1);
+			String possible = a.getItem(x).toString().toUpperCase();
+			
+			System.out.println(possible + " "  + catStrUp);
+			
+			if (possible.equals(catStrUp)){
+				spinner.setSelection(x);
 			}
+		}
+		
+		for(int i = 1; i < cats.size(); i++){
+			catStrUp = cats.get(i).toString().toUpperCase();
+			Spinner newSpin = newCategorySpinner(cats.get(i).toString());
+			TableLayout table = 
+				(TableLayout) findViewById(R.id.slide_table);
+			TableRow row = new TableRow(this);
+			
+			int pad = UIConstants.SLIDE_MENU_PADDING;
+			row.setPaddingRelative(pad, pad, pad, pad);
+			
+			TextView categoryText = new TextView(this);
+			
+			categoryText.setText("Category");
+			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
+			
+			TableRow.LayoutParams params = new TableRow.LayoutParams(
+					TableRow.LayoutParams.FILL_PARENT,
+					TableRow.LayoutParams.WRAP_CONTENT);
+			
+			row.addView(categoryText, params);
+			
+			row.addView(newSpin);
+			
+			
+			table.addView(row, table.getChildCount() - 1);
 		}
 		if(cats.size() > 1){ // Add Remove button
 			Button removeButton = 
