@@ -40,13 +40,13 @@ public class QuestionService {
 	private static final String RESULTS_KEY = "results";
 	private static final String TAG = "QUESTION_SERVICE";
 	private static QuestionService instance;
-	private NetworkService networkService;
+	private NetworkServiceInterface networkService;
 	private ObjectMapper mapper;
 	private UserInfo userInfo;
 	private File baseDir;
 
-	private QuestionService() {
-		this.networkService = NetworkService.getInstance();
+	private QuestionService(NetworkServiceInterface networkService) {
+		this.networkService = networkService;
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationConfig.
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -55,9 +55,10 @@ public class QuestionService {
 	/**
 	 * Get the singleton QuestionService.
 	 */
-	public static QuestionService getInstance() {
+	public static QuestionService getInstance(
+			NetworkServiceInterface networkService) {
 		if (instance == null) {
-			instance = new QuestionService();
+			instance = new QuestionService(networkService);
 		}
 		return instance;
 	}
