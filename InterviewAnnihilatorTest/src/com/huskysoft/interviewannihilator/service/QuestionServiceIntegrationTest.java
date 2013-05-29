@@ -9,7 +9,11 @@ package com.huskysoft.interviewannihilator.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -21,6 +25,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
+import com.huskysoft.interviewannihilator.util.DatabaseStub;
 import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 import com.huskysoft.interviewannihilator.util.PaginatedSolutions;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
@@ -94,7 +99,6 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		PaginatedQuestions questions = 
 				questionService.getMyQuestions(null, null, 10, 0, false);
 		assertNotNull(questions);
-		assertTrue(questions.getTotalNumberOfResults() > 0);
 		assertEquals(Math.min(10, questions.getTotalNumberOfResults()),
 				questions.getQuestions().size());
 		for (Question q : questions.getQuestions()) {
@@ -293,5 +297,243 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		assertEquals(42, results.get(0).getQuestionId());
 		assertEquals(43, results.get(1).getQuestionId());
 		assertEquals(44, results.get(2).getQuestionId());
+	}
+	
+	/**
+	 * Tests upvoting a question
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testUpVoteQuestion() throws NetworkException, IOException {
+		int qId = setUpQuestion();
+		boolean res = false;
+		try {
+			// upvote
+			res = questionService.upvoteQuestion(qId);
+		} finally {	
+			// delete question
+			questionService.deleteQuestion(qId);
+		}
+		
+		// assert that the upvoting worked
+		assertTrue(res);
+	}
+	
+	/**
+	 * Tests upvoting a question with an id that isn't in the database
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testUpVoteBadQuestion() throws NetworkException, IOException {
+		setUpInfo();
+		boolean res = questionService.upvoteQuestion(-1);
+		assertFalse(res);
+	}
+	
+	/**
+	 * Tests downvoting a question
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testDownVoteQuestion() throws NetworkException, IOException {
+		int qId = setUpQuestion();	
+		boolean res = false;		
+		try {
+			// upvote
+			res = questionService.downvoteQuestion(qId);
+		} finally {
+			// delete question
+			questionService.deleteQuestion(qId);
+		}
+		
+		// assert that the upvoting worked
+		assertTrue(res);		
+	}
+	
+	/**
+	 * Tests downvoting a question with a questionId not in the database
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */	
+	public void testDownVoteBadQuestion() throws NetworkException,
+			IOException {
+		setUpInfo();		
+		boolean res = questionService.downvoteQuestion(-1);
+		assertFalse(res);
+	}
+	
+	/**
+	 * Tests upvoting a solution
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testUpVoteSolution() throws NetworkException, IOException {
+		Solution sInit = setUpSolution();	
+		boolean res = false;	
+		try {
+			// upvote
+			res = questionService.upvoteSolution(sInit.getSolutionId());
+		} finally {
+			// delete
+			questionService.deleteSolution(sInit.getSolutionId());
+			questionService.deleteQuestion(sInit.getQuestionId());
+		}
+		
+		// assert that the upvoting worked
+		assertTrue(res);
+	}
+	
+	/**
+	 * Tests upvoting a solution with an id that isn't in the database
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testUpVoteBadSolution() throws NetworkException, IOException {
+		setUpInfo();	
+		boolean res = questionService.upvoteSolution(-1);
+		assertFalse(res);
+	}
+	
+	/**
+	 * Tests downvoting a solution
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testDownVoteSolution() throws NetworkException, IOException {
+		Solution sInit = setUpSolution();	
+		boolean res = false;
+		try {
+			// upvote
+			res = questionService.downvoteSolution
+					(sInit.getSolutionId());
+		} finally {	
+			// delete
+			questionService.deleteQuestion(sInit.getQuestionId());
+			questionService.deleteSolution(sInit.getSolutionId());
+		}
+		// assert that the upvoting worked
+		assertTrue(res);		
+	}
+	
+	/**
+	 * Tests downvoting a solution with a solutionId not in the database
+	 * 
+	 * @label Black-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */	
+	public void testDownVoteBadSolution() throws NetworkException,
+			IOException {
+		setUpInfo();
+		boolean res = questionService.downvoteSolution(-1);
+		assertFalse(res);
+	}
+	
+	/**
+	 * STUB TEST!!!!
+	 * 
+	 * Test the operation of the favorite questions code, but doesn't actually
+	 * connect to the database. Uses DatabaseStub instead.
+	 * 
+	 * @label White-box test
+	 */
+	public void testGetFavoriteQuestionsWithStub() {
+		// populate database stub
+		int totalSize = 10;
+		List<Integer> toFavorite = new ArrayList<Integer>();
+		toFavorite.add(3);
+		toFavorite.add(5);
+		List<Question> qList = new ArrayList<Question>();
+		for (int i = 0; i < totalSize; i++) {
+			Question newQ = TestHelpers.createDummyQuestion(i);
+			qList.add(newQ);
+		}
+		DatabaseStub stub = new DatabaseStub(qList, new ArrayList<Solution>());
+		
+		// initialize user info and favorite those questions
+		UserInfo testInfo = TestHelpers.createTestUserInfo();
+		testInfo.markFavoriteQuestion(3);
+		testInfo.markFavoriteQuestion(5);
+		
+		List<Question> results = stub.getFavoriteQuestions(testInfo);
+		assertEquals(2, results.size());
+		for (int x = 0; x < results.size(); x++) {
+			assertTrue(toFavorite.contains(results.get(x).getQuestionId()));
+		}
+	}
+	
+	/**
+	 * Tests getting favorite questions
+	 * 
+	 * @label White-box test
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public void testGetFavoriteQuestions() throws NetworkException,
+			IOException {
+		int numQuestions = 3;
+		// create a couple questions
+		Map<Integer, Date> questionIds = new LinkedHashMap<Integer, Date>();
+		for (int i = 0; i < numQuestions; i++) {
+			Question qInit = TestHelpers.createDummyQuestion(42);
+			int qId = questionService.postQuestion(qInit);
+			questionIds.put(qId, new Date(System.currentTimeMillis()));
+		}
+		List<Integer> qIds = new ArrayList<Integer>(questionIds.keySet());
+		List<Question> favorited = new ArrayList<Question>();
+		try {	
+			// initialize user info and favorite those questions
+			UserInfo testInfo = TestHelpers.createTestUserInfo();
+			testInfo.setFavoriteQuestions(questionIds);
+			questionService.setUserInfo(testInfo);
+			
+			// Get the favorited questions from DB, then delete the questions
+			favorited = questionService.getFavoriteQuestions(numQuestions, 0).
+					getQuestions();
+			} finally {
+			for (int y = 0; y < qIds.size(); y++) {
+				questionService.deleteQuestion(qIds.get(y));
+			}
+		}
+		
+		// make sure the favorited questions we get back are correct
+		assertEquals(numQuestions, favorited.size());
+		for (int x = 0; x < favorited.size(); x++) {
+			assertTrue(qIds.contains(favorited.get(x).getQuestionId()));
+		}
+	}
+	
+	private int setUpQuestion() throws NetworkException, IOException {
+		setUpInfo();
+		Question qInit = TestHelpers.createDummyQuestion(42);
+		int qId = questionService.postQuestion(qInit);
+		return qId;
+	}
+	
+	private Solution setUpSolution() throws NetworkException, IOException {
+		int qId = setUpQuestion();
+		Solution sInit = TestHelpers.createDummySolution(qId);
+		int sId = questionService.postSolution(sInit);
+		sInit.setSolutionId(sId);
+		sInit.setQuestionId(qId);
+		return sInit;
+	}
+	
+	private void setUpInfo() {
+		questionService.setUserInfo(TestHelpers.createTestUserInfo());
 	}
 }

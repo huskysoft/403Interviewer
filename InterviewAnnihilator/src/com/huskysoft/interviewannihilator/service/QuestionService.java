@@ -10,8 +10,10 @@ package com.huskysoft.interviewannihilator.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -117,8 +119,8 @@ public class QuestionService {
 	}
 
 	/**
-	 * Get a specific list of Questions from the remote server. NetworkException
-	 * if one or more QuestionID does not exist.
+	 * Get a specific list of Questions from the remote server.
+	 * NetworkException if one or more QuestionID does not exist.
 	 * 
 	 * @param questionIds
 	 * @return
@@ -193,6 +195,18 @@ public class QuestionService {
 		return databaseQuestions;
 	}
 
+	/**
+	 * Retrieves questions the user created
+	 * 
+	 * @param categories list of the categories to get
+	 * @param difficulty the difficulty of the questions to get
+	 * @param limit max number of questions
+	 * @param offset starting offset of questions
+	 * @param random whether the questions that are fetched should be random
+	 * @return questions that the user created
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
 	public PaginatedQuestions getMyQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, IOException {
@@ -201,10 +215,33 @@ public class QuestionService {
 				random, userInfo.getUserId());
 	}
 
-	public PaginatedQuestions getFavoriteQuestions(int limit, int offset) {
+	/**
+	 * Get questions the user has favorited
+	 * 
+	 * @param limit the max number of questions to get
+	 * @param offset the offset of the questions retrieved
+	 * @return the questions the user has favorited
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public PaginatedQuestions getFavoriteQuestions(int limit, int offset)
+			throws NetworkException, IOException {
+		if (limit < 0 || offset < 0) {
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
+		}
 		requireUserInfo();
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> favoriteList = new ArrayList<Integer>(
+				userInfo.getFavoriteQuestions().keySet());
+		List<Integer> favoritesToFetch = new ArrayList<Integer>();
+		int totalFavorited = favoriteList.size();
+		int toFetch = Math.min(limit, totalFavorited);
+		for (int i = offset; i < toFetch + offset; i++) {
+			favoritesToFetch.add(favoriteList.get(i));
+		}
+		List<Question> favoriteQs = getQuestionsById(favoritesToFetch);
+		return new PaginatedQuestions(favoriteQs, totalFavorited,
+				favoriteQs.size(), offset);
 	}
 
 	/**
@@ -274,10 +311,8 @@ public class QuestionService {
 	 * @param questionId the id to be voted on
 	 * @return bool indicating the success of the vote
 	 * @throws NetworkException
-	 * @throws IOException
 	 */
-	public boolean upvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean upvoteQuestion(int questionId) throws NetworkException {
 		return voteQuestion(questionId, UserInfo.UPVOTE);
 	}
 
@@ -288,10 +323,8 @@ public class QuestionService {
 	 * @param questionId the id of the question to be voted on
 	 * @return bool indicating the success of the vote
 	 * @throws NetworkException
-	 * @throws IOException
 	 */
-	public boolean downvoteQuestion(int questionId) throws NetworkException,
-			IOException {
+	public boolean downvoteQuestion(int questionId) throws NetworkException {
 		return voteQuestion(questionId, UserInfo.DOWNVOTE);
 
 	}
@@ -303,10 +336,9 @@ public class QuestionService {
 	 * @param upvote whether the question is getting upvoted
 	 * @return whether the vote succeeded
 	 * @throws NetworkException
-	 * @throws IOException
 	 */
 	private boolean voteQuestion(int questionId, boolean upvote)
-			throws NetworkException, IOException {
+			throws NetworkException {
 		requireUserInfo();
 		Boolean previousVote = userInfo.getQuestionVote(questionId);
 		// If they have already voted on the question, don't allow them
@@ -417,10 +449,8 @@ public class QuestionService {
 	 * @param solutionId the id of the solution to be voted on
 	 * @return bool indicating the result of the vote
 	 * @throws NetworkException
-	 * @throws IOException
 	 */
-	public boolean upvoteSolution(int solutionId) throws NetworkException,
-			IOException {
+	public boolean upvoteSolution(int solutionId) throws NetworkException {
 		return voteSolution(solutionId, UserInfo.UPVOTE);
 	}
 
@@ -431,10 +461,8 @@ public class QuestionService {
 	 * @param solutionId the id of the solution to be voted on
 	 * @return bool indicating the result of the vote
 	 * @throws NetworkException
-	 * @throws IOException
 	 */
-	public boolean downvoteSolution(int solutionId) throws NetworkException, 
-			IOException {
+	public boolean downvoteSolution(int solutionId) throws NetworkException {
 		return voteSolution(solutionId, UserInfo.DOWNVOTE);
 	}
 	
@@ -447,7 +475,7 @@ public class QuestionService {
 	 * @throws IOException
 	 */
 	private boolean voteSolution(int solutionId, boolean upvote) 
-			throws NetworkException, IOException {
+			throws NetworkException {
 		requireUserInfo();
 		Boolean previousVote = userInfo.getSolutionVote(solutionId);
 		// If they have already voted on the solution, don't allow them
@@ -463,6 +491,9 @@ public class QuestionService {
 		return false;		
 	}
 
+	/**
+	 * Clears the favorited questions for the user
+	 */
 	public void clearAllFavorites() {
 		userInfo.getFavoriteQuestions().clear();
 	}
