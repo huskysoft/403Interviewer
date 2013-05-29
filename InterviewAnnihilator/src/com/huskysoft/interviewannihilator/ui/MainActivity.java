@@ -84,13 +84,15 @@ public class MainActivity extends AbstractPostingActivity {
 		if(diff == null){
 			setSpinnerToSelectedValue("Difficulty", "");
 		}else{
-			setSpinnerToSelectedValue("Difficulty", diff.toString().toUpperCase());
+			setSpinnerToSelectedValue("Difficulty", 
+				diff.toString().toUpperCase());
 		}
 		
 		if(cat == null){
 			setSpinnerToSelectedValue("Category", "");
 		}else{
-			setSpinnerToSelectedValue("Category", cat.toString().toUpperCase());
+			setSpinnerToSelectedValue("Category", 
+				cat.toString().toUpperCase());
 		}
 
 		hideMainView();
