@@ -44,7 +44,7 @@ public class FetchQuestionsTaskTest extends TestCase {
 	 * @label Black-box testing
 	 * 
 	 */
-	public void testDifficulty(){
+	/*public void testDifficulty(){
 		//Test medium questions
 		FetchQuestionsTask task =
 				new FetchQuestionsTask(null,  
@@ -56,5 +56,5 @@ public class FetchQuestionsTaskTest extends TestCase {
 		for (Question q : questionList){
 			assertEquals(Difficulty.MEDIUM, q.getDifficulty());
 		}
-	}
+	}*/
 }

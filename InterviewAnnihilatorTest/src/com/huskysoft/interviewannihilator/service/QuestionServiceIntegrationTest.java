@@ -307,18 +307,16 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testUpVoteQuestion() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
-		// create
-		Question qInit = TestHelpers.createDummyQuestion(42);
-		int qId = questionService.postQuestion(qInit);
-		
-		// upvote
-		boolean res = questionService.upvoteQuestion(qId);
-		
-		// delete question
-		questionService.deleteQuestion(qId);
+		int qId = setUpQuestion();
+		boolean res = false;
+		try {
+			// upvote
+			res = questionService.upvoteQuestion(qId);
+		}
+		finally {	
+			// delete question
+			questionService.deleteQuestion(qId);
+		}
 		
 		// assert that the upvoting worked
 		assertTrue(res);
@@ -332,9 +330,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testUpVoteBadQuestion() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
+		setUpInfo();
 		boolean res = questionService.upvoteQuestion(-1);
 		assertFalse(res);
 	}
@@ -347,18 +343,16 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testDownVoteQuestion() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
-		// create
-		Question qInit = TestHelpers.createDummyQuestion(42);
-		int qId = questionService.postQuestion(qInit);
-		
-		// upvote
-		boolean res = questionService.downvoteQuestion(qId);
-		
-		// delete question
-		questionService.deleteQuestion(qId);
+		int qId = setUpQuestion();	
+		boolean res = false;		
+		try {
+			// upvote
+			res = questionService.downvoteQuestion(qId);
+		}
+		finally {
+			// delete question
+			questionService.deleteQuestion(qId);
+		}
 		
 		// assert that the upvoting worked
 		assertTrue(res);		
@@ -373,9 +367,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 */	
 	public void testDownVoteBadQuestion() throws NetworkException,
 			IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
+		setUpInfo();		
 		boolean res = questionService.downvoteQuestion(-1);
 		assertFalse(res);
 	}
@@ -388,21 +380,17 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testUpVoteSolution() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		// create question
-		Question qInit = TestHelpers.createDummyQuestion(42);
-		int qId = questionService.postQuestion(qInit);
-		// create solution
-		Solution sInit = TestHelpers.createDummySolution(qId);
-		int sId = questionService.postSolution(sInit);
-		
-		// upvote
-		boolean res = questionService.upvoteSolution(sId);
-		
-		// delete
-		questionService.deleteQuestion(qId);
-		questionService.deleteSolution(sId);
+		Solution sInit = setUpSolution();	
+		boolean res = false;	
+		try {
+			// upvote
+			res = questionService.upvoteSolution(sInit.getSolutionId());
+		}
+		finally {
+			// delete
+			questionService.deleteSolution(sInit.getSolutionId());
+			questionService.deleteQuestion(sInit.getQuestionId());
+		}
 		
 		// assert that the upvoting worked
 		assertTrue(res);
@@ -416,9 +404,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testUpVoteBadSolution() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
+		setUpInfo();	
 		boolean res = questionService.upvoteSolution(-1);
 		assertFalse(res);
 	}
@@ -431,22 +417,18 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testDownVoteSolution() throws NetworkException, IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		// create question
-		Question qInit = TestHelpers.createDummyQuestion(42);
-		int qId = questionService.postQuestion(qInit);
-		// create solution
-		Solution sInit = TestHelpers.createDummySolution(qId);
-		int sId = questionService.postSolution(sInit);
-		
-		// upvote
-		boolean res = questionService.downvoteSolution(sId);
-		
-		// delete
-		questionService.deleteQuestion(qId);
-		questionService.deleteSolution(sId);
-		
+		Solution sInit = setUpSolution();	
+		boolean res = false;
+		try {
+			// upvote
+			res = questionService.downvoteSolution
+					(sInit.getSolutionId());
+		}
+		finally {	
+			// delete
+			questionService.deleteQuestion(sInit.getQuestionId());
+			questionService.deleteSolution(sInit.getSolutionId());
+		}
 		// assert that the upvoting worked
 		assertTrue(res);		
 	}
@@ -460,9 +442,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 	 */	
 	public void testDownVoteBadSolution() throws NetworkException,
 			IOException {
-		// set up
-		questionService.setUserInfo(TestHelpers.createTestUserInfo());
-		
+		setUpInfo();
 		boolean res = questionService.downvoteSolution(-1);
 		assertFalse(res);
 	}
@@ -518,16 +498,20 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			questionIds.put(qId, new Date(System.currentTimeMillis()));
 		}
 		List<Integer> qIds = new ArrayList<Integer>(questionIds.keySet());
-		
-		// initialize user info and favorite those questions
-		UserInfo testInfo = TestHelpers.createTestUserInfo();
-		testInfo.setFavoriteQuestions(questionIds);
-		questionService.setUserInfo(testInfo);
-		
-		// Get the favorited questions from DB, then delete the questions
-		List<Question> favorited = questionService.getFavoriteQuestions();
-		for (int y = 0; y < qIds.size(); y++) {
-			questionService.deleteQuestion(qIds.get(y));
+		List<Question> favorited = new ArrayList<Question>();
+		try {	
+			// initialize user info and favorite those questions
+			UserInfo testInfo = TestHelpers.createTestUserInfo();
+			testInfo.setFavoriteQuestions(questionIds);
+			questionService.setUserInfo(testInfo);
+			
+			// Get the favorited questions from DB, then delete the questions
+			favorited = questionService.getFavoriteQuestions();
+			}
+		finally {
+			for (int y = 0; y < qIds.size(); y++) {
+				questionService.deleteQuestion(qIds.get(y));
+			}
 		}
 		
 		// make sure the favorited questions we get back are correct
@@ -535,5 +519,25 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		for (int x = 0; x < favorited.size(); x++) {
 			assertTrue(qIds.contains(favorited.get(x).getQuestionId()));
 		}
+	}
+	
+	private int setUpQuestion() throws NetworkException, IOException {
+		setUpInfo();
+		Question qInit = TestHelpers.createDummyQuestion(42);
+		int qId = questionService.postQuestion(qInit);
+		return qId;
+	}
+	
+	private Solution setUpSolution() throws NetworkException, IOException {
+		int qId = setUpQuestion();
+		Solution sInit = TestHelpers.createDummySolution(qId);
+		int sId = questionService.postSolution(sInit);
+		sInit.setSolutionId(sId);
+		sInit.setQuestionId(qId);
+		return sInit;
+	}
+	
+	private void setUpInfo() {
+		questionService.setUserInfo(TestHelpers.createTestUserInfo());
 	}
 }
