@@ -218,17 +218,30 @@ public class QuestionService {
 	/**
 	 * Get questions the user has favorited
 	 * 
+	 * @param limit the max number of questions to get
+	 * @param offset the offset of the questions retrieved
 	 * @return the questions the user has favorited
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	public List<Question> getFavoriteQuestions()
+	public PaginatedQuestions getFavoriteQuestions(int limit, int offset)
 			throws NetworkException, IOException {
+		if (limit < 0 || offset < 0) {
+			throw new IllegalArgumentException(
+					"Invalid limit or offset parameter");
+		}
 		requireUserInfo();
 		List<Integer> favoriteList = new ArrayList<Integer>(
 				userInfo.getFavoriteQuestions().keySet());
-		List<Question> favoriteQs = getQuestionsById(favoriteList);
-		return favoriteQs;
+		List<Integer> favoritesToFetch = new ArrayList<Integer>();
+		int totalFavorited = favoriteList.size();
+		int toFetch = Math.min(limit, totalFavorited);
+		for (int i = offset; i < toFetch + offset; i++) {
+			favoritesToFetch.add(favoriteList.get(i));
+		}
+		List<Question> favoriteQs = getQuestionsById(favoritesToFetch);
+		return new PaginatedQuestions(favoriteQs, totalFavorited,
+				favoriteQs.size(), offset);
 	}
 
 	/**

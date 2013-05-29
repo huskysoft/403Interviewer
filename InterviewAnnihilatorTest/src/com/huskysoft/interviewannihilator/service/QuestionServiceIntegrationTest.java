@@ -312,8 +312,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		try {
 			// upvote
 			res = questionService.upvoteQuestion(qId);
-		}
-		finally {	
+		} finally {	
 			// delete question
 			questionService.deleteQuestion(qId);
 		}
@@ -348,8 +347,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		try {
 			// upvote
 			res = questionService.downvoteQuestion(qId);
-		}
-		finally {
+		} finally {
 			// delete question
 			questionService.deleteQuestion(qId);
 		}
@@ -385,8 +383,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		try {
 			// upvote
 			res = questionService.upvoteSolution(sInit.getSolutionId());
-		}
-		finally {
+		} finally {
 			// delete
 			questionService.deleteSolution(sInit.getSolutionId());
 			questionService.deleteQuestion(sInit.getQuestionId());
@@ -423,8 +420,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			// upvote
 			res = questionService.downvoteSolution
 					(sInit.getSolutionId());
-		}
-		finally {	
+		} finally {	
 			// delete
 			questionService.deleteQuestion(sInit.getQuestionId());
 			questionService.deleteSolution(sInit.getSolutionId());
@@ -506,9 +502,9 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			questionService.setUserInfo(testInfo);
 			
 			// Get the favorited questions from DB, then delete the questions
-			favorited = questionService.getFavoriteQuestions();
-			}
-		finally {
+			favorited = questionService.getFavoriteQuestions(numQuestions, 0).
+					getQuestions();
+			} finally {
 			for (int y = 0; y < qIds.size(); y++) {
 				questionService.deleteQuestion(qIds.get(y));
 			}
