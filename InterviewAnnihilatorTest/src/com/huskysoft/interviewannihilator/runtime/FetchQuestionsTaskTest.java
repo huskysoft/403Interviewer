@@ -6,6 +6,7 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.model.Category;
@@ -44,8 +45,10 @@ public class FetchQuestionsTaskTest extends TestCase {
 	 */
 	public void testDifficulty(){
 		//Test easy questions
+		List<Category> easyCat = new LinkedList<Category>();
+		easyCat.add(Category.COMPSCI);
 		FetchQuestionsTask task =
-				new FetchQuestionsTask(null,  Category.COMPSCI, Difficulty.MEDIUM, 1, 0);
+				new FetchQuestionsTask(null,  easyCat, Difficulty.MEDIUM, 1, 0);
 		List<Question> questionList = task.doInBackground();
 		
 		assertNotNull(questionList);

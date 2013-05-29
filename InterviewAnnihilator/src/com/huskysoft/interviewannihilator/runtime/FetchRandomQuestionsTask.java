@@ -46,7 +46,8 @@ public class FetchRandomQuestionsTask
 			
 			PaginatedQuestions currentQuestions =
 					questionService.getQuestions(null,
-							null, UIConstants.DEFAULT_QUESTIONS_TO_LOAD, 0, true);
+					null, UIConstants.DEFAULT_QUESTIONS_TO_LOAD,
+					0, true);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchRandomQuestionsTask", e.getMessage());
