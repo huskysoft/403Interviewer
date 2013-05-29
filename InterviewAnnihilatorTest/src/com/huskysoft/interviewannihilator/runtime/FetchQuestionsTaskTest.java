@@ -34,23 +34,26 @@ public class FetchQuestionsTaskTest extends TestCase {
 		assertNotNull(questionList);
 		
 		// Might fail if there are not enough questions in the database
-		assertEquals(UIConstants.DEFAULT_QUESTIONS_TO_LOAD, questionList.size());
+		assertEquals(UIConstants.DEFAULT_QUESTIONS_TO_LOAD,
+				questionList.size());
 	}
-	
+
 	/**
 	 * Tests that questions have the correct difficulty
 	 * 
 	 * @label Black-box testing
+	 * 
 	 */
 	public void testDifficulty(){
-		//Test easy questions
+		//Test medium questions
 		FetchQuestionsTask task =
-				new FetchQuestionsTask(null,  Category.COMPSCI, Difficulty.MEDIUM, 1, 0);
+				new FetchQuestionsTask(null,  
+						Category.COMPSCI, Difficulty.MEDIUM, 1, 0);
 		List<Question> questionList = task.doInBackground();
 		
 		assertNotNull(questionList);
 		
-		for(Question q : questionList){
+		for (Question q : questionList){
 			assertEquals(Difficulty.MEDIUM, q.getDifficulty());
 		}
 	}

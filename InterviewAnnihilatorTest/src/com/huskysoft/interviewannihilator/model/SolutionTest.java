@@ -29,9 +29,9 @@ public class SolutionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testSolutionConstructor() {
-		String SolutionText = "text";
-		Solution testS = new Solution(0, SolutionText);
-		assertEquals(SolutionText, testS.getText());
+		String solutionText = "text";
+		Solution testS = new Solution(0, solutionText);
+		assertEquals(solutionText, testS.getText());
 		assertEquals(0, testS.getQuestionId());
 	}
 	
@@ -87,15 +87,15 @@ public class SolutionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testSolutionEquals() {
-		Solution s1 = TestHelpers.createDummySolution(0);
-		Solution s2 = TestHelpers.createDummySolution(0);
+		Solution sOne = TestHelpers.createDummySolution(0);
+		Solution sTwo = TestHelpers.createDummySolution(0);
 		// ensure dates are the same
-		s1.setDateCreated(new Date(1));
-		s2.setDateCreated(new Date(1));
+		sOne.setDateCreated(new Date(1));
+		sTwo.setDateCreated(new Date(1));
 		// Note we assert true that they are equal to ensure that
 		// the Solution equals() method is called, not Object equals()
 		// or ==
-		assertTrue(s1.equals(s2));
+		assertTrue(sOne.equals(sTwo));
 	}
 	
 	/**
@@ -105,13 +105,13 @@ public class SolutionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testSolutionNotEquals() {
-		Solution s1 = TestHelpers.createDummySolution(0);
-		Solution s2 = TestHelpers.createDummySolution(0);
+		Solution sOne = TestHelpers.createDummySolution(0);
+		Solution sTwo = TestHelpers.createDummySolution(0);
 		// ensure dates are the same
-		s1.setDateCreated(new Date(1));
-		s2.setDateCreated(new Date(1));
-		s1.setText("different text");
-		assertFalse(s1.equals(s2));
+		sOne.setDateCreated(new Date(1));
+		sTwo.setDateCreated(new Date(1));
+		sOne.setText("different text");
+		assertFalse(sOne.equals(sTwo));
 	}
 	
 	/**
@@ -120,12 +120,12 @@ public class SolutionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testSolutionHashCode() {
-		Solution s1 = TestHelpers.createDummySolution(0);
-		Solution s2 = TestHelpers.createDummySolution(0);
+		Solution sOne = TestHelpers.createDummySolution(0);
+		Solution sTwo = TestHelpers.createDummySolution(0);
 		// ensure dates are the same
-		s1.setDateCreated(new Date(1));
-		s2.setDateCreated(new Date(1));
-		assertEquals(s1.hashCode(), s2.hashCode());
+		sOne.setDateCreated(new Date(1));
+		sTwo.setDateCreated(new Date(1));
+		assertEquals(sOne.hashCode(), sTwo.hashCode());
 	}
 	
 	/**
@@ -134,13 +134,13 @@ public class SolutionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testNotHashCode() {
-		Solution s1 = TestHelpers.createDummySolution(0);
-		Solution s2 = TestHelpers.createDummySolution(0);
+		Solution sOne = TestHelpers.createDummySolution(0);
+		Solution sTwo = TestHelpers.createDummySolution(0);
 		// ensure dates are the same
-		s1.setDateCreated(new Date(1));
-		s2.setDateCreated(new Date(1));
-		s1.setText("different text");
-		assertFalse(s1.hashCode() == s2.hashCode());
+		sOne.setDateCreated(new Date(1));
+		sTwo.setDateCreated(new Date(1));
+		sOne.setText("different text");
+		assertFalse(sOne.hashCode() == sTwo.hashCode());
 	}
 	
 	/**
