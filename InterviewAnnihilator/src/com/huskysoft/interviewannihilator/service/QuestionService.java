@@ -286,6 +286,49 @@ public class QuestionService {
 	}
 
 	/**
+	 * Posts a question to the server. Same as postQuestion, but doesn't
+	 * populate authorId and date fields.
+	 * 
+	 * @param toPost
+	 *            the Question object that represents the question
+	 * @return the id of the question being posted
+	 * @throws NetworkException
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws IllegalArgumentException if toPost is null or its fields are set
+	 * incorrectly
+	 */
+	public int postQuestionMock(Question toPost) throws NetworkException,
+			IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Question: null");
+		}
+		if (toPost.getText() == null || toPost.getTitle() == null) {
+			throw new IllegalArgumentException("Null text/title in question");
+		}
+		if (toPost.getText().isEmpty() || toPost.getTitle().isEmpty()) {
+			throw new IllegalArgumentException("Empty text/title in question");
+		}
+		if (toPost.getCategory() == null) {
+			throw new IllegalArgumentException("Null category in question");
+		}
+		if (toPost.getDifficulty() == null) {
+			throw new IllegalArgumentException("Null difficulty in question");
+		}
+
+		// Post the question and return result
+		String questionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postQuestion(questionStr);
+		if (result != null) {
+			return Integer.parseInt(result);
+		}
+		else {
+			return 0;
+		}
+	}
+	
+	/**
 	 * Delete a Question. The user must be the author of the Question. Returns
 	 * true on success.
 	 * 

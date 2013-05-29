@@ -57,6 +57,15 @@ public class QuestionServiceMockTest extends
 		questionService.setUserInfo(userInfo);
 	}
 
+	/**
+	 * MOCK TEST!!!! This is our mock test, to ensure the correct methods
+	 * of networkService are getting called when a question is posted
+	 * 
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
 	public void testPostQuestion() throws JsonGenerationException,
 			JsonMappingException, IOException, NetworkException {
 		// Create the question and its json string
@@ -69,8 +78,8 @@ public class QuestionServiceMockTest extends
 		replay(mockNetworkService);
 		questionService.setNetworkService(mockNetworkService);
 		
-		int result = questionService.postQuestion(question);
-		assertEquals(result, 0);
+		int result = questionService.postQuestionMock(question);
+		assertEquals(0, result);
 		
 		verify(mockNetworkService);
 	}
