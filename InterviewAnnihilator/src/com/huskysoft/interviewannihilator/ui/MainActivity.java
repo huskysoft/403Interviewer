@@ -7,7 +7,6 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
@@ -69,7 +68,7 @@ public class MainActivity extends AbstractPostingActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		
 		
-		if (!initializedUser && tryInitialize){
+		if (!isInitializedUser() && isTryInitialize()){
 			this.initializeUserInfo();
 		}
 		
@@ -94,7 +93,7 @@ public class MainActivity extends AbstractPostingActivity {
 		}
 		
 		hideMainView();
-		showLoadingView1();
+		showLoadingViewOne();
 		loadQuestions();
 	}
 	
@@ -193,9 +192,89 @@ public class MainActivity extends AbstractPostingActivity {
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * Method that returns the Category Enum that is
+	 * currently selected in the Category spinner input
+	 * on the slide menu
+	 * 
+	 * @ return Category Enum
+	 */
+	public Category getCurrentCategorySetting(){
+		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
+		String category = spinner.getSelectedItem().toString();
+		if(category.equals(UIConstants.ALL)){
+			return null;
+		}
+		
+		category = category.replaceAll("\\s", "");
+		return Category.valueOf(category.toUpperCase());
+	}
+	
+	/**
+	 * Helper method that builds the slide menu on the current activity.
+	 */
+	@Override
+	public void buildSlideMenu(){
+		SlidingMenu menu = getSlidingMenu();
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int width = (int) ((double) metrics.widthPixels);
+		menu.setBehindOffset((int)
+				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
+		
+		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
+		ArrayAdapter<CharSequence> adapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.difficulty, 
+				android.R.layout.simple_spinner_item);
+		
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		// Apply the adapter to the spinner
+		diffSpinner.setAdapter(adapter);
+		
+		Spinner categorySpinner = 
+			(Spinner) findViewById(R.id.category_spinner);
+		ArrayAdapter<CharSequence> catAdapter = 
+				ArrayAdapter.createFromResource(this,
+				R.array.category, 
+				android.R.layout.simple_spinner_item);
+		
+		catAdapter.setDropDownViewResource(
+				android.R.layout.simple_spinner_dropdown_item);
+		
+		categorySpinner.setAdapter(catAdapter);
+	}
+	
+	/**
+	 * Click handler for the slide-in menu difficulty selection.
+	 * Will repopulate the list of questions with new questions
+	 * that have the selected difficulty.
+	 * 
+	 * @param v Button View
+	 */
+	public void adjustSettings(View v){
+		toggle();
+		
+		// Clear current Questions
+		ViewGroup questionView =
+				(ViewGroup) findViewById(R.id.question_layout);
+		questionView.removeAllViews();
+		questionOffset = 0;
+		
+		hideMainView();
+		showLoadingViewOne();
+		loadQuestions();
+	}
+	
+	/**
+>>>>>>> cleaned up FindBugs and CodePro issues
 	 * Shows loading text
 	 */
-	public void showLoadingView1(){
+	public void showLoadingViewOne(){
 		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.VISIBLE);
 	}
@@ -203,7 +282,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Hides loading text
 	 */
-	public void hideLoadingView1(){
+	public void hideLoadingViewOne(){
 		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.GONE);
 	}
@@ -211,7 +290,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Shows loading text
 	 */
-	public void showLoadingView2(){
+	public void showLoadingViewTwo(){
 		View loadingText = findViewById(R.id.layout_loading_more);
 		loadingText.setVisibility(View.VISIBLE);
 	}
@@ -219,7 +298,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Hides loading text
 	 */
-	public void hideLoadingView2(){
+	public void hideLoadingViewTwo(){
 		View loadingText = findViewById(R.id.layout_loading_more);
 		loadingText.setVisibility(View.GONE);
 	}
@@ -255,7 +334,7 @@ public class MainActivity extends AbstractPostingActivity {
 	 * @param v button being pressed
 	 */
 	public void loadMoreQuestions(View v){
-		showLoadingView2();
+		showLoadingViewTwo();
 		loadQuestions();
 	}
 	

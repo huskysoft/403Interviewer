@@ -26,7 +26,6 @@ import com.huskysoft.interviewannihilator.util.UIConstants;
 public class FetchRandomQuestionsTask 
 	extends AsyncTask<Void, Void, List<Question>>{
 
-	private Exception exception;
 	private Activity context;
 	
 	public FetchRandomQuestionsTask(Activity context){
@@ -51,7 +50,6 @@ public class FetchRandomQuestionsTask
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
 			Log.e("FetchRandomQuestionsTask", e.getMessage());
-			exception = e;
 			this.cancel(true);
 		}
 

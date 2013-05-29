@@ -10,7 +10,6 @@ package com.huskysoft.interviewannihilator.ui;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
@@ -23,7 +22,6 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,11 +43,27 @@ import android.widget.Toast;
 public abstract class AbstractPostingActivity extends SlidingActivity{
 		
 	/** Do we have to initialize this user? **/
-	protected static boolean initializedUser = false;
+	private static boolean initializedUser = false;
 	
 	/** Do we have to initialize this user? **/
-	protected static boolean tryInitialize = true;
+	private static boolean tryInitialize = true;
 	
+	public static boolean isInitializedUser() {
+		return initializedUser;
+	}
+
+	public static void setInitializedUser(boolean initializedUser) {
+		AbstractPostingActivity.initializedUser = initializedUser;
+	}
+
+	public static boolean isTryInitialize() {
+		return tryInitialize;
+	}
+
+	public static void setTryInitialize(boolean tryInitialize) {
+		AbstractPostingActivity.tryInitialize = tryInitialize;
+	}
+
 	/** Shared SlideMenuInfo object */
 	protected SlideMenuInfo slideMenuInfo;
 	
@@ -261,24 +275,30 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean ret;
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-			
-		case R.id.random_question:
-			if(RandomQuestionCollection.getInstance().isEmpty()){
-				new FetchRandomQuestionsTask(this).execute();
-			}else{
-				Question rand = 
-						RandomQuestionCollection.getInstance().getQuestion();
-				Intent intent = new Intent(this, QuestionActivity.class);
-				intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
-				startActivity(intent);
-			}
-		default:
-			return super.onOptionsItemSelected(item);
+			case android.R.id.home:
+				toggle();
+				ret = true;
+				break;
+				
+			case R.id.random_question:
+				if(RandomQuestionCollection.getInstance().isEmpty()){
+					new FetchRandomQuestionsTask(this).execute();
+				} else {
+					Question rand = RandomQuestionCollection.
+							getInstance().getQuestion();
+					Intent intent = new Intent(this, QuestionActivity.class);
+					intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
+					startActivity(intent);
+				}
+				ret = true;
+				break;
+				
+			default:
+				ret = super.onOptionsItemSelected(item);
 		}
+		return ret;
 	}
 	
 	/**
@@ -286,8 +306,8 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 * @param v The TextView that holds the selected question. 
 	 */
-	public void postQuestion(View v){
-		if (initializedUser){
+	public void postQuestion(View v) {
+		if (initializedUser) {
 			Intent intent = new Intent(this, PostQuestionActivity.class);
 			startActivity(intent);
 		} else {
@@ -299,7 +319,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	/**
 	 * Displays a message explaining why a user can't post something
 	 */
-	public void onValidationIssue(){
+	public void onValidationIssue() {
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.alertdialogcustom);
@@ -336,7 +356,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 */
 	public void userInfoSuccessFunction(){
-		initializedUser = true;
+		setInitializedUser(true);
 	}
 	
 	/**
@@ -344,7 +364,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * and asks them if they want to retry
 	 */
 	public void onInitializeError(){
-		initializedUser = false;
+		setInitializedUser(false);
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.retrydialogcustom);
