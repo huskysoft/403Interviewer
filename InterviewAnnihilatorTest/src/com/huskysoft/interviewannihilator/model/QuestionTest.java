@@ -95,12 +95,12 @@ public class QuestionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testQuestionEquals() {
-		Question q1 = TestHelpers.createDummyQuestion(0);
-		Question q2 = TestHelpers.createDummyQuestion(0);
+		Question qOne = TestHelpers.createDummyQuestion(0);
+		Question qTwo = TestHelpers.createDummyQuestion(0);
 		// ensure dates are the same
-		q1.setDateCreated(new Date(1));
-		q2.setDateCreated(new Date(1));
-		assertEquals(q1, q2);
+		qOne.setDateCreated(new Date(1));
+		qTwo.setDateCreated(new Date(1));
+		assertEquals(qOne, qTwo);
 	}
 	
 	/**
@@ -110,13 +110,13 @@ public class QuestionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testQuestionNotEquals() {
-		Question q1 = TestHelpers.createDummyQuestion(0);
-		Question q2 = TestHelpers.createDummyQuestion(0);
+		Question qOne = TestHelpers.createDummyQuestion(0);
+		Question qTwo = TestHelpers.createDummyQuestion(0);
 		// ensure dates are the same
-		q1.setDateCreated(new Date(1));
-		q2.setDateCreated(new Date(1));
-		q1.setTitle("different title");
-		assertFalse(q1.equals(q2));
+		qOne.setDateCreated(new Date(1));
+		qTwo.setDateCreated(new Date(1));
+		qOne.setTitle("different title");
+		assertFalse(qOne.equals(qTwo));
 	}
 	
 	/**
@@ -125,12 +125,12 @@ public class QuestionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testQuestionHashCode() {
-		Question q1 = TestHelpers.createDummyQuestion(0);
-		Question q2 = TestHelpers.createDummyQuestion(0);
+		Question qOne = TestHelpers.createDummyQuestion(0);
+		Question qTwo = TestHelpers.createDummyQuestion(0);
 		// ensure dates are the same
-		q1.setDateCreated(new Date(1));
-		q2.setDateCreated(new Date(1));
-		assertEquals(q1.hashCode(), q2.hashCode());
+		qOne.setDateCreated(new Date(1));
+		qTwo.setDateCreated(new Date(1));
+		assertEquals(qOne.hashCode(), qTwo.hashCode());
 	}
 	
 	/**
@@ -139,13 +139,13 @@ public class QuestionTest extends TestCase {
 	 * @label white-box test
 	 */
 	public void testNotHashCode() {
-		Question q1 = TestHelpers.createDummyQuestion(0);
-		Question q2 = TestHelpers.createDummyQuestion(0);
+		Question qOne = TestHelpers.createDummyQuestion(0);
+		Question qTwo = TestHelpers.createDummyQuestion(0);
 		// ensure dates are the same
-		q1.setDateCreated(new Date(1));
-		q2.setDateCreated(new Date(1));
-		q1.setTitle("different title");
-		assertFalse(q1.hashCode() == q2.hashCode());
+		qOne.setDateCreated(new Date(1));
+		qTwo.setDateCreated(new Date(1));
+		qOne.setTitle("different title");
+		assertFalse(qOne.hashCode() == qTwo.hashCode());
 	}
 	
 	/**

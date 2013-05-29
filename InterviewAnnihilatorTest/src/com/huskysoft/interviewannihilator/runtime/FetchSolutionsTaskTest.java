@@ -6,8 +6,10 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
@@ -27,7 +29,7 @@ public class FetchSolutionsTaskTest extends TestCase {
 		super(name);
 	}
 	
-	public void setUp() throws Exception{
+	public void setUp() throws NetworkException, IOException {
 		QuestionService questionService = QuestionService.getInstance();
 		
 		PaginatedQuestions currentQuestions =

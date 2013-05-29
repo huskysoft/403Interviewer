@@ -9,7 +9,7 @@ package com.huskysoft.interviewannihilator.model;
 import android.annotation.SuppressLint;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SuppressLint("UseSparseArrays")
@@ -28,10 +28,10 @@ public class UserInfo {
 	public UserInfo() {
 		// how to sort a map on values:
 		// http://stackoverflow.com/questions/2864840/treemap-sort-by-value
-		viewedQuestions = new HashMap<Integer, Date>();
-		favoriteQuestions = new HashMap<Integer, Date>();
-		votedQuestions = new HashMap<Integer, Boolean>();
-		votedSolutions = new HashMap<Integer, Boolean>();
+		viewedQuestions = new LinkedHashMap<Integer, Date>();
+		favoriteQuestions = new LinkedHashMap<Integer, Date>();
+		votedQuestions = new LinkedHashMap<Integer, Boolean>();
+		votedSolutions = new LinkedHashMap<Integer, Boolean>();
 	}
 
 	public String getUserEmail() {
