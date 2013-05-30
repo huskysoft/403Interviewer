@@ -240,7 +240,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			userInfo.getFavoriteQuestions().clear();
 			assertEquals(userInfo, clone);
 		} finally {
-			file.delete();
+			assertTrue(file.delete());
 		}
 	}
 
@@ -457,12 +457,13 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		List<Integer> toFavorite = new ArrayList<Integer>();
 		toFavorite.add(3);
 		toFavorite.add(5);
-		List<Question> qList = new ArrayList<Question>();
+		Map<Integer, Question> qMap = new LinkedHashMap<Integer, Question>();
 		for (int i = 0; i < totalSize; i++) {
 			Question newQ = TestHelpers.createDummyQuestion(i);
-			qList.add(newQ);
+			qMap.put(i, newQ);
 		}
-		DatabaseStub stub = new DatabaseStub(qList, new ArrayList<Solution>());
+		DatabaseStub stub = 
+				new DatabaseStub(qMap, new LinkedHashMap<Integer, Solution>());
 		
 		// initialize user info and favorite those questions
 		UserInfo testInfo = TestHelpers.createTestUserInfo();
@@ -494,7 +495,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 			questionIds.put(qId, new Date(System.currentTimeMillis()));
 		}
 		List<Integer> qIds = new ArrayList<Integer>(questionIds.keySet());
-		List<Question> favorited = new ArrayList<Question>();
+		List<Question> favorited;
 		try {	
 			// initialize user info and favorite those questions
 			UserInfo testInfo = TestHelpers.createTestUserInfo();

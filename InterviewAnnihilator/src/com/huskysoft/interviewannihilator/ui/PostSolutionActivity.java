@@ -9,7 +9,6 @@ package com.huskysoft.interviewannihilator.ui;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
 
 import android.os.Bundle;
@@ -83,7 +82,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 	/**
 	* Attempts to post a solution to the database.
 	*/
-	private void sendSolution() {
+	private synchronized void sendSolution() {
 		if (question == null)
 			throw new IllegalStateException();
 	

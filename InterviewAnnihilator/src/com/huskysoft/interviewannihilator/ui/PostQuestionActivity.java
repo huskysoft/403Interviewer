@@ -15,11 +15,9 @@ import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.PostQuestionsTask;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.Dialog;
 import android.view.Menu;
 import android.view.View;
@@ -39,7 +37,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 	Difficulty difficulty;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_question);
 		setBehindContentView(R.layout.activity_menu);
@@ -47,7 +45,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		buildSlideMenu();
 		
 		// VALIDATE
-		assert(MainActivity.initializedUser);
+		assert(isUserInfoLoaded());
 		
 		
 		difficulty = Difficulty.EASY;

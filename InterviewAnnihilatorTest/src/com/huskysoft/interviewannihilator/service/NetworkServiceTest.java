@@ -12,9 +12,6 @@ import java.util.List;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
-import com.huskysoft.interviewannihilator.model.Question;
-import com.huskysoft.interviewannihilator.util.TestHelpers;
-
 import junit.framework.TestCase;
 
 

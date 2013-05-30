@@ -16,8 +16,6 @@ import java.util.List;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
-import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
-
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 
 import android.os.Bundle;
@@ -293,7 +291,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	
 	/** Called when the user clicks the post solution button */
 	public void postSolution(View view) {
-		if (initializedUser){
+		if (isUserInfoLoaded()){
 			Intent intent = new Intent(this, PostSolutionActivity.class);
 			intent.putExtra(EXTRA_MESSAGE, question);
 			startActivity(intent);

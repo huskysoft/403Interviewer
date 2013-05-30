@@ -7,7 +7,6 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -91,8 +90,8 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	@Override
 	protected void onPostExecute(List<Question> questionList){
 		context.appendQuestionsToView(questionList);
-		context.hideLoadingView1();
-		context.hideLoadingView2();
+		context.hideLoadingViewOne();
+		context.hideLoadingViewTwo();
 		context.showMainView();
 	}
 }

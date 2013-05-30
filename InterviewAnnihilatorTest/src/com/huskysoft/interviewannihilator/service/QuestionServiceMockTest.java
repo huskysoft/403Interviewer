@@ -43,6 +43,7 @@ public class QuestionServiceMockTest extends
 	 * @param name
 	 *            the test name
 	 */
+	@SuppressWarnings("deprecation")
 	public QuestionServiceMockTest() {
 		super("com.huskysoft.interviewannihilator.ui", MainActivity.class);
 	}
@@ -120,7 +121,7 @@ public class QuestionServiceMockTest extends
 		// Check the result
 		boolean thrown = false;
 		try {
-			int result = questionService.postQuestion(question, date);
+			questionService.postQuestion(question, date);
 		} catch (NetworkException e) {
 			Log.w(TAG, "False positive: test expected " + e.toString());
 			thrown = true;
@@ -188,7 +189,7 @@ public class QuestionServiceMockTest extends
 		// Check the result
 		boolean thrown = false;
 		try {
-			int result = questionService.postSolution(solution, date);
+			questionService.postSolution(solution, date);
 		} catch (NetworkException e) {
 			Log.w(TAG, "False positive: test expected " + e.toString());
 			thrown = true;

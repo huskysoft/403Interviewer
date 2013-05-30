@@ -19,40 +19,41 @@ import com.huskysoft.interviewannihilator.model.UserInfo;
 
 public class DatabaseStub {
 
-	/** List of questions in the stub database */
-	private List<Question> questions;
-	/** List of solutions in the stub database */
-	private List<Solution> solutions;
+	/** Map of questions in the stub database */
+	private Map<Integer, Question> questions;
+	/** Map of solutions in the stub database */
+	private Map<Integer, Solution> solutions;
 	
 	public DatabaseStub() {
-		this.questions = new ArrayList<Question>();
-		this.solutions = new ArrayList<Solution>();
+		this.questions = new LinkedHashMap<Integer, Question>();
+		this.solutions = new LinkedHashMap<Integer, Solution>();
 	}
 	
-	public DatabaseStub(List<Question> questions, List<Solution> solutions) {
+	public DatabaseStub(Map<Integer, Question> questions, 
+			Map<Integer, Solution> solutions) {
 		this.questions = questions;
 		this.solutions = solutions;
 	}
 
-	public List<Question> getQuestions() {
+	public Map<Integer, Question> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(List<Question> questions) {
+	public void setQuestions(Map<Integer, Question> questions) {
 		this.questions = questions;
 	}
 
-	public List<Solution> getSolutions() {
+	public Map<Integer, Solution> getSolutions() {
 		return solutions;
 	}
 
-	public void setSolutions(List<Solution> solutions) {
+	public void setSolutions(Map<Integer, Solution> solutions) {
 		this.solutions = solutions;
 	}
 
 	public boolean insertQuestion(Question q) {
 		if (q != null) {
-			questions.add(q);
+			questions.put(q.getQuestionId(), q);
 			return true;
 		}
 		return false;
@@ -60,28 +61,18 @@ public class DatabaseStub {
 	
 	public boolean insertSolution(Solution s) {
 		if (s != null) {
-			solutions.add(s);
+			solutions.put(s.getSolutionId(), s);
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean deleteQuestion(int qId) {
-		int index = questions.indexOf(qId);
-		if (index < 0) {
-			return false;
-		}
-		questions.remove(index);
-		return true;
+		return (questions.remove(qId) != null);
 	}
 	
 	public boolean deleteSolution(int sId) {
-		int index = solutions.indexOf(sId);
-		if (index < 0) {
-			return false;
-		}
-		solutions.remove(index);
-		return true;
+		return (solutions.remove(sId) != null);
 	}
 	
 	public void clearQuestions() {

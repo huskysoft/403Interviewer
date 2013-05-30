@@ -7,15 +7,12 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -24,14 +21,12 @@ import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.ViewGroup;
 import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -69,7 +64,7 @@ public class MainActivity extends AbstractPostingActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		
 		
-		if (!initializedUser && tryInitialize){
+		if (!isUserInfoLoaded()){
 			this.initializeUserInfo();
 		}
 		
@@ -94,7 +89,7 @@ public class MainActivity extends AbstractPostingActivity {
 		}
 		
 		hideMainView();
-		showLoadingView1();
+		showLoadingViewOne();
 		loadQuestions();
 	}
 	
@@ -158,7 +153,7 @@ public class MainActivity extends AbstractPostingActivity {
 			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
 			
 			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.FILL_PARENT,
+					TableRow.LayoutParams.MATCH_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT);
 			
 			row.addView(categoryText, params);
@@ -195,7 +190,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Shows loading text
 	 */
-	public void showLoadingView1(){
+	public void showLoadingViewOne(){
 		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.VISIBLE);
 	}
@@ -203,7 +198,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Hides loading text
 	 */
-	public void hideLoadingView1(){
+	public void hideLoadingViewOne(){
 		View loadingText = findViewById(R.id.layout_loading);
 		loadingText.setVisibility(View.GONE);
 	}
@@ -211,7 +206,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Shows loading text
 	 */
-	public void showLoadingView2(){
+	public void showLoadingViewTwo(){
 		View loadingText = findViewById(R.id.layout_loading_more);
 		loadingText.setVisibility(View.VISIBLE);
 	}
@@ -219,7 +214,7 @@ public class MainActivity extends AbstractPostingActivity {
 	/**
 	 * Hides loading text
 	 */
-	public void hideLoadingView2(){
+	public void hideLoadingViewTwo(){
 		View loadingText = findViewById(R.id.layout_loading_more);
 		loadingText.setVisibility(View.GONE);
 	}
@@ -255,7 +250,7 @@ public class MainActivity extends AbstractPostingActivity {
 	 * @param v button being pressed
 	 */
 	public void loadMoreQuestions(View v){
-		showLoadingView2();
+		showLoadingViewTwo();
 		loadQuestions();
 	}
 	
