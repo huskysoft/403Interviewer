@@ -70,7 +70,7 @@ public class TestHelpers {
 			int size, int initial) {
 		Map<Integer, Boolean> m = new HashMap<Integer, Boolean>();
 		for (int i = 0; i < size; i++) {
-			m.put(i + initial, i % 2 == 1);
+			m.put(i + initial, i % 2 != 0);
 		}
 		return m;
 	}

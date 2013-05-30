@@ -10,7 +10,6 @@ package com.huskysoft.interviewannihilator.ui;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
@@ -23,7 +22,6 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,16 +42,20 @@ import android.widget.Toast;
 
 public abstract class AbstractPostingActivity extends SlidingActivity{
 		
-	/** Do we have to initialize this user? **/
-	protected static boolean initializedUser = false;
+	/** Indicates whether the user's private local data has been initialized **/
+	private static boolean userInfoLoaded = false;
 	
-	/** Do we have to initialize this user? **/
-	protected static boolean tryInitialize = true;
-	
+	public static boolean isUserInfoLoaded() {
+		return userInfoLoaded;
+	}
+
+	public static void setUserInfoLoaded(boolean isLoaded) {
+		AbstractPostingActivity.userInfoLoaded = isLoaded;
+	}
+
 	/** Shared SlideMenuInfo object */
 	protected SlideMenuInfo slideMenuInfo;
 	
-	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -149,7 +151,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
 			
 			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.FILL_PARENT,
+					TableRow.LayoutParams.MATCH_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT);
 			
 			row.addView(categoryText, params);
@@ -261,24 +263,30 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean ret;
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			toggle();
-			return true;
-			
-		case R.id.random_question:
-			if(RandomQuestionCollection.getInstance().isEmpty()){
-				new FetchRandomQuestionsTask(this).execute();
-			}else{
-				Question rand = 
-						RandomQuestionCollection.getInstance().getQuestion();
-				Intent intent = new Intent(this, QuestionActivity.class);
-				intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
-				startActivity(intent);
-			}
-		default:
-			return super.onOptionsItemSelected(item);
+			case android.R.id.home:
+				toggle();
+				ret = true;
+				break;
+				
+			case R.id.random_question:
+				if(RandomQuestionCollection.getInstance().isEmpty()){
+					new FetchRandomQuestionsTask(this).execute();
+				} else {
+					Question rand = RandomQuestionCollection.
+							getInstance().getQuestion();
+					Intent intent = new Intent(this, QuestionActivity.class);
+					intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
+					startActivity(intent);
+				}
+				ret = false;
+				break;
+				
+			default:
+				ret = super.onOptionsItemSelected(item);
 		}
+		return ret;
 	}
 	
 	/**
@@ -286,8 +294,8 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 * @param v The TextView that holds the selected question. 
 	 */
-	public void postQuestion(View v){
-		if (initializedUser){
+	public void postQuestion(View v) {
+		if (userInfoLoaded) {
 			Intent intent = new Intent(this, PostQuestionActivity.class);
 			startActivity(intent);
 		} else {
@@ -299,7 +307,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	/**
 	 * Displays a message explaining why a user can't post something
 	 */
-	public void onValidationIssue(){
+	public void onValidationIssue() {
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.alertdialogcustom);
@@ -336,7 +344,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 */
 	public void userInfoSuccessFunction(){
-		initializedUser = true;
+		setUserInfoLoaded(true);
 	}
 	
 	/**
@@ -344,7 +352,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * and asks them if they want to retry
 	 */
 	public void onInitializeError(){
-		initializedUser = false;
+		setUserInfoLoaded(false);
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.retrydialogcustom);
@@ -371,7 +379,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), 
 						R.string.toast_return, Toast.LENGTH_LONG).show();
-				tryInitialize = false;
 				dialog.dismiss();
 			}
 		});

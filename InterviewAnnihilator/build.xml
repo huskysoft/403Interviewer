@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MainActivity" default="help">
+<project name="InterviewAnnihilator" default="help">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
@@ -109,6 +109,7 @@
 			<sourcePath path="${source.dir}" />
             <class location="${out.dir}" />
         </findbugs>
-        <fail if="findbugsError" message="FindBugs detected at least one error." />
+        <fail if="findbugsError" message="FindBugs detected at least one error." />		
+        <fail if="findbugsWarning" message="FindBugs detected at least one warning." />
     </target>
 </project>
