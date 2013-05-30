@@ -1,5 +1,7 @@
 package com.huskysoft.interviewannihilator.test;
 
+import java.util.Locale;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
@@ -65,9 +67,6 @@ public class MainActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDifficultySelection(){
-		Spinner s = (Spinner) mActivity.findViewById(
-				com.huskysoft.interviewannihilator.R.id.diff_spinner);
-		
 		mActivity.runOnUiThread(
 			new Runnable() {
 				public void run() {
@@ -92,6 +91,6 @@ public class MainActivityTest extends
 	    Difficulty diff = mActivity.getCurrentDifficultySetting();
 	    String returnedDiff = diff.toString();
 	    
-	    assertEquals(mSelection.toUpperCase(), returnedDiff);
+	    assertEquals(mSelection.toUpperCase(Locale.getDefault()), returnedDiff);
 	}
 }
