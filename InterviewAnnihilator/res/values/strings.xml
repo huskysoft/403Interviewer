@@ -30,6 +30,8 @@
         <item>Science</item>
     </string-array>
 	
+    <string name="add_category">Add Category</string>
+    <string name="remove_category">Remove Category</string>
     <string name="spinner_difficulty_text">Difficulty</string>
     <string name="spinner_category_text">Category</string>
     <string name="button_show_me_more">Show me more</string>

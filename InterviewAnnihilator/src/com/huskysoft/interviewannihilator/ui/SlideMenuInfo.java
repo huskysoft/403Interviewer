@@ -6,6 +6,9 @@
  */
 package com.huskysoft.interviewannihilator.ui;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 
@@ -18,9 +21,10 @@ public class SlideMenuInfo {
 	
 	private static SlideMenuInfo instance;
 	private Difficulty diff;
-	private Category cat;
+	private List<Category> cat;
 	
 	private SlideMenuInfo() {	
+		cat = new LinkedList<Category>();
 	}
 	
 	/**
@@ -43,12 +47,20 @@ public class SlideMenuInfo {
 		this.diff = diff;
 	}
 
-	public Category getCat() {
+	public List<Category> getCat() {
 		return cat;
 	}
 
-	public void setCat(Category cat) {
-		this.cat = cat;
+	public void addCat(Category newCat) {
+		this.cat.add(newCat);
+	}
+	
+	public void clearCat(){
+		this.cat.clear();
+	}
+
+	public void setCat(List<Category> currentCategories) {
+		this.cat = currentCategories;
 	}
 	
 }
