@@ -10,7 +10,9 @@ package com.huskysoft.interviewannihilator.runtime;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
@@ -67,6 +69,8 @@ public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
 	 */
 	@Override
 	protected void onPostExecute(Integer r){
-		context.displayMessage(1);
+		Toast.makeText(context, 
+				R.string.successDialog_title, Toast.LENGTH_LONG).show();
+		context.finish();
 	}
 }
