@@ -42,32 +42,20 @@ import android.widget.Toast;
 
 public abstract class AbstractPostingActivity extends SlidingActivity{
 		
-	/** Do we have to initialize this user? **/
-	private static boolean initializedUser = false;
+	/** Indicates whether the user's private local data has been initialized **/
+	private static boolean userInfoLoaded = false;
 	
-	/** Do we have to initialize this user? **/
-	private static boolean tryInitialize = true;
-	
-	public static boolean isInitializedUser() {
-		return initializedUser;
+	public static boolean isUserInfoLoaded() {
+		return userInfoLoaded;
 	}
 
-	public static void setInitializedUser(boolean initializedUser) {
-		AbstractPostingActivity.initializedUser = initializedUser;
-	}
-
-	public static boolean isTryInitialize() {
-		return tryInitialize;
-	}
-
-	public static void setTryInitialize(boolean tryInitialize) {
-		AbstractPostingActivity.tryInitialize = tryInitialize;
+	public static void setUserInfoLoaded(boolean isLoaded) {
+		AbstractPostingActivity.userInfoLoaded = isLoaded;
 	}
 
 	/** Shared SlideMenuInfo object */
 	protected SlideMenuInfo slideMenuInfo;
 	
-	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -292,7 +280,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 					intent.putExtra(MainActivity.EXTRA_MESSAGE, rand);
 					startActivity(intent);
 				}
-				ret = true;
+				ret = false;
 				break;
 				
 			default:
@@ -307,7 +295,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * @param v The TextView that holds the selected question. 
 	 */
 	public void postQuestion(View v) {
-		if (initializedUser) {
+		if (userInfoLoaded) {
 			Intent intent = new Intent(this, PostQuestionActivity.class);
 			startActivity(intent);
 		} else {
@@ -356,7 +344,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 */
 	public void userInfoSuccessFunction(){
-		setInitializedUser(true);
+		setUserInfoLoaded(true);
 	}
 	
 	/**
@@ -364,7 +352,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * and asks them if they want to retry
 	 */
 	public void onInitializeError(){
-		setInitializedUser(false);
+		setUserInfoLoaded(false);
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.retrydialogcustom);
@@ -391,7 +379,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), 
 						R.string.toast_return, Toast.LENGTH_LONG).show();
-				tryInitialize = false;
 				dialog.dismiss();
 			}
 		});

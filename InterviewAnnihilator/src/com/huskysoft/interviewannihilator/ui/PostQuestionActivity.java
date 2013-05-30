@@ -45,7 +45,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		buildSlideMenu();
 		
 		// VALIDATE
-		assert(isInitializedUser());
+		assert(isUserInfoLoaded());
 		
 		
 		difficulty = Difficulty.EASY;

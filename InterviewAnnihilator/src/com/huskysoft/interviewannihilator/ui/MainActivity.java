@@ -13,8 +13,6 @@ import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -23,14 +21,12 @@ import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.ViewGroup;
 import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -68,7 +64,7 @@ public class MainActivity extends AbstractPostingActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		
 		
-		if (!isInitializedUser() && isTryInitialize()){
+		if (!isUserInfoLoaded()){
 			this.initializeUserInfo();
 		}
 		
@@ -192,86 +188,6 @@ public class MainActivity extends AbstractPostingActivity {
 	}
 	
 	/**
-<<<<<<< HEAD
-=======
-	 * Method that returns the Category Enum that is
-	 * currently selected in the Category spinner input
-	 * on the slide menu
-	 * 
-	 * @ return Category Enum
-	 */
-	public Category getCurrentCategorySetting(){
-		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-		String category = spinner.getSelectedItem().toString();
-		if(category.equals(UIConstants.ALL)){
-			return null;
-		}
-		
-		category = category.replaceAll("\\s", "");
-		return Category.valueOf(category.toUpperCase());
-	}
-	
-	/**
-	 * Helper method that builds the slide menu on the current activity.
-	 */
-	@Override
-	public void buildSlideMenu(){
-		SlidingMenu menu = getSlidingMenu();
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int width = (int) ((double) metrics.widthPixels);
-		menu.setBehindOffset((int)
-				(width * SlideMenuInfo.SLIDE_MENU_WIDTH));
-		
-		Spinner diffSpinner = (Spinner) findViewById(R.id.diff_spinner);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.difficulty, 
-				android.R.layout.simple_spinner_item);
-		
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		// Apply the adapter to the spinner
-		diffSpinner.setAdapter(adapter);
-		
-		Spinner categorySpinner = 
-			(Spinner) findViewById(R.id.category_spinner);
-		ArrayAdapter<CharSequence> catAdapter = 
-				ArrayAdapter.createFromResource(this,
-				R.array.category, 
-				android.R.layout.simple_spinner_item);
-		
-		catAdapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-		
-		categorySpinner.setAdapter(catAdapter);
-	}
-	
-	/**
-	 * Click handler for the slide-in menu difficulty selection.
-	 * Will repopulate the list of questions with new questions
-	 * that have the selected difficulty.
-	 * 
-	 * @param v Button View
-	 */
-	public void adjustSettings(View v){
-		toggle();
-		
-		// Clear current Questions
-		ViewGroup questionView =
-				(ViewGroup) findViewById(R.id.question_layout);
-		questionView.removeAllViews();
-		questionOffset = 0;
-		
-		hideMainView();
-		showLoadingViewOne();
-		loadQuestions();
-	}
-	
-	/**
->>>>>>> cleaned up FindBugs and CodePro issues
 	 * Shows loading text
 	 */
 	public void showLoadingViewOne(){

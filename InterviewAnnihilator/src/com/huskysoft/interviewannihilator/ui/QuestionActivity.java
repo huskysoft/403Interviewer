@@ -291,7 +291,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	
 	/** Called when the user clicks the post solution button */
 	public void postSolution(View view) {
-		if (isInitializedUser()){
+		if (isUserInfoLoaded()){
 			Intent intent = new Intent(this, PostSolutionActivity.class);
 			intent.putExtra(EXTRA_MESSAGE, question);
 			startActivity(intent);
