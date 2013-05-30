@@ -49,7 +49,7 @@ public class FetchRandomQuestionsTask
 					0, true);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
-			Log.e("FetchRandomQuestionsTask", e.getMessage());
+			Log.e("FetchRandomQuestionsTask", "" + e.getMessage());
 			this.cancel(true);
 		}
 

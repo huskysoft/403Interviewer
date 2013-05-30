@@ -66,7 +66,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 							diff, numQuestions, questionOffset, false);
 			questionList = currentQuestions.getQuestions();
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}
