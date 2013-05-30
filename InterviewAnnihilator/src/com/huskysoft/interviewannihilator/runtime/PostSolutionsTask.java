@@ -43,7 +43,7 @@ public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
 		try {
 			questionService.postSolution(solution);
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}

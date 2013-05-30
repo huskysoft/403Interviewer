@@ -46,7 +46,7 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 		try {
 			questionService.initializeUserInfo(baseDir, email);
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}

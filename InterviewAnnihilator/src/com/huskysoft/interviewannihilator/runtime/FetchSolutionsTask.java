@@ -50,7 +50,7 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, List<Solution>>{
 
 			solutionList = paginatedSolutions.getSolutions();
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}

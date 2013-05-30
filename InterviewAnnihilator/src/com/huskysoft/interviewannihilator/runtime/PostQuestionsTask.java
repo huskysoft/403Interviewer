@@ -50,7 +50,7 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 			solution.setQuestionId(id);
 			questionService.postSolution(solution);
 		} catch (Exception e){
-			Log.e("FetchSolutionsTask", e.getMessage());
+			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}
