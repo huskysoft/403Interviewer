@@ -36,7 +36,7 @@ import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.Utility;
 
-public class NetworkService {
+public class NetworkService implements NetworkServiceInterface {
 
 	/** The currently running instance of the NetworkService */
 	private static NetworkService instance;
