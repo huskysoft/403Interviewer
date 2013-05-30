@@ -119,24 +119,24 @@ public class QuestionService {
 	}
 
 	/**
-	 * Get a specific list of Questions from the remote server.
-	 * NetworkException if one or more QuestionID does not exist.
+	 * Get a specific list of Questions from the remote server. NetworkException
+	 * if one or more QuestionID does not exist.
 	 * 
 	 * @param questionIds
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws JSONException
 	 * @throws NetworkException
 	 */
-	public List<Question> getQuestionsById(List<Integer> questionIds) 
+	public List<Question> getQuestionsById(List<Integer> questionIds)
 			throws IOException, NetworkException {
 		if (questionIds == null || questionIds.size() == 0) {
 			throw new IllegalArgumentException(
 					"Must specify at least one Question ID!");
 		}
 		String json = networkService.getQuestionsById(questionIds);
-		TypeReference<List<Question>> tr = new 
-				TypeReference<List<Question>>(){};
+		TypeReference<List<Question>> tr = new TypeReference<List<Question>>() {
+		};
 		List<Question> questions = mapper.readValue(json, tr);
 		return questions;
 	}
@@ -166,10 +166,10 @@ public class QuestionService {
 	public PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, IOException {
-		return getQuestions(
-				categories, difficulty, limit, offset, random, null);
+		return getQuestions(categories, difficulty, limit, offset, random,
+							null);
 	}
-	
+
 	private PaginatedQuestions getQuestions(List<Category> categories,
 			Difficulty difficulty, int limit, int offset, boolean random,
 			Integer authorId) throws NetworkException, IOException {
@@ -198,11 +198,16 @@ public class QuestionService {
 	/**
 	 * Retrieves questions the user created
 	 * 
-	 * @param categories list of the categories to get
-	 * @param difficulty the difficulty of the questions to get
-	 * @param limit max number of questions
-	 * @param offset starting offset of questions
-	 * @param random whether the questions that are fetched should be random
+	 * @param categories
+	 *            list of the categories to get
+	 * @param difficulty
+	 *            the difficulty of the questions to get
+	 * @param limit
+	 *            max number of questions
+	 * @param offset
+	 *            starting offset of questions
+	 * @param random
+	 *            whether the questions that are fetched should be random
 	 * @return questions that the user created
 	 * @throws NetworkException
 	 * @throws IOException
@@ -211,15 +216,17 @@ public class QuestionService {
 			Difficulty difficulty, int limit, int offset, boolean random)
 			throws NetworkException, IOException {
 		requireUserInfo();
-		return getQuestions(categories, difficulty, limit, offset,
-				random, userInfo.getUserId());
+		return getQuestions(categories, difficulty, limit, offset, random,
+				userInfo.getUserId());
 	}
 
 	/**
 	 * Get questions the user has favorited
 	 * 
-	 * @param limit the max number of questions to get
-	 * @param offset the offset of the questions retrieved
+	 * @param limit
+	 *            the max number of questions to get
+	 * @param offset
+	 *            the offset of the questions retrieved
 	 * @return the questions the user has favorited
 	 * @throws NetworkException
 	 * @throws IOException
@@ -231,8 +238,8 @@ public class QuestionService {
 					"Invalid limit or offset parameter");
 		}
 		requireUserInfo();
-		List<Integer> favoriteList = new ArrayList<Integer>(
-				userInfo.getFavoriteQuestions().keySet());
+		List<Integer> favoriteList = new ArrayList<Integer>(userInfo
+				.getFavoriteQuestions().keySet());
 		List<Integer> favoritesToFetch = new ArrayList<Integer>();
 		int totalFavorited = favoriteList.size();
 		int toFetch = Math.min(limit, totalFavorited);
@@ -249,12 +256,13 @@ public class QuestionService {
 	 * 
 	 * @param toPost
 	 *            the Question object that represents the question
-	 * @return the id of the question being posted
+	 * @return the id of the question being posted; -1 if a parsing error has
+	 *         occured
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException if toPost is null or its fields are set
-	 * incorrectly
+	 * @throws IllegalArgumentException
+	 *             if toPost is null or its fields are set incorrectly
 	 */
 	public int postQuestion(Question toPost) throws NetworkException,
 			IOException {
@@ -282,24 +290,28 @@ public class QuestionService {
 		// Post the question and return result
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
-		return Integer.parseInt(result);
+		if (result != null) {
+			return Integer.parseInt(result);
+		}
+		return -1;
 	}
 
 	/**
-	 * Posts a question to the server. Same as postQuestion, but doesn't
-	 * populate authorId and date fields.
+	 * Posts a question to the server.
 	 * 
 	 * @param toPost
 	 *            the Question object that represents the question
+	 * @param date
+	 *            the date for the posting
 	 * @return the id of the question being posted
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException if toPost is null or its fields are set
-	 * incorrectly
+	 * @throws IllegalArgumentException
+	 *             if toPost is null or its fields are set incorrectly
 	 */
-	public int postQuestionMock(Question toPost) throws NetworkException,
-			IOException {
+	public int postQuestion(Question toPost, Date date)
+			throws NetworkException, IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Question: null");
@@ -317,29 +329,31 @@ public class QuestionService {
 			throw new IllegalArgumentException("Null difficulty in question");
 		}
 
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(userInfo.getUserId());
+		toPost.setDateCreated(date);
+
 		// Post the question and return result
 		String questionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postQuestion(questionStr);
 		if (result != null) {
 			return Integer.parseInt(result);
 		}
-		else {
-			return 0;
-		}
+		return -1;
 	}
-	
+
 	/**
 	 * Delete a Question. The user must be the author of the Question. Returns
 	 * true on success.
 	 * 
 	 * @param questionId
 	 * @return whether the deletion succeeded
-	 * @throws NetworkException 
+	 * @throws NetworkException
 	 */
 	public boolean deleteQuestion(int questionId) throws NetworkException {
 		requireUserInfo();
-		boolean success = networkService.deleteQuestion(
-				questionId, userInfo.getUserEmail());
+		boolean success = networkService.deleteQuestion(questionId,
+				userInfo.getUserEmail());
 		if (success) {
 			userInfo.clearFavoriteQuestion(questionId);
 			userInfo.novoteQuestion(questionId);
@@ -351,7 +365,8 @@ public class QuestionService {
 	 * Upvote a given Question. Returns true if upvote was received by the
 	 * server, otherwise false.
 	 * 
-	 * @param questionId the id to be voted on
+	 * @param questionId
+	 *            the id to be voted on
 	 * @return bool indicating the success of the vote
 	 * @throws NetworkException
 	 */
@@ -363,7 +378,8 @@ public class QuestionService {
 	 * Downvote a given Question. Returns true if downvote was received by the
 	 * server, false otherwise.
 	 * 
-	 * @param questionId the id of the question to be voted on
+	 * @param questionId
+	 *            the id of the question to be voted on
 	 * @return bool indicating the success of the vote
 	 * @throws NetworkException
 	 */
@@ -375,8 +391,10 @@ public class QuestionService {
 	/**
 	 * Vote on a question
 	 * 
-	 * @param questionId the id of the question to be voted on
-	 * @param upvote whether the question is getting upvoted
+	 * @param questionId
+	 *            the id of the question to be voted on
+	 * @param upvote
+	 *            whether the question is getting upvoted
 	 * @return whether the vote succeeded
 	 * @throws NetworkException
 	 */
@@ -387,16 +405,16 @@ public class QuestionService {
 		// If they have already voted on the question, don't allow them
 		// to vote again
 		if (previousVote == null) {
-			boolean res = networkService.voteQuestion(questionId, 
-					upvote, userInfo.getUserEmail());
+			boolean res = networkService.voteQuestion(questionId, upvote,
+					userInfo.getUserEmail());
 			if (res) {
 				userInfo.downvoteQuestion(questionId);
 			}
 			return res;
 		}
-		return false;		
+		return false;
 	}
-	
+
 	/**
 	 * The method the front-end calls to receive solutions for a given question
 	 * from the database
@@ -413,8 +431,8 @@ public class QuestionService {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public PaginatedSolutions getSolutions(int questionId, int limit, 
-			int offset) throws NetworkException, IOException {
+	public PaginatedSolutions getSolutions(int questionId, int limit,
+			int offset)	throws NetworkException, IOException {
 		if (limit < 0 || offset < 0) {
 			throw new IllegalArgumentException(
 					"Invalid limit or offset parameter");
@@ -442,16 +460,17 @@ public class QuestionService {
 	/**
 	 * Posts a solution to the server.
 	 * 
-	 * @param toPost the Solution object that represents the solution
+	 * @param toPost
+	 *            the Solution object that represents the solution
 	 * @return the id of the solution being posted
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws IllegalArgumentException if toPost is null or its fields are set
-	 * incorrectly
+	 * @throws IllegalArgumentException
+	 *             if toPost is null or its fields are set incorrectly
 	 */
-	public int postSolution(Solution toPost) 
-			throws NetworkException, IOException {
+	public int postSolution(Solution toPost) throws NetworkException,
+			IOException {
 		// Check parameter
 		if (toPost == null) {
 			throw new IllegalArgumentException("Invalid Solution: null");
@@ -469,6 +488,37 @@ public class QuestionService {
 		String result = networkService.postSolution(solutionStr);
 		return Integer.parseInt(result);
 	}
+	
+	/**
+	 * Posts a solution to the server.
+	 * 
+	 * @param toPost
+	 *            the Solution object that represents the solution
+	 * @param date
+	 *            the date for the posting
+	 * @return the id of the solution being posted
+	 * @throws NetworkException
+	 * @throws IOException
+	 */
+	public int postSolution(Solution toPost, Date date) throws NetworkException,
+	IOException {
+		// Check parameter
+		if (toPost == null) {
+			throw new IllegalArgumentException("Invalid Solution: null");
+		}
+		if (toPost.getText() == null || toPost.getText().isEmpty()) {
+			throw new IllegalArgumentException("Null/Empty text in solution");
+		}
+
+		// Populate authorId and dateCreated (others are filled in)
+		toPost.setAuthorId(userInfo.getUserId());
+		toPost.setDateCreated(date);
+
+		// Post the solution and return result
+		String solutionStr = mapper.writeValueAsString(toPost);
+		String result = networkService.postSolution(solutionStr);
+		return Integer.parseInt(result);
+	}
 
 	/**
 	 * Delete a Solution. The user must be the author of the Solution.
@@ -478,8 +528,7 @@ public class QuestionService {
 	 * @return bool indicating whether the deletion succeeded
 	 * @throws NetworkException
 	 */
-	public boolean deleteSolution(int solutionId) 
-			throws NetworkException {
+	public boolean deleteSolution(int solutionId) throws NetworkException {
 		requireUserInfo();
 		return networkService.deleteSolution(solutionId,
 				userInfo.getUserEmail());
@@ -489,7 +538,8 @@ public class QuestionService {
 	 * Upvote a given Solution. Returns true if upvote was received by the
 	 * server, otherwise false.
 	 * 
-	 * @param solutionId the id of the solution to be voted on
+	 * @param solutionId
+	 *            the id of the solution to be voted on
 	 * @return bool indicating the result of the vote
 	 * @throws NetworkException
 	 */
@@ -501,37 +551,41 @@ public class QuestionService {
 	 * Downvote a given Solution. Returns true if downvote was received by the
 	 * server, otherwise false.
 	 * 
-	 * @param solutionId the id of the solution to be voted on
+	 * @param solutionId
+	 *            the id of the solution to be voted on
 	 * @return bool indicating the result of the vote
 	 * @throws NetworkException
 	 */
 	public boolean downvoteSolution(int solutionId) throws NetworkException {
 		return voteSolution(solutionId, UserInfo.DOWNVOTE);
 	}
-	
+
 	/**
 	 * Votes on a given solution
-	 * @param solutionId the id of the solution to be voted on
-	 * @param upvote whether the vote is a like
+	 * 
+	 * @param solutionId
+	 *            the id of the solution to be voted on
+	 * @param upvote
+	 *            whether the vote is a like
 	 * @return whether the vote succeeded
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
-	private boolean voteSolution(int solutionId, boolean upvote) 
+	private boolean voteSolution(int solutionId, boolean upvote)
 			throws NetworkException {
 		requireUserInfo();
 		Boolean previousVote = userInfo.getSolutionVote(solutionId);
 		// If they have already voted on the solution, don't allow them
 		// to vote again
 		if (previousVote == null) {
-			boolean res = networkService.voteSolution(solutionId, 
-					upvote, userInfo.getUserEmail());
+			boolean res = networkService.voteSolution(solutionId, upvote,
+					userInfo.getUserEmail());
 			if (res) {
 				userInfo.downvoteSolution(solutionId);
 			}
 			return res;
 		}
-		return false;		
+		return false;
 	}
 
 	/**
@@ -551,10 +605,11 @@ public class QuestionService {
 	/**
 	 * Gets the userId associated with a given email in the database
 	 * 
-	 * @param userEmail the email whose id we are getting
+	 * @param userEmail
+	 *            the email whose id we are getting
 	 * @return the id associated with the email. Creates a new entry in the
-	 * database and returns the id of the new entry if the email doesn't
-	 * exist in the database yet
+	 *         database and returns the id of the new entry if the email doesn't
+	 *         exist in the database yet
 	 * @throws NetworkException
 	 * @throws IOException
 	 */

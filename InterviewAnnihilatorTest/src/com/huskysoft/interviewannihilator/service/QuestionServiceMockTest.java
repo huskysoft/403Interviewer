@@ -7,14 +7,17 @@
 package com.huskysoft.interviewannihilator.service;
 
 import java.io.IOException;
+import java.util.Date;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
+import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.model.UserInfo;
-import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -27,9 +30,12 @@ import static org.easymock.EasyMock.verify;
 
 public class QuestionServiceMockTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
+	
+	private static final String TAG = "QuestionServiceMockTest";
 
 	private QuestionService questionService;
 	private NetworkServiceInterface mockNetworkService;
+	private UserInfo userInfo;
 
 	/**
 	 * Construct new test instance
@@ -45,42 +51,149 @@ public class QuestionServiceMockTest extends
 	 * Perform pre-test initialization
 	 * 
 	 * @throws Exception
-	 * 
-	 * @see TestCase#setUp()
 	 */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		mockNetworkService = createNiceMock(NetworkServiceInterface.class);
 		questionService = QuestionService.getInstance();
-		UserInfo userInfo = TestHelpers.createDummyUserInfo();
+		userInfo = TestHelpers.createDummyUserInfo();
 		questionService.setUserInfo(userInfo);
 	}
 
 	/**
-	 * MOCK TEST!!!! This is our mock test, to ensure the correct methods
-	 * of networkService are getting called when a question is posted
+	 * Tests postQuestion in QuestionService returns the correct value from
+	 * NetworkService.
 	 * 
 	 * @throws JsonGenerationException
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 * @throws NetworkException
 	 */
-	public void testPostQuestion() throws JsonGenerationException,
+	public void testPostQuestionCorrectValue() throws JsonGenerationException,
 			JsonMappingException, IOException, NetworkException {
 		// Create the question and its json string
-		Question question = TestHelpers.createDummyQuestion(0);
+		Question question = TestHelpers.createDummyQuestion(1);
+		Date date = new Date();
+		question.setAuthorId(userInfo.getUserId());
+		question.setDateCreated(date);
 		ObjectMapper mapper = new ObjectMapper();
 		String questionStr = mapper.writeValueAsString(question);
-		
+
 		// Create and activate the mock networkService object
-		expect(mockNetworkService.postQuestion(questionStr)).andReturn("0");
+		expect(mockNetworkService.postQuestion(questionStr)).andReturn("1");
 		replay(mockNetworkService);
 		questionService.setNetworkService(mockNetworkService);
-		
-		int result = questionService.postQuestionMock(question);
-		assertEquals(0, result);
-		
+
+		// Check the result
+		int result = questionService.postQuestion(question, date);
+		assertEquals(1, result);
+		verify(mockNetworkService);
+	}
+
+	/**
+	 * Tests postQuestion in QuestionService throws a NetworkException
+	 * propagated from NetworkService.
+	 * 
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
+	public void testPostQuestionThrowsException()
+			throws JsonGenerationException, JsonMappingException, IOException,
+			NetworkException {
+		// Create the question and its json string
+		Question question = TestHelpers.createDummyQuestion(1);
+		Date date = new Date();
+		question.setAuthorId(userInfo.getUserId());
+		question.setDateCreated(date);
+		ObjectMapper mapper = new ObjectMapper();
+		String questionStr = mapper.writeValueAsString(question);
+
+		// Create and activate the mock networkService object
+		NetworkException ne = new NetworkException();
+		expect(mockNetworkService.postQuestion(questionStr)).andThrow(ne);
+		replay(mockNetworkService);
+		questionService.setNetworkService(mockNetworkService);
+
+		// Check the result
+		boolean thrown = false;
+		try {
+			int result = questionService.postQuestion(question, date);
+		} catch (NetworkException e) {
+			Log.w(TAG, "False positive: test expected " + e.toString());
+			thrown = true;
+		}
+		assertTrue(thrown);
+		verify(mockNetworkService);
+	}
+
+	/**
+	 * Tests postSolution in QuestionService returns the correct value from
+	 * NetworkService.
+	 * 
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
+	public void testPostSolutionCorrectValue() throws JsonGenerationException,
+			JsonMappingException, IOException, NetworkException {
+		// Create the solution and its json string
+		Solution solution = TestHelpers.createDummySolution(1);
+		Date date = new Date();
+		solution.setAuthorId(userInfo.getUserId());
+		solution.setDateCreated(date);
+		ObjectMapper mapper = new ObjectMapper();
+		String solutionStr = mapper.writeValueAsString(solution);
+
+		// Create and activate the mock networkService object
+		expect(mockNetworkService.postSolution(solutionStr)).andReturn("1");
+		replay(mockNetworkService);
+		questionService.setNetworkService(mockNetworkService);
+
+		// Check the result
+		int result = questionService.postSolution(solution, date);
+		assertEquals(1, result);
+		verify(mockNetworkService);
+	}
+
+	/**
+	 * Tests postSolution in QuestionService throws a NetworkException
+	 * propagated from NetworkService.
+	 * 
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws NetworkException
+	 */
+	public void testPostSolutionThrowsException()
+			throws JsonGenerationException, JsonMappingException, IOException,
+			NetworkException {
+		// Create the solution and its json string
+		Solution solution = TestHelpers.createDummySolution(1);
+		Date date = new Date();
+		solution.setAuthorId(userInfo.getUserId());
+		solution.setDateCreated(date);
+		ObjectMapper mapper = new ObjectMapper();
+		String solutionStr = mapper.writeValueAsString(solution);
+
+		// Create and activate the mock networkService object
+		NetworkException ne = new NetworkException();
+		expect(mockNetworkService.postSolution(solutionStr)).andThrow(ne);
+		replay(mockNetworkService);
+		questionService.setNetworkService(mockNetworkService);
+
+		// Check the result
+		boolean thrown = false;
+		try {
+			int result = questionService.postSolution(solution, date);
+		} catch (NetworkException e) {
+			Log.w(TAG, "False positive: test expected " + e.toString());
+			thrown = true;
+		}
+		assertTrue(thrown);
 		verify(mockNetworkService);
 	}
 }
