@@ -9,10 +9,10 @@ package com.huskysoft.interviewannihilator.service;
 import java.io.IOException;
 import java.util.Date;
 
-import android.test.ActivityInstrumentationTestCase2;
+import junit.framework.TestCase;
+
 import android.util.Log;
 
-import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
 import com.huskysoft.interviewannihilator.model.NetworkException;
 import com.huskysoft.interviewannihilator.model.Question;
@@ -28,8 +28,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-public class QuestionServiceMockTest extends
-		ActivityInstrumentationTestCase2<MainActivity> {
+public class QuestionServiceMockTest extends TestCase {
 	
 	private static final String TAG = "QuestionServiceMockTest";
 
@@ -43,9 +42,8 @@ public class QuestionServiceMockTest extends
 	 * @param name
 	 *            the test name
 	 */
-	@SuppressWarnings("deprecation")
-	public QuestionServiceMockTest() {
-		super("com.huskysoft.interviewannihilator.ui", MainActivity.class);
+	public QuestionServiceMockTest(String name) {
+		super(name);
 	}
 
 	/**
