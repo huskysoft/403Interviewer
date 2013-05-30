@@ -7,7 +7,6 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.os.AsyncTask;

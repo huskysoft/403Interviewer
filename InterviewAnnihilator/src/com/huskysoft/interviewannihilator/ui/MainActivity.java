@@ -157,7 +157,7 @@ public class MainActivity extends AbstractPostingActivity {
 			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
 			
 			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.FILL_PARENT,
+					TableRow.LayoutParams.MATCH_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT);
 			
 			row.addView(categoryText, params);
