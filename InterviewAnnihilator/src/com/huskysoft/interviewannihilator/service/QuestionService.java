@@ -257,7 +257,7 @@ public class QuestionService {
 	 * @param toPost
 	 *            the Question object that represents the question
 	 * @return the id of the question being posted; -1 if a parsing error has
-	 *         occured
+	 *         occurred
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
@@ -303,7 +303,8 @@ public class QuestionService {
 	 *            the Question object that represents the question
 	 * @param date
 	 *            the date for the posting
-	 * @return the id of the question being posted
+	 * @return the id of the question being posted; -1 if a parsing error has
+	 * occurred
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
@@ -462,7 +463,8 @@ public class QuestionService {
 	 * 
 	 * @param toPost
 	 *            the Solution object that represents the solution
-	 * @return the id of the solution being posted
+	 * @return the id of the solution being posted; -1 if a parsing error has
+	 * occurred
 	 * @throws NetworkException
 	 * @throws JSONException
 	 * @throws IOException
@@ -486,7 +488,10 @@ public class QuestionService {
 		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postSolution(solutionStr);
-		return Integer.parseInt(result);
+		if (result != null) {
+			return Integer.parseInt(result);
+		}
+		return -1;
 	}
 	
 	/**
@@ -496,7 +501,8 @@ public class QuestionService {
 	 *            the Solution object that represents the solution
 	 * @param date
 	 *            the date for the posting
-	 * @return the id of the solution being posted
+	 * @return the id of the solution being posted; -1 if a parsing error has
+	 * occurred
 	 * @throws NetworkException
 	 * @throws IOException
 	 */
@@ -517,7 +523,10 @@ public class QuestionService {
 		// Post the solution and return result
 		String solutionStr = mapper.writeValueAsString(toPost);
 		String result = networkService.postSolution(solutionStr);
-		return Integer.parseInt(result);
+		if (result != null) {
+			return Integer.parseInt(result);
+		}
+		return -1;
 	}
 
 	/**
