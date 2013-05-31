@@ -18,8 +18,9 @@
    
     <EditText
         android:id="@+id/edit_question_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginRight="16dp"
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/title_descriptor"
         android:hint="@string/edit_question_title_msg" > 
@@ -108,8 +109,9 @@
 
     <EditText
         android:id="@+id/edit_solution_q"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginRight="16dp"
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/solution_descriptor"
         android:hint="@string/edit_solution_msg" />
@@ -126,8 +128,9 @@
 
     <EditText
         android:id="@+id/edit_question"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginRight="16dp"
         android:layout_toRightOf="@+id/question_descriptor"
         android:layout_alignTop="@+id/question_descriptor"
         android:layout_marginLeft="8dp"

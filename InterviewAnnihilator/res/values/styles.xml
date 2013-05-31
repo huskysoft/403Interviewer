@@ -25,7 +25,8 @@
     
     <style name="EditText" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/myedittext</item> 
-        <item name="android:ems">10</item>
+        <item name="android:ems">8</item>
+        <item name="android:textColor">@color/pitch_black</item>
     </style>
     
     <style name="Button" parent="@android:style/Widget.Button">
