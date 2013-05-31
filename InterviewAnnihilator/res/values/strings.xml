@@ -55,8 +55,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="edit_question_msg">Enter a question</string>
     <string name="edit_question_title_msg">Enter a descriptive title</string>
-    <string name="radio_easy">Easy</string>
-    <string name="radio_medium">Medium</string>
+    <string name="radio_easy">Easy   </string>
+    <string name="radio_medium">Medium   </string>
     <string name="radio_hard">Hard</string>
     <string name="random_question">Random</string>
     <string name="difficulty_post_descriptor">Select a difficulty rank: </string>

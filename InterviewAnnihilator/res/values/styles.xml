@@ -17,6 +17,7 @@
 	<color name="white">#FFFFFF</color>
     <color name="white_opaque">#999999</color>
 	<color name="pitch_black">#FF000000</color>
+	<color name="highlight_yellow">#FFFF00</color>
 	
 	<!-- <color name="light_purple">#D166FF</color> -->
 	<color name="light_purple">#39275B</color>
@@ -32,6 +33,20 @@
 
     </style>
     
+    <style name="ButtonText">
+    	<item name="android:layout_width">fill_parent</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textColor">#ffffff</item>
+    	<item name="android:gravity">center</item>
+    	<item name="android:layout_margin">2dp</item>
+    	<item name="android:textSize">16sp</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:shadowColor">#000000</item>
+    	<item name="android:shadowDx">1</item>
+    	<item name="android:shadowDy">1</item>
+   		<item name="android:shadowRadius">2</item>
+	</style>
+
     <!-- Loading indicator -->
 	<style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
 	    <item name="android:layout_width">wrap_content</item>
