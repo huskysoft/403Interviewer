@@ -92,10 +92,11 @@ public class QuestionActivity extends AbstractPostingActivity {
 		//build text
 		String questionBody = question.getText();
 		String questionDate = question.getDateCreated().toString();
+		String questionDiff = question.getDifficulty().toString();
+		String questionCat = question.getCategory().toString();
 		
 		int pos = 0;
 		SpannableStringBuilder sb = new SpannableStringBuilder();
-		
 		// body
 		sb.append(questionBody);
 		sb.setSpan(new  TextAppearanceSpan(
@@ -103,6 +104,17 @@ public class QuestionActivity extends AbstractPostingActivity {
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		sb.append('\n');
 		pos += questionBody.length() + 1;
+		// descriptors
+				sb.append('\n');
+				sb.append(questionCat);
+				sb.append("\t\t\t");
+				sb.append(questionDiff);
+				sb.setSpan(new  TextAppearanceSpan(
+						this, R.style.question_descriptors_appearance),
+						pos, sb.length(), 
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				sb.append("\n");
+				pos += questionDiff.length() + questionCat.length() + 4;
 		// date
 		sb.append('\n');
 		sb.append(questionDate);
