@@ -49,6 +49,7 @@
     <string name="badInputDialog_return">Return to editor</string>
     <string name="button_ok"> OK </string>
     <string name="loading_text">Loading&#8230;</string>
+    <string name="sending_text">Sending&#8230;</string>
     <string name="toast_return">Returning&#8230; </string>
     <string name="toast_retry">Trying again&#8230; </string>
     <string name="title_activity_post_question">Post A Question</string>

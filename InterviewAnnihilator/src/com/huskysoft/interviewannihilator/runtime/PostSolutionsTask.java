@@ -57,8 +57,10 @@ public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
 		//TODO: handle specific error cases
 		if(exception != null){
 			if (exception.getClass().equals(NetworkException.class)){
+				context.switchFromLoad();
 				context.displayMessage(-1);
 			} else{
+				context.switchFromLoad();
 				context.displayMessage(-2);
 			}
 		}
