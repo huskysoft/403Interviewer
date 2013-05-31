@@ -113,7 +113,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 						this, R.style.question_descriptors_appearance),
 						pos, sb.length(), 
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				sb.append("\n");
+				sb.append('\n');
 				pos += questionDiff.length() + questionCat.length() + 4;
 		// date
 		sb.append('\n');
@@ -249,10 +249,14 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// Add post solution button to end of list
 		Button post = new Button(this);
 		post.setText(R.string.button_post_solution);
-		float dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
-		int height = (int)(40*dp);
-		int margin = (int)(16*dp);
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, (int)height, 1f);
+		float dp = TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 1, 
+				getResources().getDisplayMetrics());
+		int height = (int) (40 * dp);
+		int margin = (int) (16 * dp);
+		LinearLayout.LayoutParams lp = 
+				new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, height, 1f);
 		lp.gravity = Gravity.CENTER_HORIZONTAL;
 		lp.setMargins(0, margin, 0, 0);
 		post.setLayoutParams(lp);

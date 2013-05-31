@@ -187,7 +187,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 	public void switchToLoad(){
 		View loadingText = findViewById(R.id.layout_loading);
 		View main = findViewById(R.id.post_solution_main_view);
-		Button send = (Button)findViewById(R.id.send_solution);
+		Button send = (Button) findViewById(R.id.send_solution);
 		main.setVisibility(View.GONE);
 		loadingText.setVisibility(View.VISIBLE);
 		send.setEnabled(false);
@@ -199,7 +199,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 	public void switchFromLoad(){
 		View loadingText = findViewById(R.id.layout_loading);
 		View main = findViewById(R.id.post_solution_main_view);
-		Button send = (Button)findViewById(R.id.send_solution);
+		Button send = (Button) findViewById(R.id.send_solution);
 		send.setEnabled(true);
 		main.setVisibility(View.VISIBLE);
 		loadingText.setVisibility(View.GONE);
