@@ -16,6 +16,7 @@ import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
+import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 
 import android.os.Bundle;
@@ -75,7 +76,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				MainActivity.EXTRA_MESSAGE);
-		System.out.println("QuestionID: " + question.getQuestionId());
+		
 		this.setTitle(question.getTitle());
 		// Grab Linear Layout
 		solutionsLayout =
@@ -213,16 +214,43 @@ public class QuestionActivity extends AbstractPostingActivity {
 		int score = solution.getLikes() - solution.getDislikes();
 		scoreView.setText(Integer.toString(score));
 		
+		// store the context and solution so that when a button is pressed,
+		// we can access it
+		solutionView.setTag(R.id.TAG_CONTEXT_ID, this);
+		solutionView.setTag(R.id.TAG_SOLUTION_VIEW_ID, solution);
+		
+		// yes I know this is redundant but it is difficult to code around
 		// get upvote button
 		Button upvoteButton = (Button)
 				solutionView.findViewById(R.id.button_upvote);
-		upvoteButton.setTag(solution.getSolutionId());
+		upvoteButton.setTag(solutionView);
 		upvoteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){
-				int solutionId = (Integer) v.getTag();
-				QuestionService qs = QuestionService.getInstance();
-				//qs.upvoteSolution(solutionId);
+				View solutionView = (View) v.getTag();
+				QuestionActivity context = (QuestionActivity)
+						solutionView.getTag(R.id.TAG_CONTEXT_ID);
+				Solution solution = (Solution)
+						solutionView.getTag(R.id.TAG_SOLUTION_VIEW_ID);
+				new VoteSolutionTask(context,
+						solutionView, solution, true).execute();
+			}
+		});
+		
+		// get downvote button
+		Button downvoteButton = (Button)
+				solutionView.findViewById(R.id.button_downvote);
+		downvoteButton.setTag(solutionView);
+		downvoteButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				View solutionView = (View) v.getTag();
+				QuestionActivity context = (QuestionActivity)
+						solutionView.getTag(R.id.TAG_CONTEXT_ID);
+				Solution solution = (Solution)
+						solutionView.getTag(R.id.TAG_SOLUTION_VIEW_ID);
+				new VoteSolutionTask(context,
+						solutionView, solution, false).execute();
 			}
 		});
 		
