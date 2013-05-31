@@ -75,6 +75,6 @@ public class FetchSolutionsTask extends AsyncTask<Void, Void, List<Solution>>{
 	 */
 	@Override
 	protected void onPostExecute(List<Solution> solutionList){
-		context.addSolutions(solutionList);
+		context.addSolutionList(solutionList);
 	}
 }

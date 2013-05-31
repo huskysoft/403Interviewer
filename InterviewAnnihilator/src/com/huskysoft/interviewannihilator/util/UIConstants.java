@@ -18,6 +18,9 @@ public class UIConstants {
 	/** Default size for slide menu text */
 	public static final int SLIDE_MENU_TEXT_SIZE = 20;
 	
+	/** Default vertical margin things in lists */
+	public static final int DEFAULT_VERTICAL_MARGIN = 10;
+	
 	/** Default number of Questions to fetch */
 	public static final int DEFAULT_QUESTIONS_TO_LOAD = 10;
 	

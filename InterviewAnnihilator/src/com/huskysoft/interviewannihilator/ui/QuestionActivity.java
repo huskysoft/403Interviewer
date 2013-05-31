@@ -17,7 +17,7 @@ import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
-import com.huskysoft.interviewannihilator.service.QuestionService;
+import com.huskysoft.interviewannihilator.util.UIConstants;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -139,7 +139,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 * 
 	 * @param solutions
 	 */
-	public synchronized void addSolutions(List<Solution> solutions){		
+	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
 			t.setText("There doesn't seem to be any solutions");
@@ -256,8 +256,8 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-		int verticalMargin = R.dimen.activity_vertical_margin;
-		llp.setMargins(0, 10, 0, 10);
+		int verticalMargin = UIConstants.DEFAULT_VERTICAL_MARGIN;
+		llp.setMargins(0, verticalMargin, 0, verticalMargin);
 		solutionView.setLayoutParams(llp);
 		
 		solutionsLayout.addView(solutionView);

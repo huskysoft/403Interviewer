@@ -6,8 +6,6 @@
 
 package com.huskysoft.interviewannihilator.runtime;
 
-import java.util.List;
-
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -16,14 +14,9 @@ import android.widget.Toast;
 
 
 import com.huskysoft.interviewannihilator.R;
-import com.huskysoft.interviewannihilator.model.Category;
-import com.huskysoft.interviewannihilator.model.Difficulty;
-import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
-import com.huskysoft.interviewannihilator.ui.MainActivity;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
-import com.huskysoft.interviewannihilator.util.PaginatedQuestions;
 
 public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 
@@ -39,8 +32,8 @@ public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 
 	/**
 	 * @param solutionView Solution view as defined in solution_view.xml
-	 * 			solutionView must have .setTag(Solution) set in order for this
-	 * 			to work.
+	 * 			solutionView must have .setTag(Solution) set in order for
+	 * 			this to work.
 	 * @param isUpvote true upvotes, false downvotes
 	 */
 	public VoteSolutionTask(QuestionActivity context,
