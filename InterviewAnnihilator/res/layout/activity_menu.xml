@@ -3,7 +3,7 @@
     android:id="@+id/sliding_menu_options"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sliding_menu"
+    android:background="@color/dark_grey"
     android:orientation="vertical" >
 
     <TableLayout
@@ -16,7 +16,8 @@
             android:id="@+id/tableRow1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="5dip" >
+            android:padding="5dip" 
+            style="android:Theme.Holo">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +62,8 @@
 	            android:layout_height="wrap_content"
 	            android:onClick="addCategory"
 	            android:text="@string/add_category"
-	            android:textSize="13sp"/>
+	            android:textSize="13sp"
+	            android:background="@android:drawable/btn_default"/>
 	        <Button 
 	            android:id="@+id/remove_category_button" 
 	            android:layout_width="wrap_content"
@@ -69,7 +71,8 @@
 	            android:onClick="removeCategory"
 	            android:text="@string/remove_category"
 	            android:textSize="13sp"
-	            android:visibility="gone"/>
+	            android:visibility="gone"
+	            android:background="@android:drawable/btn_default"/>
 	        
 	    </LinearLayout>
 
@@ -79,6 +82,7 @@
         android:id="@+id/slide_menu_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_ok" />
+        android:text="@string/button_ok" 
+        android:background="@android:drawable/btn_default"/>
 
 </LinearLayout>

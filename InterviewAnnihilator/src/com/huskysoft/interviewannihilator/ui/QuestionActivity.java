@@ -235,7 +235,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// Add post solution button to end of list
 		Button post = new Button(this);
 		post.setText(R.string.button_post_solution);
-		post.setBackgroundColor(getResources().getColor(R.color.button));
 		post.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){

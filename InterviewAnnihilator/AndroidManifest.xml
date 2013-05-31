@@ -16,12 +16,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ia_app_logo"
         android:logo="@drawable/settings"
-        android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme">
+        android:label="@string/app_name" >
         <activity
             android:name="com.huskysoft.interviewannihilator.ui.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +32,8 @@
             android:name="com.huskysoft.interviewannihilator.ui.QuestionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_question"
-            android:parentActivityName="com.huskysoft.interviewannihilator.ui.MainActivity" >
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.MainActivity" 
+            android:theme="@style/MyTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.ui.MainActivity" />
@@ -41,7 +42,8 @@
             android:name="com.huskysoft.interviewannihilator.ui.PostSolutionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post_solution"
-            android:parentActivityName="com.huskysoft.interviewannihilator.ui.QuestionActivity" >
+            android:parentActivityName="com.huskysoft.interviewannihilator.ui.QuestionActivity" 
+            android:theme="@style/MyTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huskysoft.interviewannihilator.ui.QuestionActivity" />
@@ -49,8 +51,8 @@
         <activity
             android:name="com.huskysoft.interviewannihilator.ui.PostQuestionActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_post_question" >
+            android:label="@string/title_activity_post_question" 
+            android:theme="@style/MyTheme">
         </activity>
     </application>
-
 </manifest>

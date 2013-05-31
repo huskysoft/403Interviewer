@@ -11,7 +11,7 @@
          android:layout_below="@+id/dialog_text_alert"
          android:layout_centerHorizontal="true"
          android:layout_marginTop="32dp"
-         android:background="@color/button"
+         android:background="@android:drawable/btn_default"
          android:text="@string/button_ok" >
 
          <requestFocus /> </Button>

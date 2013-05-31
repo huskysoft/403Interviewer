@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"  
-    android:background="@color/light_purple">
+    android:layout_height="fill_parent" 
+    style="@style/Layout">
 
     <TextView
         android:id="@+id/title_descriptor"
@@ -22,9 +22,7 @@
         android:layout_height="60dp"
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/title_descriptor"
-        android:ems="10"
-        android:hint="@string/edit_question_title_msg"
-        android:background="@drawable/myedittext"> 
+        android:hint="@string/edit_question_title_msg" > 
                 <requestFocus /> </EditText> 
  
     <TextView
@@ -114,21 +112,17 @@
         android:layout_height="80dp"
         android:layout_alignLeft="@+id/edit_question"
         android:layout_alignTop="@+id/solution_descriptor"
-        android:ems="10"
-        android:hint="@string/edit_solution_msg" 
-        android:background="@drawable/myedittext" />
+        android:hint="@string/edit_solution_msg" />
     
     <Button
         android:id="@+id/send_question"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:onClick="sendQuestion"
-        android:text="@string/button_post" 
-        android:background="@drawable/button" 
-        style="@style/ButtonText"/>
+        android:text="@string/button_post" />
 
     <EditText
         android:id="@+id/edit_question"
@@ -137,9 +131,7 @@
         android:layout_toRightOf="@+id/question_descriptor"
         android:layout_alignTop="@+id/question_descriptor"
         android:layout_marginLeft="8dp"
-        android:ems="10"
-        android:hint="@string/edit_question_msg" 
-        android:background="@drawable/myedittext" />
+        android:hint="@string/edit_question_msg" />
     
     <TextView
         android:id="@+id/category_descriptor"
