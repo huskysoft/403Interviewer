@@ -18,7 +18,7 @@
 	    <EditText
 	        android:id="@+id/edit_solution"
 	        android:layout_width="match_parent"
-	        android:layout_height="60dp"
+	        android:layout_height="100dp"
 	        android:layout_alignParentLeft="true"
 	        android:layout_marginLeft="16dp"
 	        android:layout_marginRight="16dp"
