@@ -25,6 +25,8 @@ import android.app.ActionBar.LayoutParams;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -235,6 +237,14 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// Add post solution button to end of list
 		Button post = new Button(this);
 		post.setText(R.string.button_post_solution);
+		float dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
+		int height = (int)(40*dp);
+		int margin = (int)(16*dp);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, (int)height, 1f);
+		lp.gravity = Gravity.CENTER_HORIZONTAL;
+		lp.setMargins(0, margin, 0, 0);
+		post.setLayoutParams(lp);
+		post.setPadding(margin, 0, margin, 0);
 		post.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){

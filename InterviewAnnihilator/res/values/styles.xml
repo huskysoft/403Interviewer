@@ -8,12 +8,15 @@
 	<color name="gold">#C79900</color>
 	<color name="sliding_menu">#e6e4e9</color>
 	<color name="button">#B5B5B5</color>
-	<color name="dark_grey">#666666</color>
+	<color name="dark_grey">#4D4D4D</color>
+	<color name="medium_grey">#666666</color>
+	<color name="light_grey">#B5B5B5</color>
     
     <!-- My theme for the App -->
     <style name="MyTheme" parent="android:Theme.Holo">
 		<item name="android:buttonStyle">@style/Button</item>
 		<item name="android:editTextStyle">@style/EditText</item>
+		<item name="android:textColor">@color/pitch_black</item>
     </style>
     
     <style name="Layout">
@@ -27,10 +30,21 @@
     
     <style name="Button" parent="@android:style/Widget.Button">
     	<item name="android:background">@drawable/button</item>
-    	<item name="android:textColor">#ffffff</item>
+    	<item name="android:textColor">@color/white</item>
     	<item name="android:textSize">16sp</item>
     	<item name="android:textStyle">bold</item>
-    	<item name="android:shadowColor">#000000</item>
+    	<item name="android:shadowColor">@color/pitch_black</item>
+    	<item name="android:shadowDx">1</item>
+    	<item name="android:shadowDy">1</item>
+   		<item name="android:shadowRadius">2</item>
+	</style>
+	
+    <style name="NormButton" parent="@android:style/Widget.Button">
+    	<item name="android:background">@drawable/normal_button</item>
+    	<item name="android:textColor">@color/white</item>
+    	<item name="android:textSize">16sp</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:shadowColor">@color/pitch_black</item>
     	<item name="android:shadowDx">1</item>
     	<item name="android:shadowDy">1</item>
    		<item name="android:shadowRadius">2</item>

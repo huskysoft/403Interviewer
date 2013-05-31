@@ -19,7 +19,9 @@
 		<Button 
 	        android:id="@+id/question_button_show_solutions"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_height="40dp"
+	        android:paddingLeft="16dp"
+	        android:paddingRight="16dp"
 	        android:text="@string/button_solutions"
 	        android:layout_gravity="center_horizontal"
 	        android:onClick="onShowSolutions"/>	        

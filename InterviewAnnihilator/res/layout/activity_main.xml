@@ -45,7 +45,7 @@
             android:orientation="horizontal" >
 
             <!-- Android was complaining unless these had buttonBarStyle -->
-                <View android:id="@+id/strut"
+            <View android:id="@+id/strut"
                 android:layout_width="0dp"
                 android:layout_height="0dp" 
                 android:layout_centerHorizontal="true"/>
