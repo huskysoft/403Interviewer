@@ -18,7 +18,6 @@ public class MainActivityTest extends
 
 	public MainActivityTest() {
 		super(MainActivity.class);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
