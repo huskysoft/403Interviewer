@@ -47,6 +47,7 @@
     <string name="badInputDialog_solution">Please provide a valid solution.</string>
     <string name="badInputDialog_title">Please provide a valid title.</string>
     <string name="badInputDialog_question">Please provide a valid question.</string>
+    <string name="badInputDialog_category">Please provide a valid category.</string>
     <string name="badInputDialog_return">Return to editor</string>
     <string name="button_ok"> OK </string>
     <string name="loading_text">Loading&#8230;</string>
