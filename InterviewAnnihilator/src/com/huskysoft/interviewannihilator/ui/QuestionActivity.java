@@ -18,7 +18,6 @@ import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
 import android.text.Spannable;
@@ -60,8 +59,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 	/** Thread in which solutions are loaded */
 	private FetchSolutionsTask loadingThread;
 	
-	
-	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -15,7 +15,6 @@ import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Intent;
@@ -56,7 +55,6 @@ public class MainActivity extends AbstractPostingActivity {
 	 * Initializes the questions and questionll fields. Also calls
 	 * the displayQuestions function.
 	 */
-	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +118,6 @@ public class MainActivity extends AbstractPostingActivity {
 	 * sliders for extra categories.
 	 * @param cats
 	 */
-	@SuppressLint("NewApi")
 	public void setCategorySpinners(List<Category> cats){
 		String catStrUp = cats.get(0).toString().toUpperCase();
 		

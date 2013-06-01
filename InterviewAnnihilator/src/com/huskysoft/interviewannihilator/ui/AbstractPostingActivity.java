@@ -21,7 +21,6 @@ import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -135,7 +134,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	/**
 	 * Add another category spinner in the slide menu
 	 */
-	@SuppressLint("NewApi")
 	public void addCategory(View v){
 		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
 		
