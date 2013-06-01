@@ -10,14 +10,13 @@
 
 package com.huskysoft.interviewannihilator.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
-
+import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -27,12 +26,14 @@ import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.content.Context;
 import android.content.Intent;
 
 
@@ -49,9 +50,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 	
 	/** The question the user is viewing */
 	private Question question;
-	
-	/** List of TextViews containing solutions */
-	private List<TextView> solutionTextViews;
 	
 	/** true when the solutions have finished loading */
 	private boolean solutionsLoaded;
@@ -76,18 +74,11 @@ public class QuestionActivity extends AbstractPostingActivity {
 		Intent intent = getIntent();
 		question = (Question) intent.getSerializableExtra(
 				MainActivity.EXTRA_MESSAGE);
+		
 		this.setTitle(question.getTitle());
 		// Grab Linear Layout
 		solutionsLayout =
 				(LinearLayout) findViewById(R.id.question_layout_solutions);
-		
-		// Create TextView that holds Question
-		LinearLayout.LayoutParams llp =  new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f);
-		
-		// TODO: Move to XML or constants file - haven't yet figured out how
-		llp.setMargins(40, 10, 40, 10);
-		llp.gravity = 1; // Horizontal Center
 
 		//build text
 		String questionBody = question.getText();
@@ -128,12 +119,10 @@ public class QuestionActivity extends AbstractPostingActivity {
 		textview.setBackground(
 				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(sb);
-		textview.setLayoutParams(llp);
 				
 		// Initialize values
 		solutionsLoaded = false;
 		showSolutionsPressed = false;
-		solutionTextViews = new ArrayList<TextView>();
 		
 		//Start loading solutions. This makes a network call.
 		loadSolutions();		
@@ -148,56 +137,23 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 * 
 	 * @param solutions
 	 */
-	public synchronized void addSolutions(List<Solution> solutions){
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-		llp.setMargins(40, 10, 40, 10);
-		llp.gravity = 1; // Horizontal Center
-		
+	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
-			
 			t.setText("There doesn't seem to be any solutions");
+			
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+			llp.setMargins(40, 10, 40, 10);
+			llp.gravity = 1; // Horizontal Center
 			t.setLayoutParams(llp);
+			
 			solutionsLayout.addView(t);
 		} else {
 			for(int i = 0; i < solutions.size(); i++){
 				Solution solution = solutions.get(i);
 				if(solution != null && solution.getText() != null){
-					//build text
-					String solutionBody = solution.getText();
-					String solutionDate = solution.getDateCreated().toString();
-					
-					int pos = 0;
-					SpannableStringBuilder sb = new SpannableStringBuilder();
-					
-					// body
-					sb.append(solutionBody);
-					sb.setSpan(new  TextAppearanceSpan(
-							this, R.style.solution_appearance), pos, 
-							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					sb.append('\n');
-					pos += solutionBody.length() + 1;
-					// date
-					sb.append('\n');
-					sb.append(solutionDate);
-					sb.setSpan(new  TextAppearanceSpan(
-							this, R.style.question_date_appearance), pos, 
-							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					
-					// done
-					TextView t = new TextView(this);
-					
-					t.setText(sb);
-					t.setBackground(getResources().
-							getDrawable(R.drawable.listitem));
-					t.setLayoutParams(llp);
-					t.setId(solution.getSolutionId());
-					//Hide solutions
-					t.setVisibility(View.GONE);
-					
-					solutionTextViews.add(t);
-					solutionsLayout.addView(t);
+					addSolution(solution);
 				}
 			}
 		}
@@ -206,7 +162,99 @@ public class QuestionActivity extends AbstractPostingActivity {
 		if(showSolutionsPressed){
 			revealSolutions();
 		}
-	}	
+	}
+	
+	/**
+	 * Adds a single solution to the UI. This includes the solution TextView
+	 * and upvote/downvote arrows.
+	 * 
+	 * @param solution solution that will populate the text view
+	 * @param llp layout parameters
+	 */
+	private void addSolution(Solution solution){
+		// get layout from xml
+		LayoutInflater li = (LayoutInflater)
+				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View solutionView =
+				li.inflate(R.layout.solution_view, solutionsLayout, false);
+		
+		// build text
+		String solutionBody = solution.getText();
+		String solutionDate = solution.getDateCreated().toString();
+		
+		int pos = 0;
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		
+		// body
+		sb.append(solutionBody);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.solution_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append('\n');
+		pos += solutionBody.length() + 1;
+		// date
+		sb.append('\n');
+		sb.append(solutionDate);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		
+		
+		// get the solution TextView from solution_view.xml
+		TextView solnView = (TextView)
+				solutionView.findViewById(R.id.solution_text);
+		solnView.setText(sb);
+		solnView.setId(solution.getSolutionId());
+		
+		// get the score TextView from solution_view.xml
+		TextView scoreView = (TextView)
+				solutionView.findViewById(R.id.score_text);
+		int score = solution.getLikes() - solution.getDislikes();
+		scoreView.setText(Integer.toString(score));
+		
+		// store the context and solution so that when a button is pressed,
+		// we can access it
+		solutionView.setTag(R.id.TAG_CONTEXT_ID, this);
+		solutionView.setTag(R.id.TAG_SOLUTION_VIEW_ID, solution);
+		
+		// yes I know this is redundant but it is difficult to code around
+		// get upvote button
+		Button upvoteButton = (Button)
+				solutionView.findViewById(R.id.button_upvote);
+		upvoteButton.setTag(solutionView);
+		upvoteButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				View solutionView = (View) v.getTag();
+				QuestionActivity context = (QuestionActivity)
+						solutionView.getTag(R.id.TAG_CONTEXT_ID);
+				Solution solution = (Solution)
+						solutionView.getTag(R.id.TAG_SOLUTION_VIEW_ID);
+				new VoteSolutionTask(context,
+						solutionView, solution, true).execute();
+			}
+		});
+		
+		// get downvote button
+		Button downvoteButton = (Button)
+				solutionView.findViewById(R.id.button_downvote);
+		downvoteButton.setTag(solutionView);
+		downvoteButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				View solutionView = (View) v.getTag();
+				QuestionActivity context = (QuestionActivity)
+						solutionView.getTag(R.id.TAG_CONTEXT_ID);
+				Solution solution = (Solution)
+						solutionView.getTag(R.id.TAG_SOLUTION_VIEW_ID);
+				new VoteSolutionTask(context,
+						solutionView, solution, false).execute();
+			}
+		});
+		
+		solutionsLayout.addView(solutionView);
+	}
 
 	
 	/**
@@ -242,9 +290,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		showSolutions.setVisibility(View.GONE);
 		
 		// Reveal hidden solutions
-		for(TextView tv : solutionTextViews){
-			tv.setVisibility(View.VISIBLE);
-		}
+		solutionsLayout.setVisibility(View.VISIBLE);
 		
 		// Add post solution button to end of list
 		Button post = new Button(this);
