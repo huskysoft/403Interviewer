@@ -2,18 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" 
-	android:background="@color/white">
+	android:background="@color/sliding_menu">
 
-     <Button
+     <Button style="@style/NormButton"
          android:id="@+id/dialogButtonOK"
-         android:layout_width="100dp"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_below="@+id/dialog_text_alert"
          android:layout_centerHorizontal="true"
-         android:layout_marginTop="32dp"
-         android:background="@color/button"
+         android:layout_margin="1dp"
+         android:layout_marginTop="16dp"
          android:text="@string/button_ok" >
-
          <requestFocus /> </Button>
 
      <TextView
@@ -26,7 +25,6 @@
 		 android:layout_marginTop="32dp"
          android:gravity="center_horizontal"
          android:textSize="10pt" 
-         android:textColor="@color/pitch_black"
          android:focusable="false" />
 
 </RelativeLayout>

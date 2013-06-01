@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+  <item>
+      <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/white"/>
+    <stroke android:width="2dp" android:color="@color/pitch_black"/>
+    <corners android:radius="3dp" />
+</shape>
+  </item>
+  
+  <item android:bottom="0.5dp"
+      android:left="2dp"
+      android:right="2dp"
+      android:top="2dp">
+      <shape >
+          <solid android:color="@color/highlight_yellow" />
+      </shape>
+  </item>
+
+  <!-- main color -->
+  <item android:bottom="4dp"
+      android:left="4dp"
+      android:right="4dp"
+      android:top="2dp">
+      <shape >
+          <solid android:color="@color/white" />
+      </shape>
+  </item>
+
+  <!-- draw another block to cut-off the left and right bars -->
+  <item android:bottom="15.0dp"
+      android:top="2dp"
+      android:left="2dp"
+      android:right="2dp">
+      <shape >
+          <solid android:color="@color/white" />
+      </shape>
+  </item> 
+  </layer-list>

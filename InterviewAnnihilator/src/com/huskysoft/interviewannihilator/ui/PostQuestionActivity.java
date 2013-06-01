@@ -99,6 +99,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 			displayMessage(0, getString(R.string.badInputDialog_solution));
 		} else {
 			// all fields are correct, try and send it!
+			switchToLoad();
 			Question q = new Question(questionText, 
 					titleText, category, difficulty);
 			Solution s = new Solution(q.getQuestionId(), solutionText);
@@ -215,5 +216,29 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 			med.setChecked(false);
 			difficulty = Difficulty.HARD;
 		}
+	}
+	
+	/**
+	 * Shows loading text
+	 */
+	public void switchToLoad(){
+		View loadingText = findViewById(R.id.layout_loading);
+		View main = findViewById(R.id.post_question_main_view);
+		Button send = (Button) findViewById(R.id.send_question);
+		main.setVisibility(View.GONE);
+		loadingText.setVisibility(View.VISIBLE);
+		send.setEnabled(false);
+	}
+	
+	/**
+	 * Hides loading text
+	 */
+	public void switchFromLoad(){
+		View loadingText = findViewById(R.id.layout_loading);
+		View main = findViewById(R.id.post_question_main_view);
+		Button send = (Button) findViewById(R.id.send_question);
+		send.setEnabled(true);
+		main.setVisibility(View.VISIBLE);
+		loadingText.setVisibility(View.GONE);
 	}
 }

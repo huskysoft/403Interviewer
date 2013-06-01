@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     	xmlns:tools="http://schemas.android.com/tools"
-    	android:background="@color/light_purple"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+	    android:layout_height="match_parent" 
+	    style="@style/Layout">
 
 	<LinearLayout android:id="@+id/question_layout_main"
 	    android:layout_width="match_parent"
@@ -19,11 +19,12 @@
 		<Button 
 	        android:id="@+id/question_button_show_solutions"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_height="40dp"
+	        android:paddingLeft="16dp"
+	        android:paddingRight="16dp"
 	        android:text="@string/button_solutions"
 	        android:layout_gravity="center_horizontal"
-	        android:onClick="onShowSolutions"
-	        android:background="@color/button" />	        
+	        android:onClick="onShowSolutions"/>	        
 
 		<LinearLayout android:id="@+id/question_layout_solutions"
 		    android:layout_width="match_parent"

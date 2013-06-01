@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity_view_switcher"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/light_purple" >
+    android:layout_height="wrap_content" 
+    style="@style/Layout">
 
     <!-- Main loading animation -->
     <include layout="@layout/loading_anim"
@@ -38,35 +38,40 @@
 				android:id="@+id/layout_loading_more"/>
             
             <!-- Button bar at the bottom -->
-            <RelativeLayout
-                android:id="@+id/main_bottom_button_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                
-                <!-- Android was complaining unless these had buttonBarStyle -->
-	            <Button style="@android:attr/buttonBarStyle"
-	                android:id="@+id/button_post_question"
-	                android:text="@string/button_post_question"
-	                android:layout_width="150dp"
-	                android:layout_height="wrap_content" 
-	                android:background="@color/button"
-	                android:onClick="postQuestion" 
-	                android:layout_alignParentLeft="true"
-	                android:layout_margin="@dimen/activity_horizontal_margin"/>
-	            
-	            <Button	style="@android:attr/buttonBarStyle"
-	                android:id="@+id/button_show_me_more"
-	                android:text="@string/button_show_me_more" 
-	                android:layout_width="150dp"
-	                android:layout_height="wrap_content"
-	                android:background="@color/button"
-	                android:onClick="loadMoreQuestions"
-	                android:layout_alignParentRight="true"
-	                android:layout_margin="@dimen/activity_horizontal_margin"/>
-	            
-            </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/main_bottom_button_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <!-- Android was complaining unless these had buttonBarStyle -->
+            <View android:id="@+id/strut"
+                android:layout_width="0dp"
+                android:layout_height="0dp" 
+                android:layout_centerHorizontal="true"/>
+
+            <Button style="@android:attr/buttonBarStyle"
+                android:id="@+id/button_post_question"
+                android:text="@string/button_post_question"
+                android:layout_width="0dp"
+                android:layout_alignRight="@id/strut"
+                android:layout_alignParentLeft="true"
+                android:layout_height="40dp"
+                android:onClick="postQuestion" 
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="2dp"/>
+
+            <Button style="@android:attr/buttonBarStyle"
+                android:id="@+id/button_show_me_more"
+                android:text="@string/button_show_me_more" 
+                android:layout_width="0dp"
+                android:layout_alignLeft="@id/strut"
+                android:layout_alignParentRight="true"
+                android:onClick="loadMoreQuestions"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="2dp"/>
+        </RelativeLayout>
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

@@ -25,6 +25,8 @@ import android.app.ActionBar.LayoutParams;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -90,10 +92,11 @@ public class QuestionActivity extends AbstractPostingActivity {
 		//build text
 		String questionBody = question.getText();
 		String questionDate = question.getDateCreated().toString();
+		String questionDiff = question.getDifficulty().toString();
+		String questionCat = question.getCategory().toString();
 		
 		int pos = 0;
 		SpannableStringBuilder sb = new SpannableStringBuilder();
-		
 		// body
 		sb.append(questionBody);
 		sb.setSpan(new  TextAppearanceSpan(
@@ -101,6 +104,17 @@ public class QuestionActivity extends AbstractPostingActivity {
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		sb.append('\n');
 		pos += questionBody.length() + 1;
+		// descriptors
+				sb.append('\n');
+				sb.append(questionCat);
+				sb.append("\t\t\t");
+				sb.append(questionDiff);
+				sb.setSpan(new  TextAppearanceSpan(
+						this, R.style.question_descriptors_appearance),
+						pos, sb.length(), 
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				sb.append('\n');
+				pos += questionDiff.length() + questionCat.length() + 4;
 		// date
 		sb.append('\n');
 		sb.append(questionDate);
@@ -235,7 +249,18 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// Add post solution button to end of list
 		Button post = new Button(this);
 		post.setText(R.string.button_post_solution);
-		post.setBackgroundColor(getResources().getColor(R.color.button));
+		float dp = TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 1, 
+				getResources().getDisplayMetrics());
+		int height = (int) (40 * dp);
+		int margin = (int) (16 * dp);
+		LinearLayout.LayoutParams lp = 
+				new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, height, 1f);
+		lp.gravity = Gravity.CENTER_HORIZONTAL;
+		lp.setMargins(0, margin, 0, 0);
+		post.setLayoutParams(lp);
+		post.setPadding(margin, 0, margin, 0);
 		post.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){
