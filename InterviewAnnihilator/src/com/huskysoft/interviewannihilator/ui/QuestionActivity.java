@@ -17,8 +17,6 @@ import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
-import com.huskysoft.interviewannihilator.util.UIConstants;
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
