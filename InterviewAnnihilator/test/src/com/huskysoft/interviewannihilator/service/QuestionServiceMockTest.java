@@ -68,10 +68,7 @@ public class QuestionServiceMockTest extends TestCase {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 * @throws NetworkException
-<<<<<<< HEAD
 	 * @label White-box test
-=======
->>>>>>> refactored tests to InterviewAnnihilator/test
 	 */
 	public void testPostQuestionCorrectValue() throws JsonGenerationException,
 			JsonMappingException, IOException, NetworkException {
@@ -102,10 +99,7 @@ public class QuestionServiceMockTest extends TestCase {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 * @throws NetworkException
-<<<<<<< HEAD
 	 * @label White-box test
-=======
->>>>>>> refactored tests to InterviewAnnihilator/test
 	 */
 	public void testPostQuestionThrowsException()
 			throws JsonGenerationException, JsonMappingException, IOException,
@@ -144,10 +138,7 @@ public class QuestionServiceMockTest extends TestCase {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 * @throws NetworkException
-<<<<<<< HEAD
 	 * @label White-box test
-=======
->>>>>>> refactored tests to InterviewAnnihilator/test
 	 */
 	public void testPostSolutionCorrectValue() throws JsonGenerationException,
 			JsonMappingException, IOException, NetworkException {
@@ -178,10 +169,7 @@ public class QuestionServiceMockTest extends TestCase {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 * @throws NetworkException
-<<<<<<< HEAD
 	 * @label White-box test
-=======
->>>>>>> refactored tests to InterviewAnnihilator/test
 	 */
 	public void testPostSolutionThrowsException()
 			throws JsonGenerationException, JsonMappingException, IOException,
