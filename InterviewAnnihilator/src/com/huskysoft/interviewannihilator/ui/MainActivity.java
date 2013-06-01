@@ -74,7 +74,6 @@ public class MainActivity extends AbstractPostingActivity {
 		slideMenuInfo = SlideMenuInfo.getInstance();
 		Difficulty diff = slideMenuInfo.getDiff();
 		List<Category> cat = slideMenuInfo.getCat();
-		
 		buildSlideMenu();
 		
 		if(diff == null){

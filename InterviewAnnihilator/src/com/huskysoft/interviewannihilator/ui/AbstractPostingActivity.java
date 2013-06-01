@@ -58,7 +58,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
+		super.onCreate(savedInstanceState);
 
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
