@@ -56,8 +56,7 @@ public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 			int solutionId = solution.getSolutionId();
 			if(isUpvote){
 				success = questionService.upvoteSolution(solutionId);
-			}
-			else{
+			}else{
 				success = questionService.downvoteSolution(solutionId);
 			}
 		} catch (Exception e){
@@ -65,8 +64,9 @@ public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 			exception = e;
 			this.cancel(true);
 		}
-		if(!success)
+		if(!success){
 			this.cancel(true);
+		}
 		return success;
 	}
 
@@ -79,8 +79,7 @@ public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 			// network error
 			Toast.makeText(context.getApplicationContext(), 
 					R.string.toast_network_error, Toast.LENGTH_LONG).show();	
-		}
-		else{
+		}else{
 			// user has already voted
 			Toast.makeText(context.getApplicationContext(), 
 					R.string.toast_already_voted, Toast.LENGTH_LONG).show();
@@ -99,10 +98,11 @@ public class VoteSolutionTask extends AsyncTask<Void, Void, Boolean>{
 			
 			int currentScore =
 					Integer.parseInt(scoreView.getText().toString());
-			if(isUpvote)
+			if(isUpvote){
 				currentScore++;
-			else
+			}else{
 				currentScore--;
+			}
 			scoreView.setText(currentScore + "");
 		}
 	}
