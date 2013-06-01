@@ -52,6 +52,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		
 		// fill category spinner
 		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("<SELECT>");
 		for (Category c : Category.values()){
 			spinnerArray.add(c.toString());
 		}
@@ -82,13 +83,17 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		// get all necessary fields
 		String categoryStr = ((Spinner) findViewById(
 				R.id.category_spinner_question)).getSelectedItem().toString();
-		Category category = Category.valueOf(categoryStr);
+		Category category = null;
+		if (!categoryStr.equals("<SELECT>")) {
+			category = Category.valueOf(categoryStr);
+		}
 		String solutionText = ((EditText) findViewById(
 				R.id.edit_solution_q)).getText().toString();
 		String questionText = ((EditText) findViewById(
 				R.id.edit_question)).getText().toString();
 		String titleText = ((EditText) findViewById(
 				R.id.edit_question_title)).getText().toString();
+		
 		
 		// check fields for correctness
 		if (titleText.trim().equals("")){
@@ -97,6 +102,8 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 			displayMessage(0, getString(R.string.badInputDialog_question));
 		} else if (solutionText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_solution));
+		} else if (categoryStr.equals("<SELECT>")) {
+			displayMessage(0, getString(R.string.badInputDialog_category));
 		} else {
 			// all fields are correct, try and send it!
 			switchToLoad();
