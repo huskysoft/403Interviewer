@@ -177,7 +177,8 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// get layout from xml
 		LayoutInflater li = (LayoutInflater)
 				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View solutionView = li.inflate(R.layout.solution_view, solutionsLayout, false);
+		View solutionView =
+				li.inflate(R.layout.solution_view, solutionsLayout, false);
 		
 		// build text
 		String solutionBody = solution.getText();
@@ -253,14 +254,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 						solutionView, solution, false).execute();
 			}
 		});
-		
-		/*
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-		int verticalMargin = UIConstants.DEFAULT_VERTICAL_MARGIN;
-		llp.setMargins(0, verticalMargin, 0, verticalMargin);
-		solutionView.setLayoutParams(llp);
-		*/
 		
 		solutionsLayout.addView(solutionView);
 	}
