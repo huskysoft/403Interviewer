@@ -1,7 +1,7 @@
 /**
  * Tests for the QuestionActivity
  * 
- * @author Cody Andrews, 07/01/2013
+ * @author Cody Andrews, 06/01/2013
  */
 
 package com.huskysoft.interviewannihilator.test;
@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class QuestionActivityTest extends
-ActivityInstrumentationTestCase2<QuestionActivity> {
+	ActivityInstrumentationTestCase2<QuestionActivity> {
 
 	private final int TIMEOUT = 1000;
 	private QuestionActivity mActivity;
