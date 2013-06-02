@@ -42,20 +42,21 @@ public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
 	@Override
 	protected Integer doInBackground(Void... result) {
 		QuestionService questionService = QuestionService.getInstance();
+		int retval = -1;
 		try {
-			questionService.postSolution(solution);
+			retval = questionService.postSolution(solution);
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}
-		return 0;
+		return retval;
 	}
 
 	@Override
 	protected void onCancelled(){
 		//TODO: handle specific error cases
-		if(exception != null){
+		if(exception != null && context != null){
 			if (exception.getClass().equals(NetworkException.class)){
 				context.switchFromLoad();
 				context.displayMessage(-1);
@@ -71,8 +72,11 @@ public class PostSolutionsTask extends AsyncTask<Void, Void, Integer>{
 	 */
 	@Override
 	protected void onPostExecute(Integer r){
-		Toast.makeText(context, 
-				R.string.successDialog_title, Toast.LENGTH_LONG).show();
-		context.finish();
+		if (context != null){
+			Toast.makeText(context, 
+					R.string.successDialog_title, 
+					Toast.LENGTH_LONG).show();
+			context.finish();
+		}
 	}
 }

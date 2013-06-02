@@ -46,23 +46,25 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 	 */
 	@Override
 	protected Integer doInBackground(Void... result) {
-		QuestionService questionService = QuestionService.getInstance();	
+		QuestionService questionService = QuestionService.getInstance();
+		int retval = -1;
 		try {
-			int id = questionService.postQuestion(question);
-			solution.setQuestionId(id);
+			retval = questionService.postQuestion(question);
+			solution.setQuestionId(retval);
 			questionService.postSolution(solution);
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
+			return -1;
 		}
-		return 0;
+		return retval;
 	}
 
 	@Override
 	protected void onCancelled(){
 		//TODO: handle specific error cases
-		if(exception != null){
+		if(exception != null && context != null){
 			if (exception.getClass().equals(NetworkException.class)){
 				context.switchFromLoad();
 				context.displayMessage(-1, "");
@@ -78,8 +80,11 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 	 */
 	@Override
 	protected void onPostExecute(Integer result){
-		Toast.makeText(context, 
-				R.string.successDialog_title_q, Toast.LENGTH_LONG).show();
-		context.finish();
+		if (context != null){
+			Toast.makeText(context, 
+					R.string.successDialog_title_q, 
+					Toast.LENGTH_LONG).show();
+			context.finish();
+		}
 	}
 }
