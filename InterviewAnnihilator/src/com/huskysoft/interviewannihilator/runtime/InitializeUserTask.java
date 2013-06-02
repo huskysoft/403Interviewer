@@ -43,20 +43,22 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 	@Override
 	protected Integer doInBackground(Void... result) {
 		QuestionService questionService = QuestionService.getInstance();
+		int retval = -1;
 		try {
 			questionService.initializeUserInfo(baseDir, email);
+			retval = 1;
 		} catch (Exception e){
 			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 		}
-		return 0;
+		return retval;
 	}
 
 	@Override
 	protected void onCancelled() {
 		//TODO: handle specific error cases
-		if(exception != null){
+		if(exception != null && context != null){
 			context.onInitializeError();
 		}
 	}
@@ -66,6 +68,8 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 	 */
 	@Override
 	protected void onPostExecute(Integer result) {
-		context.userInfoSuccessFunction();
+		if (context != null){
+			context.userInfoSuccessFunction();
+		}
 	}
 }
