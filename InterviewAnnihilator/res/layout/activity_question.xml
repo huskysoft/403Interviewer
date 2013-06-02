@@ -37,8 +37,8 @@
 		    android:orientation="vertical"
 		    android:visibility="gone"
 		    android:layout_gravity="center_horizontal">
-
-		    <include layout="@layout/loading_anim" />
 		</LinearLayout>
+		
+		<include layout="@layout/loading_anim" />
 	</LinearLayout>
 </ScrollView>
