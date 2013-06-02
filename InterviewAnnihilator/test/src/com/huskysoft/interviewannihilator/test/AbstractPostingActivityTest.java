@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.huskysoft.interviewannihilator.model.Category;
-import com.huskysoft.interviewannihilator.ui.AbstractPostingActivity;
 import com.huskysoft.interviewannihilator.ui.MainActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
