@@ -36,7 +36,6 @@ ActivityInstrumentationTestCase2<MainActivity> {
 
 	public MainActivityTest() {
 		super(MainActivity.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
