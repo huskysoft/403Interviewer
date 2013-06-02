@@ -87,6 +87,8 @@ public class PostQuestionActivityTest extends
 	/**
 	 * Tests that the page is loaded properly, showing all elements with
 	 * correct initial values.
+	 * 
+	 * @label white-box test
 	 */
 	public void testPreCondition() {
 		// Checks that all elements are shown
@@ -112,11 +114,13 @@ public class PostQuestionActivityTest extends
 	/** 
 	 * Tests displayMessage displays the successful dialog when the post is
 	 * successful.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageSuccessfulPost() {
 		Dialog dialog = mActivity.displayMessage(1, SUCCESS_DIALOG_TITLE);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals("Your solution was successfully posted.",
+		assertEquals(mActivity.getString(R.string.successDialog_title),
 				text.getText().toString());
 	}
 	
@@ -127,13 +131,15 @@ public class PostQuestionActivityTest extends
 	public void testDisplayMessageSuccessfulPostIgnoresMessage() {
 		Dialog dialog = mActivity.displayMessage(1, "test");
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals("Your solution was successfully posted.",
+		assertEquals(mActivity.getString(R.string.successDialog_title),
 				text.getText().toString());
 	}
 	
 	/** 
 	 * Tests displayMessage displays the given string when the post is
 	 * unsuccessful.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageUnsuccessfulPostEmptyString() {
 		String s = "";
@@ -145,6 +151,8 @@ public class PostQuestionActivityTest extends
 	/** 
 	 * Tests displayMessage displays the given string when the post is
 	 * unsuccessful.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageUnsuccessfulPostRandomString() {
 		String s = "test";
@@ -156,6 +164,8 @@ public class PostQuestionActivityTest extends
 	/** 
 	 * Tests displayMessage displays the retry dialog when a network error
 	 * has occurred.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageNetworkError() {
 		Dialog dialog = mActivity.displayMessage(-1, RETRY_DIALOG_TITLE);
@@ -166,6 +176,8 @@ public class PostQuestionActivityTest extends
 	/** 
 	 * Tests displayMessage displays the retry dialog when a network error
 	 * has occurred, ignoring the value of the string given.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageNetworkErrorIgnoresMessage() {
 		Dialog dialog = mActivity.displayMessage(-1, "test");
@@ -176,6 +188,8 @@ public class PostQuestionActivityTest extends
 	/**
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
+	 * 
+	 * @label white-box test
 	 */
 	public void testSelectEasyDifficulty() {
 		mActivity.runOnUiThread(
@@ -197,6 +211,8 @@ public class PostQuestionActivityTest extends
 	/**
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
+	 * 
+	 * @label white-box test
 	 */
 	public void testSelectMediumDifficulty() {
 		mActivity.runOnUiThread(
@@ -219,6 +235,8 @@ public class PostQuestionActivityTest extends
 	/**
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
+	 * 
+	 * @label white-box test
 	 */
 	public void testSelectHardDifficulty() {
 		mActivity.runOnUiThread(
