@@ -1,3 +1,8 @@
+/**
+ * A test case for MainActivity.
+ * 
+ * @author Phil
+ */
 package com.huskysoft.interviewannihilator.test;
 
 import java.util.Locale;
