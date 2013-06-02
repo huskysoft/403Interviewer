@@ -353,6 +353,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		}
 		
 		// prompt the user to select an account
+		// skip if running a debug build (for compatibility reasons)
 		if ((getApplicationInfo().flags & 
 				ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
 			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
