@@ -4,7 +4,7 @@
  * @author Kevin Loh, 6/1/2013
  */
 
-package com.huskysoft.interviewannihilator.ui;
+package com.huskysoft.interviewannihilator.test;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
