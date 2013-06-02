@@ -60,13 +60,12 @@ public class MainActivity extends AbstractPostingActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
-		getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);		
 		
-		
+		// ensure user has been validated
 		if (!isUserInfoLoaded()){
 			this.initializeUserInfo();
-		}
-		
+		}		
 		
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
@@ -417,6 +416,11 @@ public class MainActivity extends AbstractPostingActivity {
 		Intent intent = new Intent(this, QuestionActivity.class);
 		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
 		startActivity(intent);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 }

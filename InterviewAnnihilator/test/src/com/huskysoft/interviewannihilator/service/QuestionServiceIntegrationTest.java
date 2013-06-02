@@ -227,7 +227,7 @@ public class QuestionServiceIntegrationTest extends TestCase {
 		Utility.writeStringToFile(file, json);
 		try {
 			// load UserInfo in QuestionService
-			questionService.initializeUserInfo(path, userInfo.getUserEmail());
+			questionService.loadUserInfo(path);
 
 			// modify userInfo and write changes
 			questionService.clearAllFavorites();
