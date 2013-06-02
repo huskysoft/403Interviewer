@@ -253,6 +253,14 @@ public class QuestionActivity extends AbstractPostingActivity {
 		solutionsLayout.addView(solutionView);
 	}
 
+	/**
+	 * Returns whether or not solutions are done loading
+	 * 
+	 * @return true if solutions are done loading, false otherwise
+	 */
+	public boolean areSolutionsLoaded(){
+		return solutionsLoaded;
+	}
 	
 	/**
 	 * Button handler for the "Solutions" button.
@@ -263,7 +271,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 */
 	public synchronized void onShowSolutions(View v){
 		if(!showSolutionsPressed){
-			if(solutionsLoaded){
+			if(areSolutionsLoaded()){
 				revealSolutions();
 			}else{
 				View loadingText = findViewById(R.id.loading_text_layout);
