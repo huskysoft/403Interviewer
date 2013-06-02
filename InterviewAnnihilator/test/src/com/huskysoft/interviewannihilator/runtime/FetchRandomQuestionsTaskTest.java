@@ -21,7 +21,7 @@ public class FetchRandomQuestionsTaskTest extends TestCase {
 	 * 
 	 * @label Black-box testing
 	 */
-	public void testCstr(){
+	public void testConstructor(){
 		FetchRandomQuestionsTask task = 
 				new FetchRandomQuestionsTask(null);
 		assertNotNull(task);

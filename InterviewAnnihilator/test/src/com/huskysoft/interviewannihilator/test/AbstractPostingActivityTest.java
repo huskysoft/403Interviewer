@@ -79,7 +79,7 @@ public class AbstractPostingActivityTest extends
 		List<Category> abstractCats = mActivity.getCurrentCategories();
 		
 		assertEquals(1, abstractCats.size());
-		assertTrue(cats.equals(abstractCats));
+		assertEquals(cats, abstractCats);
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class AbstractPostingActivityTest extends
 				mActivity.getCurrentCategories();
 		
 		assertEquals(2, abstractCats.size());
-		assertTrue(cats.equals(abstractCats));
+		assertEquals(cats, abstractCats);
 	}
 	
 	/**
