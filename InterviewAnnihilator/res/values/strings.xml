@@ -75,6 +75,7 @@
         							Do you wish to continue without validation?</string>
     <string name="userInfoHelp_title">You must be validated to use this feature!</string>
     <string name="userInfoHelp_retry">   Try again   </string>	
-    <string name="userInfoHelp_cancel">   Continue unvalidated   </string>							
+    <string name="userInfoHelp_cancel">   Continue unvalidated   </string>
+    <string name="no_solutions_found">There doesn\'t seem to be any solutions</string>			
  
 </resources>
