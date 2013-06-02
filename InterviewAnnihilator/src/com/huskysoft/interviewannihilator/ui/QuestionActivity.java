@@ -137,7 +137,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
-			t.setText("There doesn't seem to be any solutions");
+			t.setText(getString(R.string.no_solutions_found));
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);

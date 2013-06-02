@@ -9,11 +9,13 @@ package com.huskysoft.interviewannihilator.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
 
+import android.app.Instrumentation.ActivityMonitor;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 public class QuestionActivityTest extends
 ActivityInstrumentationTestCase2<QuestionActivity> {
 
+	private final int TIMEOUT = 1000;
 	private QuestionActivity mActivity;
 	private Question question;
 	
@@ -94,11 +97,36 @@ ActivityInstrumentationTestCase2<QuestionActivity> {
 
 		TextView t = (TextView) solutionView.getChildAt(0);
 		String message = (String) t.getText();
-		String expected = "There doesn't seem to be any solutions";
+		String expected = mActivity.getString(R.string.no_solutions_found);
 
 		assertEquals(expected, message);
 	}
 	
+	/**
+	 * Tests the addSolutionList method with an empty list
+	 * 
+	 * @label whitebox
+	 */
+	@UiThreadTest
+	public void testAddSolutionListEmpty(){
+		// Clear current solutions
+		ViewGroup solutionView = (ViewGroup) mActivity.findViewById(
+				com.huskysoft.interviewannihilator.R.id.
+				question_layout_solutions);
+		solutionView.removeAllViews();
+		
+		List<Solution> solutionList = new ArrayList<Solution>();
+		mActivity.addSolutionList(solutionList);
+		
+		assertEquals(1, solutionView.getChildCount());
+		
+		TextView t = (TextView) solutionView.getChildAt(0);
+		String message = (String) t.getText();
+		String expected = mActivity.getString(R.string.no_solutions_found);
+
+		assertEquals(expected, message);
+	}
+
 	/**
 	 * Tests the addSolutionList method with null parameters
 	 * 
@@ -123,5 +151,23 @@ ActivityInstrumentationTestCase2<QuestionActivity> {
 		
 		assertEquals(numSolutions, solutionView.getChildCount());
 	}
+	
+	/**
+	 * Tests that the post solution method properly starts an Intent for
+	 * PostSolutionActivity when the user is validated
+	 * 
+	 * @label whitebox
+	 */
+	public void testPostSolutionValidated(){
+		ActivityMonitor am = getInstrumentation().addMonitor(
+				PostSolutionActivity.class.getName(), null, true);
 
+		QuestionActivity.setUserInfoLoaded(true);
+		mActivity.postSolution(null);
+		
+		// for some reason this is waiting for the entire duration of TIMEOUT
+		// even if it gets a hit.
+		am.waitForActivityWithTimeout(TIMEOUT);
+		assertEquals(1, am.getHits());
+	}
 }
