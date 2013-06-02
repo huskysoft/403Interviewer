@@ -54,7 +54,7 @@ public class QuestionActivityTest extends
 		// Set up a question that would be displayed
 		question = TestHelpers.createDummyQuestion(0);
 		Intent intent = new Intent();
-		intent.putExtra("com.huskysoft.interviewannihilator.QUESTION",
+		intent.putExtra(QuestionActivity.EXTRA_MESSAGE,
 				question);
 		setActivityIntent(intent);
 		
