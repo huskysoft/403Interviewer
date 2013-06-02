@@ -137,7 +137,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
-			t.setText("There doesn't seem to be any solutions");
+			t.setText(getString(R.string.no_solutions_found));
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
@@ -253,6 +253,14 @@ public class QuestionActivity extends AbstractPostingActivity {
 		solutionsLayout.addView(solutionView);
 	}
 
+	/**
+	 * Returns whether or not solutions are done loading
+	 * 
+	 * @return true if solutions are done loading, false otherwise
+	 */
+	public boolean areSolutionsLoaded(){
+		return solutionsLoaded;
+	}
 	
 	/**
 	 * Button handler for the "Solutions" button.
@@ -263,7 +271,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 */
 	public synchronized void onShowSolutions(View v){
 		if(!showSolutionsPressed){
-			if(solutionsLoaded){
+			if(areSolutionsLoaded()){
 				revealSolutions();
 			}else{
 				View loadingText = findViewById(R.id.loading_text_layout);
