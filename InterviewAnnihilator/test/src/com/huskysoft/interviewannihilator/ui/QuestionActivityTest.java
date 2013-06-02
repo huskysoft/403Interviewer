@@ -9,7 +9,6 @@ package com.huskysoft.interviewannihilator.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
@@ -18,7 +17,6 @@ import com.huskysoft.interviewannihilator.util.TestHelpers;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;

@@ -5,7 +5,7 @@
  * @author Phillip Leland
  */
 
-package com.huskysoft.interviewannihilator.test;
+package com.huskysoft.interviewannihilator.ui;
 
 import java.util.Date;
 import java.util.LinkedList;
