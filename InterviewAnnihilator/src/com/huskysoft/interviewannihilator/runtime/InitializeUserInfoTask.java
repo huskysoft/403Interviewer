@@ -16,7 +16,7 @@ import android.util.Log;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.AbstractPostingActivity;
 
-public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
+public class InitializeUserInfoTask extends AsyncTask<Void, Void, Integer>{
 
 	private AbstractPostingActivity context;
 	private Exception exception;
@@ -28,7 +28,7 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 	 * 
 	 * @param context2 reference to MainActivity
 	 */
-	public InitializeUserTask(AbstractPostingActivity context, 
+	public InitializeUserInfoTask(AbstractPostingActivity context, 
 			File baseDir, String email) {
 		this.context = context;
 		this.baseDir = baseDir;
@@ -47,7 +47,7 @@ public class InitializeUserTask extends AsyncTask<Void, Void, Integer>{
 		try {
 			questionService.initializeUserInfo(baseDir, email);
 			retval = 1;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Log.e("FetchSolutionsTask", "" + e.getMessage());
 			exception = e;
 			this.cancel(true);

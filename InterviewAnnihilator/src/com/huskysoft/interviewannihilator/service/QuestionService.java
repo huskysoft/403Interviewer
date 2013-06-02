@@ -25,8 +25,6 @@ import org.codehaus.jackson.type.TypeReference;
 
 import org.json.JSONException;
 
-import android.util.Log;
-
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
@@ -40,7 +38,6 @@ import com.huskysoft.interviewannihilator.util.Utility;
 public class QuestionService {
 
 	private static final String RESULTS_KEY = "results";
-	private static final String TAG = "QUESTION_SERVICE";
 	private static QuestionService instance;
 	private NetworkServiceInterface networkService;
 	private ObjectMapper mapper;
@@ -73,9 +70,26 @@ public class QuestionService {
 	 *            the user's Email address
 	 * @throws IOException
 	 * @throws NetworkException
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	public void initializeUserInfo(File baseDir, String userEmail)
-			throws NetworkException {
+			throws NetworkException, JsonGenerationException, 
+			JsonMappingException, IOException {
+		this.baseDir = baseDir;
+		userInfo = new UserInfo();
+		userInfo.setUserEmail(userEmail);
+		userInfo.setUserId(getUserId(userEmail));
+		writeUserInfo();
+	}
+
+	/**
+	 * Load the saved UserInfo object. Returns true if load is successful, or
+	 * false if no saved UserInfo is found.
+	 * 
+	 * @param baseDir
+	 */
+	public boolean loadUserInfo(File baseDir) {
 		// open file
 		this.baseDir = baseDir;
 		File file = new File(baseDir, Utility.USER_INFO_FILENAME);
@@ -83,16 +97,10 @@ public class QuestionService {
 			// parse JSON
 			String json = Utility.readStringFromFile(file);
 			userInfo = mapper.readValue(json, UserInfo.class);
+			return true;
 		} catch (IOException e) {
-			// failed to read userInfo; create a new one
-			Log.w(TAG, e.getMessage());
-			userInfo = new UserInfo();
-		}
-		if (!userEmail.equals(userInfo.getUserEmail())) {
-			// new or non-matching UserInfo; clear history
-			userInfo.setUserEmail(userEmail);
-			userInfo.setUserId(getUserId(userEmail));
-			userInfo.clear();
+			// failed to read userInfo
+			return false;
 		}
 	}
 

@@ -30,6 +30,16 @@ public class Utility {
 	public static final String USER_INFO_FILENAME = "userInfo.txt";
 	
 	/**
+	 * String to fetch Google accounts from the device
+	 */
+	public static final String ACCOUNT_TYPE_GOOGLE = "com.google";
+	
+	/**
+	 * Array of allowed Account types for authentication
+	 */
+	public static final String[] ALLOWED_ACCT_TYPES = {ACCOUNT_TYPE_GOOGLE};
+			
+	/**
 	 * Default encoding for File I/O
 	 */
 	public static final String ASCII_ENCODING = "ASCII";
