@@ -23,7 +23,7 @@ public class PostQuestionActivityTest extends
 		ActivityInstrumentationTestCase2<PostQuestionActivity> {
 	
 	/** Number of categories to choose from when posting question. */
-	private static final int CATEGORY_COUNT = 9;
+	private static final int CATEGORY_COUNT = 10;
 	
 	private static final String SUCCESS_DIALOG_TITLE =
 			"Your solution was successfully posted.";
@@ -70,6 +70,7 @@ public class PostQuestionActivityTest extends
 		super.setUp();
 		setActivityInitialTouchMode(false);
 		
+		// Sets up all the elements on the post question page
 		mActivity = getActivity();
 		mTitle = (EditText) mActivity.findViewById(R.id.edit_question_title);
 		mQuestion = (EditText) mActivity.findViewById(R.id.edit_question);
@@ -83,7 +84,12 @@ public class PostQuestionActivityTest extends
 		mPost = (Button) mActivity.findViewById(R.id.send_question);
 	}
 	
+	/**
+	 * Tests that the page is loaded properly, showing all elements with
+	 * correct initial values.
+	 */
 	public void testPreCondition() {
+		// Checks that all elements are shown
 		assertTrue(mTitle.isShown());
 		assertTrue(mQuestion.isShown());
 		assertTrue(mDifficulty.isShown());
@@ -103,6 +109,10 @@ public class PostQuestionActivityTest extends
 		assertTrue(mPost.isEnabled());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the successful dialog when the post is
+	 * successful.
+	 */
 	public void testDisplayMessageSuccessfulPost() {
 		Dialog dialog = mActivity.displayMessage(1, SUCCESS_DIALOG_TITLE);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
@@ -110,6 +120,10 @@ public class PostQuestionActivityTest extends
 				text.getText().toString());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the successful dialog when the post is
+	 * successful, ignoring the value of the string passed.
+	 */
 	public void testDisplayMessageSuccessfulPostIgnoresMessage() {
 		Dialog dialog = mActivity.displayMessage(1, "test");
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
@@ -117,6 +131,10 @@ public class PostQuestionActivityTest extends
 				text.getText().toString());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the given string when the post is
+	 * unsuccessful.
+	 */
 	public void testDisplayMessageUnsuccessfulPostEmptyString() {
 		String s = "";
 		Dialog dialog = mActivity.displayMessage(0, s);
@@ -124,6 +142,10 @@ public class PostQuestionActivityTest extends
 		assertEquals(s, text.getText().toString());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the given string when the post is
+	 * unsuccessful.
+	 */
 	public void testDisplayMessageUnsuccessfulPostRandomString() {
 		String s = "test";
 		Dialog dialog = mActivity.displayMessage(0, s);
@@ -131,18 +153,30 @@ public class PostQuestionActivityTest extends
 		assertEquals(s, text.getText().toString());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the retry dialog when a network error
+	 * has occurred.
+	 */
 	public void testDisplayMessageNetworkError() {
 		Dialog dialog = mActivity.displayMessage(-1, RETRY_DIALOG_TITLE);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		assertEquals(RETRY_DIALOG_TITLE, text.getText().toString());
 	}
 	
+	/** 
+	 * Tests displayMessage displays the retry dialog when a network error
+	 * has occurred, ignoring the value of the string given.
+	 */
 	public void testDisplayMessageNetworkErrorIgnoresMessage() {
 		Dialog dialog = mActivity.displayMessage(-1, "test");
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
 		assertEquals(RETRY_DIALOG_TITLE, text.getText().toString());
 	}
 	
+	/**
+	 * Tests that only the Easy difficulty is selected when given the
+	 * corresponding user input.
+	 */
 	public void testSelectEasyDifficulty() {
 		mActivity.runOnUiThread(
 				new Runnable() {
@@ -160,6 +194,10 @@ public class PostQuestionActivityTest extends
 		assertFalse(mHard.isChecked());
 	}
 
+	/**
+	 * Tests that only the Easy difficulty is selected when given the
+	 * corresponding user input.
+	 */
 	public void testSelectMediumDifficulty() {
 		mActivity.runOnUiThread(
 				new Runnable() {
@@ -178,6 +216,10 @@ public class PostQuestionActivityTest extends
 		assertFalse(mHard.isChecked());
 	}
 
+	/**
+	 * Tests that only the Easy difficulty is selected when given the
+	 * corresponding user input.
+	 */
 	public void testSelectHardDifficulty() {
 		mActivity.runOnUiThread(
 				new Runnable() {
