@@ -30,6 +30,7 @@
         <item>Science</item>
     </string-array>
 	
+    <string name="ad_message">Your Ad Here</string>
     <string name="add_category">Add Category</string>
     <string name="remove_category">Remove Category</string>
     <string name="spinner_difficulty_text">Difficulty</string>
@@ -46,10 +47,13 @@
     <string name="badInputDialog_solution">Please provide a valid solution.</string>
     <string name="badInputDialog_title">Please provide a valid title.</string>
     <string name="badInputDialog_question">Please provide a valid question.</string>
+    <string name="badInputDialog_category">Please provide a valid category.</string>
     <string name="badInputDialog_return">Return to editor</string>
     <string name="button_ok"> OK </string>
     <string name="loading_text">Loading&#8230;</string>
     <string name="sending_text">Sending&#8230;</string>
+    <string name="toast_already_voted">You have already voted on this solution</string>
+    <string name="toast_network_error">Network error</string>
     <string name="toast_return">Returning&#8230; </string>
     <string name="toast_retry">Trying again&#8230; </string>
     <string name="title_activity_post_question">Post A Question</string>

@@ -24,15 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 
 public class PostSolutionActivity extends AbstractPostingActivity {
 	/** The question being answered **/
 	private Question question;
 	
-	
-	@SuppressLint("NewApi")
 	@Override
 	public synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
