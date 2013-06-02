@@ -60,13 +60,12 @@ public class MainActivity extends AbstractPostingActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.activity_menu);
-		getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);		
 		
-		
+		// ensure user has been validated
 		if (!isUserInfoLoaded()){
 			this.initializeUserInfo();
-		}
-		
+		}		
 		
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();

@@ -10,6 +10,8 @@ package com.huskysoft.interviewannihilator.ui;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.android.gms.common.AccountPicker;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
@@ -18,9 +20,11 @@ import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
 import com.huskysoft.interviewannihilator.runtime.InitializeUserTask;
 import com.huskysoft.interviewannihilator.util.UIConstants;
+import com.huskysoft.interviewannihilator.util.Utility;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
+import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +44,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class AbstractPostingActivity extends SlidingActivity{
+	
+	/**
+	 * Unique request code for the AccountPicker intent in 
+	 * AbstractPostingActivity
+	 */
+	public static final int ACCT_PICKER_REQ_CODE = 6541328;
 		
 	/** Indicates whether the user's private local data has been initialized **/
 	private static boolean userInfoLoaded = false;
@@ -331,10 +341,14 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	/**
 	 * Attempts to initialize the user's information on database
 	 * 
+	 * @return true on success
 	 */
 	public void initializeUserInfo(){
-		File dir = getFilesDir();
-		new InitializeUserTask(this, dir, "Anon@example.com").execute();
+		// prompt the user to select an account
+		Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+				Utility.ALLOWED_ACCT_TYPES, false, null, null, null, null);
+		startActivityForResult(intent, ACCT_PICKER_REQ_CODE);
+		// see onActivityResult
 	}
 	
 	/**
@@ -381,6 +395,17 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			}
 		});
 		dialog.show();
+	}
+	
+	@Override
+	protected void onActivityResult(final int requestCode, final int resultCode, 
+			final Intent data) {
+		if (requestCode == ACCT_PICKER_REQ_CODE && resultCode == RESULT_OK) {
+			// initialize UserInfo
+			String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			File dir = getFilesDir();
+			new InitializeUserTask(this, dir, email).execute();
+		}
 	}
 }
 
