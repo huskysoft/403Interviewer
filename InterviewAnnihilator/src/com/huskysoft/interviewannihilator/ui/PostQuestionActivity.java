@@ -129,7 +129,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
     * 				 telling them what was invalid.
     * 				only needed when status == 0     
     */
-	public void displayMessage(int status, String message){
+	public Dialog displayMessage(int status, String message){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -199,6 +199,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 			});
 		}
 		dialog.show();
+		return dialog;
 	}
 	/**
 	 * Manages the radio buttons 

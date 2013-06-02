@@ -107,7 +107,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
     *              Any other number to indicate an internal error
     *                      
     */
-	public void displayMessage(int status){
+	public Dialog displayMessage(int status){
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -176,6 +176,7 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 			});
 		}
 		dialog.show();
+		return dialog;
 	}
 	
 	/**
