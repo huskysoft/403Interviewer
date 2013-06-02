@@ -8,6 +8,7 @@ package com.huskysoft.interviewannihilator.runtime;
 
 import java.io.File;
 
+import android.os.Environment;
 import android.util.Log;
 
 import junit.framework.TestCase;
@@ -25,8 +26,8 @@ public class InitializeUserTaskTest extends TestCase {
 	 */
 	public void testInitializeUserCstr(){
 		File dir = new File("./temp/");
-		InitializeUserTask task = 
-				new InitializeUserTask(null, dir, "test@TESTING.com");
+		InitializeUserInfoTask task = 
+				new InitializeUserInfoTask(null, dir, "test@TESTING.com");
 		assertNotNull(task);
 	}
 	
@@ -36,9 +37,9 @@ public class InitializeUserTaskTest extends TestCase {
 	 * @label Black-box testing
 	 */
 	public void testInitializeUser(){
-		File dir = new File("./temp/");
-		InitializeUserTask task = 
-				new InitializeUserTask(null, dir, "test@TESTING.com");
+		File dir = Environment.getExternalStorageDirectory();
+		InitializeUserInfoTask task = 
+				new InitializeUserInfoTask(null, dir, "test@TESTING.com");
 		try {
 			int result = task.doInBackground();
 			assertNotSame(-1, result);
@@ -54,8 +55,8 @@ public class InitializeUserTaskTest extends TestCase {
 	 * @label Black-box testing
 	 */
 	public void testInitializeBadUserTest(){
-		InitializeUserTask task = 
-				new InitializeUserTask(null, null, null);
+		InitializeUserInfoTask task = 
+				new InitializeUserInfoTask(null, null, null);
 		try {
 			int result = task.doInBackground();
 			assertEquals(-1, result);

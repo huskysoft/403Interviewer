@@ -18,7 +18,8 @@ import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.RandomQuestionCollection;
 import com.huskysoft.interviewannihilator.runtime.FetchRandomQuestionsTask;
-import com.huskysoft.interviewannihilator.runtime.InitializeUserTask;
+import com.huskysoft.interviewannihilator.runtime.InitializeUserInfoTask;
+import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import com.huskysoft.interviewannihilator.util.Utility;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -27,6 +28,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -343,12 +345,22 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 * 
 	 * @return true on success
 	 */
-	public void initializeUserInfo(){
+	public void initializeUserInfo() {
+		// try to load existing UserInfo
+		if (QuestionService.getInstance().loadUserInfo(getFilesDir())) {
+			userInfoSuccessFunction();
+			return;
+		}
+		
 		// prompt the user to select an account
-		Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-				Utility.ALLOWED_ACCT_TYPES, false, null, null, null, null);
-		startActivityForResult(intent, ACCT_PICKER_REQ_CODE);
-		// see onActivityResult
+		if ((getApplicationInfo().flags & 
+				ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
+			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+					Utility.ALLOWED_ACCT_TYPES, false, null, null, null, null);
+			startActivityForResult(intent, ACCT_PICKER_REQ_CODE);
+		}
+		
+		// (see onActivityResult)
 	}
 	
 	/**
@@ -404,7 +416,7 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			// initialize UserInfo
 			String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			File dir = getFilesDir();
-			new InitializeUserTask(this, dir, email).execute();
+			new InitializeUserInfoTask(this, dir, email).execute();
 		}
 	}
 }
