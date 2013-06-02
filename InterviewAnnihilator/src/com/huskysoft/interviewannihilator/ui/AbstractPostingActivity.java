@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ import android.widget.Toast;
 
 public abstract class AbstractPostingActivity extends SlidingActivity{
 	
+	public static final String TAG = "AbstractPostingActivity";
 	/**
 	 * Unique request code for the AccountPicker intent in 
 	 * AbstractPostingActivity
@@ -418,6 +420,32 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			File dir = getFilesDir();
 			new InitializeUserInfoTask(this, dir, email).execute();
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		writeUserInfo();
+	}
+	
+	/**
+	 * Write the currently-loaded UserInfo object to disk. Returns true on
+	 * success, false on failure.
+	 * 
+	 * @return
+	 */
+	private static boolean writeUserInfo() {
+		if (isUserInfoLoaded()) {
+			try {
+				QuestionService.getInstance().writeUserInfo();
+				return true;
+			} catch (Exception e) {
+				Log.e(TAG, "Failed to write UserInfo :" + e.getMessage());
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 }

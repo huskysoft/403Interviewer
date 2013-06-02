@@ -417,6 +417,11 @@ public class MainActivity extends AbstractPostingActivity {
 		intent.putExtra(EXTRA_MESSAGE, (Question) view.getTag());
 		startActivity(intent);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
 
 }
 
