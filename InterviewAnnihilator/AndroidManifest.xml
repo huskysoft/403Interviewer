@@ -52,7 +52,7 @@
             android:name="com.huskysoft.interviewannihilator.ui.PostQuestionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post_question" 
-            android:theme="@style/MyTheme">
+            android:theme="@style/postQuestionsTheme">
         </activity>
     </application>
 </manifest>
