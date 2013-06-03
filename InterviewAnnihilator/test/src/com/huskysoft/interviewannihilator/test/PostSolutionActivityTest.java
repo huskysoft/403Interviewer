@@ -12,10 +12,12 @@ import com.huskysoft.interviewannihilator.ui.PostSolutionActivity;
 import com.huskysoft.interviewannihilator.ui.QuestionActivity;
 import com.huskysoft.interviewannihilator.util.TestHelpers;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class PostSolutionActivityTest extends
 		ActivityInstrumentationTestCase2<PostSolutionActivity> {
@@ -49,7 +51,7 @@ public class PostSolutionActivityTest extends
 	/**
 	 * Check that the PostSolutionActivity is initialized correctly.
 	 * 
-	 * @label white-box test
+	 * @label black-box test
 	 */
 	public void testPreCondition() {
 		// Checks that the solution text box and post button is shown
@@ -63,5 +65,24 @@ public class PostSolutionActivityTest extends
 		assertTrue(mPost.isEnabled());
 	}
 	
+	public void testDisplayMessageSuccessfulPost() {
+		Dialog dialog = mActivity.displayMessage(1);
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
+		assertEquals(mActivity.getString(R.string.successDialog_title),
+				text.getText().toString());
+	}
 	
+	public void testDisplayMessageUnsuccessfulPost() {
+		Dialog dialog = mActivity.displayMessage(0);
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
+		assertEquals(mActivity.getString(R.string.badInputDialog_solution),
+				text.getText().toString());
+	}
+	
+	public void testDisplayMessageNetworkError() {
+		Dialog dialog = mActivity.displayMessage(-1);
+		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
+		assertEquals(mActivity.getString(R.string.retryDialog_title),
+				text.getText().toString());
+	}
 }
