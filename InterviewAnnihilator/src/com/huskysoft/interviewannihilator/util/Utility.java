@@ -25,6 +25,11 @@ import com.huskysoft.interviewannihilator.model.Likeable;
 public class Utility {
 	
 	/**
+	 * Dummy email address to use in debug mode
+	 */
+	public static final String DEBUG_USER_EMAIL = "debug@huskysoft.com";
+	
+	/**
 	 * The name of the file in which user info is stored
 	 */
 	public static final String USER_INFO_FILENAME = "userInfo.txt";
