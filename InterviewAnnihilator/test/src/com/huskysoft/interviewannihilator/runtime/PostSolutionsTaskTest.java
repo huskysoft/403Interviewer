@@ -7,9 +7,14 @@
 package com.huskysoft.interviewannihilator.runtime;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+import android.os.Environment;
 import android.util.Log;
 
 import com.huskysoft.interviewannihilator.model.Category;
@@ -42,10 +47,14 @@ public class PostSolutionsTaskTest extends TestCase {
 	
 	/**
 	 * Tests that solutions are posted correctly
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 * @label Black-box testing
 	 */
-	public void testPostSolution(){
+	public void testPostSolution() throws JsonGenerationException,
+			JsonMappingException, IOException{
 		Solution solution = new Solution();
 		solution.setText("TEST_SOLUTION");
 		QuestionService qs = QuestionService.getInstance();
@@ -56,7 +65,7 @@ public class PostSolutionsTaskTest extends TestCase {
 						emptyCat, Difficulty.EASY, 1, 0);
 		Question question = fetchTask.doInBackground().get(0);
 		solution.setQuestionId(question.getQuestionId());
-		File dir = new File("./tmp/");
+		File dir = Environment.getExternalStorageDirectory();
 		PostSolutionsTask task = 
 				new PostSolutionsTask(null, solution);
 		// assert that we can delete it (it exists in the database)

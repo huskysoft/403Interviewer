@@ -280,5 +280,14 @@ public class UserInfo {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "UserInfo [userEmail=" + userEmail + ", userId=" + userId
+				+ ", viewedQuestions=" + viewedQuestions
+				+ ", favoriteQuestions=" + favoriteQuestions
+				+ ", votedQuestions=" + votedQuestions + ", votedSolutions="
+				+ votedSolutions + "]";
+	}
+
 
 }
