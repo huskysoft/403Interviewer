@@ -358,8 +358,9 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		// skip if running a debug build (for compatibility reasons)
 		if ((getApplicationInfo().flags & 
 				ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
+			String[] allowedTypes = {Utility.ACCOUNT_TYPE_GOOGLE};
 			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-					Utility.ALLOWED_ACCT_TYPES, false, null, null, null, null);
+					allowedTypes, false, null, null, null, null);
 			startActivityForResult(intent, ACCT_PICKER_REQ_CODE);
 		} else {
 			File dir = getFilesDir();
