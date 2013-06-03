@@ -56,6 +56,7 @@
     <string name="toast_network_error">Network error</string>
     <string name="toast_return">Returning&#8230; </string>
     <string name="toast_retry">Trying again&#8230; </string>
+    <string name="toast_no_more_questions">There aren\'t any more questions</string>
     <string name="title_activity_post_question">Post A Question</string>
     <string name="hello_world">Hello world!</string>
     <string name="edit_question_msg">Enter a question</string>
@@ -77,5 +78,5 @@
     <string name="userInfoHelp_retry">   Try again   </string>	
     <string name="userInfoHelp_cancel">   Continue unvalidated   </string>
     <string name="no_solutions_found">There doesn\'t seem to be any solutions</string>			
- 
+ 	<string name="no_questions_found">There doesn\'t seem to be any questions</string>			
 </resources>

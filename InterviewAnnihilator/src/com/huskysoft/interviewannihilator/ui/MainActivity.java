@@ -272,10 +272,16 @@ public class MainActivity extends AbstractPostingActivity {
 				// No existing questions
 				TextView t = new TextView(this);
 	
-				t.setText("There doesn't seem to be any questions.");
+				t.setText(getString(R.string.no_questions_found));
+				t.setTextColor(getResources().getColor(R.color.gold));
 				// special look?
 				t.setLayoutParams(llp);
 				questionView.addView(t);
+			}else{
+				// Some existing questions
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_no_more_questions,
+						Toast.LENGTH_LONG).show();
 			}
 		}else{
 			// Increase the question offset so that next time we access the db, we
@@ -390,9 +396,8 @@ public class MainActivity extends AbstractPostingActivity {
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), 
-						R.string.toast_return, Toast.LENGTH_LONG).show();
 				dialog.dismiss();
+				finish();
 			}
 		});
 		dialog.show();

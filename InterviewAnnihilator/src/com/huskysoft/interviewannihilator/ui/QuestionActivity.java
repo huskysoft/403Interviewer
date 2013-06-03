@@ -138,6 +138,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
 			t.setText(getString(R.string.no_solutions_found));
+			t.setTextColor(getResources().getColor(R.color.gold));
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
