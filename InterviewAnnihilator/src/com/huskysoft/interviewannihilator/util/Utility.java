@@ -38,11 +38,6 @@ public class Utility {
 	 * String to fetch Google accounts from the device
 	 */
 	public static final String ACCOUNT_TYPE_GOOGLE = "com.google";
-	
-	/**
-	 * Array of allowed Account types for authentication
-	 */
-	public static final String[] ALLOWED_ACCT_TYPES = {ACCOUNT_TYPE_GOOGLE};
 			
 	/**
 	 * Default encoding for File I/O
