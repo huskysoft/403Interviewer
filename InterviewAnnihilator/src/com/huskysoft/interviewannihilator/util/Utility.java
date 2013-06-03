@@ -149,7 +149,7 @@ public class Utility {
 	 */
 	public static void ensureNotNull(Object o, String objectName) {
 		if (o == null) {
-			throw new IllegalStateException(objectName + " cannot be null!");
+			throw new IllegalArgumentException(objectName + " cannot be null!");
 		}
 	}
 }
