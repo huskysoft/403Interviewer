@@ -22,6 +22,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.Question;
@@ -232,7 +233,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 
 		TextView t = (TextView) questionView.getChildAt(0);
 		String message = (String) t.getText();
-		String expected = "There doesn't seem to be any questions.";
+		String expected = mActivity.getString(R.string.no_questions_found);
 
 		assertEquals(expected, message);
 	}

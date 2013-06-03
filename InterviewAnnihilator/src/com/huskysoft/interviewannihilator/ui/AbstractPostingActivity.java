@@ -377,6 +377,11 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	 */
 	public void userInfoSuccessFunction(){
 		setUserInfoLoaded(true);
+		
+		String email = QuestionService.getInstance().getUserEmail();
+		String toastText = "Validated " + email;
+		Toast.makeText(getApplicationContext(), 
+				toastText, Toast.LENGTH_LONG).show();
 	}
 	
 	/**

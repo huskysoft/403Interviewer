@@ -153,6 +153,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 				public void onClick(View v) {
 					Toast.makeText(getApplicationContext(), 
 							R.string.toast_return, Toast.LENGTH_LONG).show();
+					dialog.dismiss();
 					finish();   //It would look really cool for the solutions
 								//to update b4 the user returns
 				}
