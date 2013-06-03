@@ -158,6 +158,9 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 				}
 			});
 		}else if (status == 0){
+			if (message == null) {
+				message = "";
+			}
 			text.setText(message);
 			Button dialogButton = (Button) 
 					dialog.findViewById(R.id.dialogButtonOK);
