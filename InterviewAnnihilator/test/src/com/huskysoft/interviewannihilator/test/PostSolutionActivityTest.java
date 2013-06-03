@@ -22,10 +22,13 @@ import android.widget.TextView;
 public class PostSolutionActivityTest extends
 		ActivityInstrumentationTestCase2<PostSolutionActivity> {
 	
+	/** The activity for post solution. */
 	private PostSolutionActivity mActivity;
 	
+	/** The text field for solution. */
 	private EditText mSolution;
 	
+	/** The post button. */
 	private Button mPost;
 
 	public PostSolutionActivityTest() {
@@ -65,6 +68,12 @@ public class PostSolutionActivityTest extends
 		assertTrue(mPost.isEnabled());
 	}
 	
+	/**
+	 * Tests displayMessage displays the correct message when called with
+	 * a "successful" status.
+	 * 
+	 *  @label white-box test
+	 */
 	public void testDisplayMessageSuccessfulPost() {
 		Dialog dialog = mActivity.displayMessage(1);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
@@ -72,6 +81,12 @@ public class PostSolutionActivityTest extends
 				text.getText().toString());
 	}
 	
+	/**
+	 * Tests displayMessage displays the correct message when called with
+	 * a "unsuccessful" status.
+	 * 
+	 *  @label white-box test
+	 */
 	public void testDisplayMessageUnsuccessfulPost() {
 		Dialog dialog = mActivity.displayMessage(0);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
@@ -79,6 +94,12 @@ public class PostSolutionActivityTest extends
 				text.getText().toString());
 	}
 	
+	/**
+	 * Tests displayMessage displays the correct message when called with
+	 * a "network error" status.
+	 * 
+	 *  @label white-box test
+	 */
 	public void testDisplayMessageNetworkError() {
 		Dialog dialog = mActivity.displayMessage(-1);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
