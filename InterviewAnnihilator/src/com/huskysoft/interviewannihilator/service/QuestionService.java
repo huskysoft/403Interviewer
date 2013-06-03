@@ -125,6 +125,16 @@ public class QuestionService {
 		String json = mapper.writeValueAsString(userInfo);
 		Utility.writeStringToFile(file, json);
 	}
+	
+	/**
+	 * Get the loaded user's email address.
+	 * 
+	 * @return
+	 */
+	public String getUserEmail() {
+		requireUserInfo();
+		return userInfo.getUserEmail();
+	}
 
 	/**
 	 * Get a specific list of Questions from the remote server. NetworkException
