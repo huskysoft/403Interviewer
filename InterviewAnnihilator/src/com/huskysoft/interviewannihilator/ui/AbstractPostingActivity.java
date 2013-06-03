@@ -361,6 +361,10 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
 					Utility.ALLOWED_ACCT_TYPES, false, null, null, null, null);
 			startActivityForResult(intent, ACCT_PICKER_REQ_CODE);
+		} else {
+			File dir = getFilesDir();
+			new InitializeUserInfoTask(
+					this, dir, Utility.DEBUG_USER_EMAIL).execute();
 		}
 		
 		// (see onActivityResult)
