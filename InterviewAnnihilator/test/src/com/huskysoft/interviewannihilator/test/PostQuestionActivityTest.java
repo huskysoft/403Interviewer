@@ -25,12 +25,6 @@ public class PostQuestionActivityTest extends
 	/** Number of categories to choose from when posting question. */
 	private static final int CATEGORY_COUNT = 10;
 	
-	private static final String SUCCESS_DIALOG_TITLE =
-			"Your solution was successfully posted.";
-	
-	private static final String RETRY_DIALOG_TITLE =
-			"A network error has occurred";
-	
 	/** The activity for post question. */
 	private PostQuestionActivity mActivity;
 	
@@ -88,7 +82,7 @@ public class PostQuestionActivityTest extends
 	 * Tests that the page is loaded properly, showing all elements with
 	 * correct initial values.
 	 * 
-	 * @label white-box test
+	 * @label black-box test
 	 */
 	public void testPreCondition() {
 		// Checks that all elements are shown
@@ -118,21 +112,25 @@ public class PostQuestionActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDisplayMessageSuccessfulPost() {
-		Dialog dialog = mActivity.displayMessage(1, SUCCESS_DIALOG_TITLE);
+		String successDialogTitle =
+				mActivity.getString(R.string.successDialog_title);
+		Dialog dialog = mActivity.displayMessage(1, successDialogTitle);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals(mActivity.getString(R.string.successDialog_title),
-				text.getText().toString());
+		assertEquals(successDialogTitle, text.getText().toString());
 	}
 	
 	/** 
 	 * Tests displayMessage displays the successful dialog when the post is
 	 * successful, ignoring the value of the string passed.
+	 * 
+	 * @label white-box test
 	 */
 	public void testDisplayMessageSuccessfulPostIgnoresMessage() {
+		String successDialogTitle =
+				mActivity.getString(R.string.successDialog_title);
 		Dialog dialog = mActivity.displayMessage(1, "test");
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals(mActivity.getString(R.string.successDialog_title),
-				text.getText().toString());
+		assertEquals(successDialogTitle, text.getText().toString());
 	}
 	
 	/** 
@@ -142,10 +140,10 @@ public class PostQuestionActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDisplayMessageUnsuccessfulPostEmptyString() {
-		String s = "";
-		Dialog dialog = mActivity.displayMessage(0, s);
+		String message = "";
+		Dialog dialog = mActivity.displayMessage(0, message);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals(s, text.getText().toString());
+		assertEquals(message, text.getText().toString());
 	}
 	
 	/** 
@@ -155,10 +153,10 @@ public class PostQuestionActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDisplayMessageUnsuccessfulPostRandomString() {
-		String s = "test";
-		Dialog dialog = mActivity.displayMessage(0, s);
+		String message = "test";
+		Dialog dialog = mActivity.displayMessage(0, message);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text_alert);
-		assertEquals(s, text.getText().toString());
+		assertEquals(message, text.getText().toString());
 	}
 	
 	/** 
@@ -168,9 +166,11 @@ public class PostQuestionActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDisplayMessageNetworkError() {
-		Dialog dialog = mActivity.displayMessage(-1, RETRY_DIALOG_TITLE);
+		String retryDialogTitle =
+				mActivity.getString(R.string.retryDialog_title);
+		Dialog dialog = mActivity.displayMessage(-1, retryDialogTitle);
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
-		assertEquals(RETRY_DIALOG_TITLE, text.getText().toString());
+		assertEquals(retryDialogTitle, text.getText().toString());
 	}
 	
 	/** 
@@ -180,16 +180,18 @@ public class PostQuestionActivityTest extends
 	 * @label white-box test
 	 */
 	public void testDisplayMessageNetworkErrorIgnoresMessage() {
+		String retryDialogTitle =
+				mActivity.getString(R.string.retryDialog_title);
 		Dialog dialog = mActivity.displayMessage(-1, "test");
 		TextView text = (TextView) dialog.findViewById(R.id.dialog_text);
-		assertEquals(RETRY_DIALOG_TITLE, text.getText().toString());
+		assertEquals(retryDialogTitle, text.getText().toString());
 	}
 	
 	/**
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
 	 * 
-	 * @label white-box test
+	 * @label black-box test
 	 */
 	public void testSelectEasyDifficulty() {
 		mActivity.runOnUiThread(
@@ -212,7 +214,7 @@ public class PostQuestionActivityTest extends
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
 	 * 
-	 * @label white-box test
+	 * @label black-box test
 	 */
 	public void testSelectMediumDifficulty() {
 		mActivity.runOnUiThread(
@@ -236,7 +238,7 @@ public class PostQuestionActivityTest extends
 	 * Tests that only the Easy difficulty is selected when given the
 	 * corresponding user input.
 	 * 
-	 * @label white-box test
+	 * @label black-box test
 	 */
 	public void testSelectHardDifficulty() {
 		mActivity.runOnUiThread(
