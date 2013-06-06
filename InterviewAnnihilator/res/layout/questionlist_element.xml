@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- I'm ignoring this warning because if we make text selectable,
+	 then it takes two clicks to open a question -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/questionlist_element_text"
     android:layout_width="match_parent"

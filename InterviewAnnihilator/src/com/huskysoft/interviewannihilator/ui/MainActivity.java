@@ -32,7 +32,6 @@ import android.view.Window;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
