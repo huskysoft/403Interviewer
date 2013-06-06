@@ -89,7 +89,7 @@ public class FetchQuestionsTask extends AsyncTask<Void, Void, List<Question>>{
 	 */
 	@Override
 	protected void onPostExecute(List<Question> questionList){
-		context.appendQuestionsToView(questionList);
+		context.addQuestionList(questionList);
 		context.hideLoadingViewOne();
 		context.hideLoadingViewTwo();
 		context.showMainView();

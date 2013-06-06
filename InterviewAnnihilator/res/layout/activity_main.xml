@@ -23,8 +23,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-			
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+            
             <!-- Question TextViews get inserted in this layout -->
             <LinearLayout
                 android:id="@+id/question_layout"
@@ -33,6 +35,17 @@
                 android:orientation="vertical" >
             </LinearLayout>
             
+            <TextView android:id="@+id/questionlist_none_found_text"
+		        android:textIsSelectable="true"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+			    android:layout_marginTop="@dimen/activity_vertical_margin"
+			    android:layout_marginBottom="@dimen/activity_vertical_margin"
+			    android:text="@string/no_questions_found"
+			    android:textColor="@color/gold"
+			    android:visibility="gone" />
+			
             <!-- Loading animation when "Show me more" is clicked -->
             <include layout="@layout/loading_anim"
 				android:id="@+id/layout_loading_more"/>
@@ -59,7 +72,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="40dp"
                 android:onClick="postQuestion" 
-                android:layout_marginLeft="20dp"
                 android:layout_marginRight="2dp"/>
 
             <Button style="@android:attr/buttonBarStyle"
@@ -72,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/button_post_question"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="2dp"/>
         </RelativeLayout>
         </LinearLayout>

@@ -139,17 +139,9 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 */
 	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
-			TextView t = new TextView(this);
-			t.setText(getString(R.string.no_solutions_found));
-			t.setTextColor(getResources().getColor(R.color.gold));
-			
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-			llp.setMargins(40, 10, 40, 10);
-			llp.gravity = 1; // Horizontal Center
-			t.setLayoutParams(llp);
-			
-			solutionsLayout.addView(t);
+			TextView noneFound = (TextView)
+					findViewById(R.id.solutionlist_none_found_text);
+			noneFound.setVisibility(View.VISIBLE);
 		} else {
 			for(int i = 0; i < solutions.size(); i++){
 				Solution solution = solutions.get(i);
@@ -176,8 +168,8 @@ public class QuestionActivity extends AbstractPostingActivity {
 		// get layout from xml
 		LayoutInflater li = (LayoutInflater)
 				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View solutionView =
-				li.inflate(R.layout.solution_view, solutionsLayout, false);
+		View solutionView = li.inflate(
+				R.layout.solutionlist_element, solutionsLayout, false);
 		
 		// build text
 		String solutionBody = solution.getText();
@@ -204,7 +196,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		// get the solution TextView from solution_view.xml
 		TextView solnView = (TextView)
-				solutionView.findViewById(R.id.solution_text);
+				solutionView.findViewById(R.id.solutionlist_element_text);
 		solnView.setText(sb);
 		solnView.setId(solution.getSolutionId());
 		
