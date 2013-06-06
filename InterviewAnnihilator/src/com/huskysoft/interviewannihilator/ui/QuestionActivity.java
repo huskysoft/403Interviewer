@@ -80,8 +80,8 @@ public class QuestionActivity extends AbstractPostingActivity {
 		//build text
 		String questionBody = question.getText();
 		String questionDate = question.getDateCreated().toString();
-		String questionDiff = question.getDifficulty().toString();
-		String questionCat = question.getCategory().toString();
+		String questionDiff = question.getDifficulty().translate();
+		String questionCat = question.getCategory().translate();
 		
 		int pos = 0;
 		SpannableStringBuilder sb = new SpannableStringBuilder();
