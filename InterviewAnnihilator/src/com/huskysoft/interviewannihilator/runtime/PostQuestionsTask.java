@@ -18,6 +18,7 @@ import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
 import com.huskysoft.interviewannihilator.service.QuestionService;
 import com.huskysoft.interviewannihilator.ui.PostQuestionActivity;
+import com.huskysoft.interviewannihilator.util.Utility;
 
 public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 
@@ -28,11 +29,14 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 
 
 	/**
+	 * Create a new PostQuestionTask.
 	 * 
-	 * @param context reference to MainActivity
+	 * @param context reference to the parent PostQuestionActivity
 	 */
 	public PostQuestionsTask(PostQuestionActivity context, 
 			Question question, Solution solution) {
+		Utility.ensureNotNull(solution, "Solution");
+		Utility.ensureNotNull(question, "Question");
 		this.context = context;
 		this.solution = solution;
 		this.question = question;
@@ -41,24 +45,48 @@ public class PostQuestionsTask extends AsyncTask<Void, Void, Integer>{
 
 	/**
 	 * This is the main function of the AsyncTask thread. This will populate
-	 * questionList with Questions so that they may be displayed afterwards.
-	 * @return 
+	 * create the new Question and Solution
+	 * 
+	 * @return the ID of the newly-created Question, or -1 on failure
 	 */
 	@Override
 	protected Integer doInBackground(Void... result) {
 		QuestionService questionService = QuestionService.getInstance();
-		int retval = -1;
+		int questionId;
+		
+		// attempt to post the Question
 		try {
-			retval = questionService.postQuestion(question);
-			solution.setQuestionId(retval);
-			questionService.postSolution(solution);
-		} catch (Exception e){
-			Log.e("FetchSolutionsTask", "" + e.getMessage());
+			
+			questionId = questionService.postQuestion(question);
+		} catch (Exception e) {
+			Log.e("FetchSolutionsTask failed to post Question: ", 
+					"" + e.getMessage());
 			exception = e;
 			this.cancel(true);
 			return -1;
 		}
-		return retval;
+		
+		// attempt to post the Solution
+		try {
+			solution.setQuestionId(questionId);
+			questionService.postSolution(solution);
+		} catch (Exception e) {
+			// post failed; roll back the Question
+			try {
+				questionService.deleteQuestion(questionId);
+			} catch (NetworkException netException) {
+				Log.e("FetchSolutionsTask failed to roll back Question: ", 
+						"" + netException.getMessage());
+			}
+			
+			// log the posting error and return failure ID
+			Log.e("FetchSolutionsTask failed to post Solution: ", 
+					"" + e.getMessage());
+			exception = e;
+			this.cancel(true);
+			return -1;
+		}
+		return questionId;
 	}
 
 	@Override
