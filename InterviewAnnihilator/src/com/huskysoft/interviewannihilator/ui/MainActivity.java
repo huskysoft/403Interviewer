@@ -130,7 +130,6 @@ public class MainActivity extends AbstractPostingActivity {
 		for (int x = 0; x < a.getCount(); x++){
 			
 			String possible = a.getItem(x).toString().toUpperCase();
-						
 			if (possible.equals(catStrUp)){
 				spinner.setSelection(x);
 			}
@@ -353,8 +352,6 @@ public class MainActivity extends AbstractPostingActivity {
 				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		
 		// done
-		//TextView t = (TextView)
-		//		questionview.findViewById(R.id.questionlist_element_text);
 		questionview.setId(question.getQuestionId());
 		questionview.setTag(question);
 		questionview.setText(sb);	
