@@ -11,6 +11,7 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
@@ -80,8 +81,10 @@ public class QuestionActivity extends AbstractPostingActivity {
 		//build text
 		String questionBody = question.getText();
 		String questionDate = question.getDateCreated().toString();
-		String questionDiff = question.getDifficulty().toString();
-		String questionCat = question.getCategory().toString();
+		String questionDiff = 
+				question.getDifficulty().toString(Locale.getDefault());
+		String questionCat = 
+				question.getCategory().toString(Locale.getDefault());
 		
 		int pos = 0;
 		SpannableStringBuilder sb = new SpannableStringBuilder();
@@ -138,6 +141,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		if(solutions == null || solutions.size() <= 0){
 			TextView t = new TextView(this);
 			t.setText(getString(R.string.no_solutions_found));
+			t.setTextColor(getResources().getColor(R.color.gold));
 			
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);

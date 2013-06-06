@@ -50,17 +50,19 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 		
 		difficulty = Difficulty.EASY;
 		
-		// fill category spinner
-		List<String> spinnerArray =  new ArrayList<String>();
-		spinnerArray.add("<SELECT>");
-		for (Category c : Category.values()){
-			spinnerArray.add(c.toString());
+		String[] cats = getResources().getStringArray(R.array.category);
+		
+		List<CharSequence> catsList = new ArrayList<CharSequence>();
+		catsList.add(getResources().getString(R.string.select));
+		for(int i = 1; i < cats.length; i++){
+			catsList.add(cats[i]);
 		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this, android.R.layout.simple_spinner_item, spinnerArray);
+		ArrayAdapter<CharSequence> adapter = 
+				new ArrayAdapter<CharSequence>(this,
+				android.R.layout.simple_spinner_item, catsList);
+								
 		adapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
-		findViewById(R.id.edit_solution_q);
 		Spinner spinner = (Spinner) 
 				findViewById(R.id.category_spinner_question);
 
@@ -81,11 +83,11 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 	 */
 	public void sendQuestion(View v) {
 		// get all necessary fields
-		String categoryStr = ((Spinner) findViewById(
-				R.id.category_spinner_question)).getSelectedItem().toString();
+		int selected = ((Spinner) findViewById(
+				R.id.category_spinner_question)).getSelectedItemPosition();
 		Category category = null;
-		if (!categoryStr.equals("<SELECT>")) {
-			category = Category.valueOf(categoryStr);
+		if (selected != 0) {
+			category = Category.values()[selected - 1];
 		}
 		String solutionText = ((EditText) findViewById(
 				R.id.edit_solution_q)).getText().toString();
@@ -102,7 +104,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 			displayMessage(0, getString(R.string.badInputDialog_question));
 		} else if (solutionText.trim().equals("")){
 			displayMessage(0, getString(R.string.badInputDialog_solution));
-		} else if (categoryStr.equals("<SELECT>")) {
+		} else if (selected == 0) {
 			displayMessage(0, getString(R.string.badInputDialog_category));
 		} else {
 			// all fields are correct, try and send it!
@@ -153,6 +155,7 @@ public class PostQuestionActivity extends AbstractPostingActivity {
 				public void onClick(View v) {
 					Toast.makeText(getApplicationContext(), 
 							R.string.toast_return, Toast.LENGTH_LONG).show();
+					dialog.dismiss();
 					finish();   //It would look really cool for the solutions
 								//to update b4 the user returns
 				}

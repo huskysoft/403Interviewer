@@ -9,12 +9,14 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.*;
 import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Intent;
@@ -74,11 +76,10 @@ public class MainActivity extends AbstractPostingActivity {
 		buildSlideMenu();
 		
 		if(diff == null){
-
 			setDifficultyToSelectedValue("");
 		}else{
 			setDifficultyToSelectedValue(
-				diff.toString().toUpperCase());			
+				diff.toString(Locale.getDefault()));			
 		}
 		
 		if(!cat.isEmpty()){
@@ -103,7 +104,8 @@ public class MainActivity extends AbstractPostingActivity {
 		Adapter a = spinner.getAdapter();
 		for (int i = 0; i < a.getCount(); i++){
 
-			if (a.getItem(i).toString().toUpperCase().equals(value)){
+			if (a.getItem(i).toString().toUpperCase().equals(
+					value.toUpperCase())){
 
 				spinner.setSelection(i);
 				return;
@@ -117,25 +119,26 @@ public class MainActivity extends AbstractPostingActivity {
 	 * sliders for extra categories.
 	 * @param cats
 	 */
+	@SuppressLint("NewApi")
 	public void setCategorySpinners(List<Category> cats){
-		String catStrUp = cats.get(0).toString().toUpperCase();
+		String catStrUp = 
+				cats.get(0).toString(Locale.getDefault()).toUpperCase();
 		
 		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
 		Adapter a = spinner.getAdapter();
 		for (int x = 0; x < a.getCount(); x++){
 			
 			String possible = a.getItem(x).toString().toUpperCase();
-			
-			System.out.println(possible + " "  + catStrUp);
-			
+						
 			if (possible.equals(catStrUp)){
 				spinner.setSelection(x);
 			}
 		}
 		
 		for(int i = 1; i < cats.size(); i++){
-			catStrUp = cats.get(i).toString().toUpperCase();
-			Spinner newSpin = newCategorySpinner(cats.get(i).toString());
+			catStrUp = cats.get(i).toString(Locale.getDefault()).toUpperCase();
+
+			Spinner newSpin = newCategorySpinner(catStrUp);
 			TableLayout table = 
 				(TableLayout) findViewById(R.id.slide_table);
 			TableRow row = new TableRow(this);
@@ -175,12 +178,14 @@ public class MainActivity extends AbstractPostingActivity {
 	 */
 	public Difficulty getCurrentDifficultySetting(){
 		Spinner spinner = (Spinner) findViewById(R.id.diff_spinner);
-
-		String diff = spinner.getSelectedItem().toString();
-		if (diff == null || diff.isEmpty() || diff.equals(UIConstants.ALL)) {
+		
+		int diff = spinner.getSelectedItemPosition();
+		
+		if (diff == 0) {
 			return null;
 		}
-		return Difficulty.valueOf(diff.toUpperCase());
+		
+		return Difficulty.values()[diff - 1];
 	}
 	
 	/**
@@ -272,10 +277,16 @@ public class MainActivity extends AbstractPostingActivity {
 				// No existing questions
 				TextView t = new TextView(this);
 	
-				t.setText("There doesn't seem to be any questions.");
+				t.setText(getString(R.string.no_questions_found));
+				t.setTextColor(getResources().getColor(R.color.gold));
 				// special look?
 				t.setLayoutParams(llp);
 				questionView.addView(t);
+			}else{
+				// Some existing questions
+				Toast.makeText(getApplicationContext(), 
+						R.string.toast_no_more_questions,
+						Toast.LENGTH_LONG).show();
 			}
 		}else{
 			// Increase the question offset so that next time we access the db, we
@@ -289,8 +300,8 @@ public class MainActivity extends AbstractPostingActivity {
 					//build text
 					String questionTitle = question.getTitle();
 					String questionBody = question.getText();
-					String questionDiff = question.getDifficulty().toString();
-					String questionCat = question.getCategory().toString();
+					String questionDiff = question.getDifficulty().toString(Locale.getDefault());
+					String questionCat = question.getCategory().toString(Locale.getDefault());
 					String questionDate = question.getDateCreated().toString();
 					
 					// abbreviate
@@ -390,9 +401,8 @@ public class MainActivity extends AbstractPostingActivity {
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), 
-						R.string.toast_return, Toast.LENGTH_LONG).show();
 				dialog.dismiss();
+				finish();
 			}
 		});
 		dialog.show();
