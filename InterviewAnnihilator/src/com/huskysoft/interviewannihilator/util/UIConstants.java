@@ -9,6 +9,9 @@ package com.huskysoft.interviewannihilator.util;
 
 public class UIConstants {
 	
+	/** Language code for localized Spanish language */
+	public static final String SPANISH_CODE = "es";
+	
 	/** Base number of rows in the Slide menu table */
 	public static final int BASE_NUM_MENU_ROWS = 3;
 	
