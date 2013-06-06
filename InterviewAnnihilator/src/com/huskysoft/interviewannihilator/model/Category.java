@@ -19,7 +19,9 @@ public enum Category {
 	/**
 	 * Method to display the category in
 	 * the correct language.
-	 * @return
+	 * @param locale specifies the language the app is currently using
+	 * @return a string representing the category in the correct language, as
+	 * specified by locale
 	 */
 	public String toString(Locale locale){
 		if(locale.getLanguage().equals(UIConstants.SPANISH_CODE)){
