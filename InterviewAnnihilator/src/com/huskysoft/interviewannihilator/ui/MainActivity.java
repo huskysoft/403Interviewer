@@ -17,7 +17,6 @@ import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;

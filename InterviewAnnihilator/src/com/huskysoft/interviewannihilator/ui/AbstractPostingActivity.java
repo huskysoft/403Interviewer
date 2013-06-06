@@ -10,8 +10,6 @@ package com.huskysoft.interviewannihilator.ui;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-
 import com.google.android.gms.common.AccountPicker;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
@@ -27,7 +25,6 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
