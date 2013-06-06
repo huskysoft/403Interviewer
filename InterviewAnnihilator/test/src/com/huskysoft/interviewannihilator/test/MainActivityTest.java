@@ -128,7 +128,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		Difficulty diff = mActivity.getCurrentDifficultySetting();
 		String returnedDiff = diff.toString();
 
-		assertEquals("HARD", returnedDiff.toUpperCase());
+		assertEquals("HARD", returnedDiff.toUpperCase(Locale.getDefault()));
 
 	}
 
@@ -145,7 +145,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		int mPos = mSpinner.getSelectedItemPosition();
 		String mSelection = (String) mSpinner.getItemAtPosition(mPos);
 
-		assertEquals("HARD", mSelection.toUpperCase());
+		assertEquals("HARD", mSelection.toUpperCase(Locale.getDefault()));
 	}
 
 	/**
@@ -209,7 +209,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		int mPos = s.getSelectedItemPosition();
 		String mSelection = (String) s.getItemAtPosition(mPos);
 
-		assertEquals("COMPSCI", mSelection.toUpperCase());
+		assertEquals("COMPSCI", mSelection.toUpperCase(Locale.getDefault()));
 	}
 
 

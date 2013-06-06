@@ -25,6 +25,8 @@ import org.codehaus.jackson.type.TypeReference;
 
 import org.json.JSONException;
 
+import android.util.Log;
+
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
 import com.huskysoft.interviewannihilator.model.NetworkException;
@@ -37,6 +39,7 @@ import com.huskysoft.interviewannihilator.util.Utility;
 
 public class QuestionService {
 
+	public static final String TAG = "QuestionService";
 	private static final String RESULTS_KEY = "results";
 	private static QuestionService instance;
 	private NetworkServiceInterface networkService;
@@ -100,6 +103,7 @@ public class QuestionService {
 			return true;
 		} catch (IOException e) {
 			// failed to read userInfo
+			Log.w(TAG, "" + e.getMessage());
 			return false;
 		}
 	}
