@@ -73,7 +73,7 @@ public interface NetworkConstants {
 	public static final String AMPERSAND = "&";
 	
 	/** Default language to use if language is improperly set */
-	public static final Language DEFAULT_LANGUAGE = Language.valueOf("EN");
+	public static final Language DEFAULT_LANGUAGE = Language.EN;
 
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
