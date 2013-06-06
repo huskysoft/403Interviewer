@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -29,10 +30,13 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import android.accounts.NetworkErrorException;
+import android.util.Log;
 
 import com.huskysoft.interviewannihilator.model.Category;
 import com.huskysoft.interviewannihilator.model.Difficulty;
+import com.huskysoft.interviewannihilator.model.Language;
 import com.huskysoft.interviewannihilator.model.NetworkException;
+import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.util.NetworkConstants;
 import com.huskysoft.interviewannihilator.util.Utility;
 
@@ -103,6 +107,17 @@ public class NetworkService implements NetworkServiceInterface {
 					PARAM_AUTHORID, String.valueOf(authorId));
 			urlToSend.append(str);
 		}
+		Language lang;
+		try {
+			lang = Language.valueOf(Locale.getDefault().getLanguage().
+					trim().toUpperCase());
+		} catch (Exception e) {
+			lang = DEFAULT_LANGUAGE;
+			Log.w(Question.QUESTION_TAG, "Getting app language failed..."
+					+ "using default: " + e.getMessage());
+		}
+		urlToSend.append(Utility.appendParameter(PARAM_LANGUAGE, 
+				lang.toString()));
 		
 		// delete the trailing ampersand from the url
 		urlToSend.deleteCharAt(urlToSend.lastIndexOf(AMPERSAND));

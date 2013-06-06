@@ -18,7 +18,9 @@ public enum Difficulty {
 	/**
 	 * Method used to help display the difficulty in 
 	 * the correct language.
-	 * @return
+	 * @param locale specifies which language the app is currently using
+	 * @return a string representing the difficulty in the language
+	 * specified by locale
 	 */
 	public String toString(Locale locale){
 		if(locale.getLanguage().equals(UIConstants.SPANISH_CODE)){
