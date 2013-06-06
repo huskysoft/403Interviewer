@@ -33,8 +33,6 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -137,30 +135,7 @@ public class MainActivity extends AbstractPostingActivity {
 		
 		for(int i = 1; i < cats.size(); i++){
 			catStrUp = cats.get(i).toString(Locale.getDefault()).toUpperCase();
-
-			Spinner newSpin = newCategorySpinner(catStrUp);
-			TableLayout table = 
-				(TableLayout) findViewById(R.id.slide_table);
-			TableRow row = new TableRow(this);
-			
-			int pad = UIConstants.SLIDE_MENU_PADDING;
-			row.setPaddingRelative(pad, pad, pad, pad);
-			
-			TextView categoryText = new TextView(this);
-			
-			categoryText.setText("Category");
-			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
-			
-			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.MATCH_PARENT,
-					TableRow.LayoutParams.WRAP_CONTENT);
-			
-			row.addView(categoryText, params);
-			
-			row.addView(newSpin);
-			
-			
-			table.addView(row, table.getChildCount() - 1);
+			addCategory(catStrUp);
 		}
 		if(cats.size() > 1){ // Add Remove button
 			Button removeButton = 
@@ -298,9 +273,8 @@ public class MainActivity extends AbstractPostingActivity {
 		
 		LayoutInflater li = (LayoutInflater)
 				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		TextView questionview = (TextView)
-				 li.inflate(R.layout.questionlist_element,
-				 questionlist, false);
+		TextView questionview = (TextView) li.inflate(
+				R.layout.questionlist_element, questionlist, false);
 		
 		//build text
 		String questionTitle = question.getTitle();

@@ -150,10 +150,17 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	}
 
 	/**
+	 * Add another category spinner in the slide menu, exists to be called
+	 * by the "Add Category" button.
+	 */
+	public void addCategory(View v){
+		addCategory("");
+	}
+	
+	/**
 	 * Add another category spinner in the slide menu
 	 */
-	@SuppressLint("NewApi")
-	public void addCategory(View v){
+	public void addCategory(String cat){
 		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
 
 		if(table.getChildCount() < Category.values().length + 3){
@@ -172,9 +179,8 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 					TableRow.LayoutParams.WRAP_CONTENT);
 
 			row.addView(categoryText, params);
-
-			row.addView(newCategorySpinner(""), params);
-
+			
+			row.addView(newCategorySpinner(cat), params);
 			// Add new row before the buttons
 			table.addView(row, table.getChildCount() - 1);
 
@@ -183,7 +189,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 					(Button) findViewById(R.id.remove_category_button);
 			removeButton.setVisibility(View.VISIBLE);
 		}
-
 	}
 
 	/**
