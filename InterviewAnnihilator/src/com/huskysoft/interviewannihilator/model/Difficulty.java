@@ -10,6 +10,8 @@ package com.huskysoft.interviewannihilator.model;
 
 import java.util.Locale;
 
+import com.huskysoft.interviewannihilator.util.UIConstants;
+
 public enum Difficulty {
 	EASY, MEDIUM, HARD;
 	
@@ -19,7 +21,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	public String toString(Locale locale){
-		if(locale.getLanguage().equals("es")){
+		if(locale.getLanguage().equals(UIConstants.SPANISH_CODE)){
 			switch(this) {
 				case EASY:
 					return "Fácil";

@@ -10,6 +10,8 @@ package com.huskysoft.interviewannihilator.model;
 
 import java.util.Locale;
 
+import com.huskysoft.interviewannihilator.util.UIConstants;
+
 public enum Category {
 	COMPSCI, BUSINESS, MANAGEMENT, LOGIC, ESTIMATION, BRAINTEASER,
 	GAME, MATH, SCIENCE;
@@ -20,7 +22,7 @@ public enum Category {
 	 * @return
 	 */
 	public String toString(Locale locale){
-		if(locale.getLanguage().equals("es")){
+		if(locale.getLanguage().equals(UIConstants.SPANISH_CODE)){
 			switch(this) {
 				case COMPSCI:
 					return "Informática";
