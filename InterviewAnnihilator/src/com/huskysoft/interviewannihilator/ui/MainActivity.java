@@ -79,7 +79,7 @@ public class MainActivity extends AbstractPostingActivity {
 			setDifficultyToSelectedValue("");
 		}else{
 			setDifficultyToSelectedValue(
-				diff.translate());			
+				diff.toString(Locale.getDefault()));			
 		}
 		
 		if(!cat.isEmpty()){
@@ -121,7 +121,8 @@ public class MainActivity extends AbstractPostingActivity {
 	 */
 	@SuppressLint("NewApi")
 	public void setCategorySpinners(List<Category> cats){
-		String catStrUp = cats.get(0).translate().toUpperCase();
+		String catStrUp = 
+				cats.get(0).toString(Locale.getDefault()).toUpperCase();
 		
 		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
 		Adapter a = spinner.getAdapter();
@@ -135,7 +136,7 @@ public class MainActivity extends AbstractPostingActivity {
 		}
 		
 		for(int i = 1; i < cats.size(); i++){
-			catStrUp = cats.get(i).translate().toUpperCase();
+			catStrUp = cats.get(i).toString(Locale.getDefault()).toUpperCase();
 
 			Spinner newSpin = newCategorySpinner(catStrUp);
 			TableLayout table = 
@@ -299,8 +300,8 @@ public class MainActivity extends AbstractPostingActivity {
 					//build text
 					String questionTitle = question.getTitle();
 					String questionBody = question.getText();
-					String questionDiff = question.getDifficulty().translate();
-					String questionCat = question.getCategory().translate();
+					String questionDiff = question.getDifficulty().toString(Locale.getDefault());
+					String questionCat = question.getCategory().toString(Locale.getDefault());
 					String questionDate = question.getDateCreated().toString();
 					
 					// abbreviate

@@ -18,8 +18,8 @@ public enum Difficulty {
 	 * the correct language.
 	 * @return
 	 */
-	public String translate(){
-		if(Locale.getDefault().getLanguage().equals("es")){
+	public String toString(Locale locale){
+		if(locale.getLanguage().equals("es")){
 			switch(this) {
 				case EASY:
 					return "Fácil";
