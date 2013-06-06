@@ -7,6 +7,8 @@
 
 package com.huskysoft.interviewannihilator.util;
 
+import com.huskysoft.interviewannihilator.model.Language;
+
 public interface NetworkConstants {
 	/** The URI of our server for both solution and question. */
 	public static final String BASE_URI = 
@@ -69,6 +71,9 @@ public interface NetworkConstants {
 
 	/** Ampersand for get URL requests */
 	public static final String AMPERSAND = "&";
+	
+	/** Default language to use if language is improperly set */
+	public static final Language DEFAULT_LANGUAGE = Language.EN;
 
 	/** HTTP parameters */
 	public static final String PARAM_LIMIT = "limit";
@@ -81,6 +86,7 @@ public interface NetworkConstants {
 	public static final String PARAM_RANDOM = "random";
 	public static final String PARAM_EMAIL = "email";
 	public static final String PARAM_AUTHORID = "authorId";
+	public static final String PARAM_LANGUAGE = "language";
 	
 	/** The default connection timeout (ms) */
 	public static final int CONN_TIMEOUT = 5000;
