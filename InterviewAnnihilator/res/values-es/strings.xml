@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">El InterviewAnnihilator</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="edit_message">Ingresa Un Mensaje</string>
+    <string name="button_solutions">Soluciones</string>
+    <string name="title_activity_question">Preguntas</string>
+    <string name="title_activity_post_solution">Publicación De Solución</string>
+    <string name="edit_solution_msg">Entrar en una Solución</string>
+    <string name="button_post">Enviar</string>
+
+    <string-array name="difficulty">
+        <item>Todo</item>
+        <item>Fácil</item>
+        <item>Medio</item>
+        <item>Duro</item>
+    </string-array>
+    
+    <string-array name="category">
+        <item>Todo</item>
+        <item>Informática</item>
+        <item>Negocios</item>
+        <item>Administración</item>
+        <item>Lógica</item>
+        <item>Clasificación</item>
+        <item>Rompecabezas</item>
+        <item>Juego</item>
+        <item>Matemáticas</item>
+        <item>Ciencia</item>
+    </string-array>
+	
+    <string name="select">&lt;Selecto&gt;</string>
+    <string name="ad_message">Lugar Advertisement</string>
+    <string name="add_category">Añadir Categoría</string>
+    <string name="remove_category">Eliminar Categoría</string>
+    <string name="spinner_difficulty_text">Dificultad</string>
+    <string name="spinner_category_text">Categoría</string>
+    <string name="button_show_me_more">Muéstrame Más</string>
+    <string name="button_post_solution">Envíe una Solución</string>
+    <string name="button_post_question">Envíe una Pregunta</string>
+    <string name="error_displaying_question">Preguntas Se Presentan Errores</string>
+    <string name="retryDialog_title">Un Error de la Red se ha Producido</string>
+    <string name="retryDialog_retry">  Reintento  </string>
+    <string name="retryDialog_cancel"> Cancelar </string>
+    <string name="successDialog_title">Solución Fue Publicada.</string>
+    <string name="successDialog_title_q">Solución Fue Publicada.</string>
+    <string name="badInputDialog_solution">Por Favor Proporcione una Solución.</string>
+    <string name="badInputDialog_title">Por Favor Proporcione una Título.</string>
+    <string name="badInputDialog_question">Por Favor Proporcione una Pregunta.</string>
+    <string name="badInputDialog_category">Por Favor Proporcione una Categoría.</string>
+    <string name="badInputDialog_return">Volver al Editor</string>
+    <string name="button_ok"> Bueno </string>
+    <string name="loading_text">Carga&#8230;</string>
+    <string name="sending_text">Envío&#8230;</string>
+    <string name="toast_already_voted">Usted ya Votó</string>
+    <string name="toast_network_error">Error de Red</string>
+    <string name="toast_return">Volviendo&#8230; </string>
+    <string name="toast_retry">Tratar&#8230; </string>
+    <string name="toast_no_more_questions">No hay más Preguntas</string>
+    <string name="title_activity_post_question">Publica Pregunta</string>
+    <string name="hello_world">Hola Mundo</string>
+    <string name="edit_question_msg">Introduzca Pregunta</string>
+    <string name="edit_question_title_msg">Introduzca el Título</string>
+    <string name="radio_easy">Fácil   </string>
+    <string name="radio_medium">Medio   </string>
+    <string name="radio_hard">Duro</string>
+    <string name="random_question">Azar</string>
+    <string name="difficulty_post_descriptor">Seleccione Dificultad: </string>
+    <string name="title_post_descriptor">Título: </string>
+    <string name="question_post_descriptor">Pregunta: </string>
+    <string name="category_post_descriptor">Categoría: </string>
+    <string name="solution_post_descriptor">Solución: </string>
+    <string name="internalError_title">Error Interna.</string>
+    <string name="userInfoError_title">Error de comunicación con la base de datos, 
+        						validación de la identificación del usuario ha fallado. 
+        						Usted debe validar su dispositivo antes de enviar. 
+        						¿Desea continuar sin validación?</string>
+    <string name="userInfoHelp_title">Usted Debe Ser Validado</string>
+    <string name="userInfoHelp_retry">   Volver a Probar   </string>	
+    <string name="userInfoHelp_cancel">   Continuar Sin Validar   </string>
+    <string name="no_solutions_found">No Soluciónes</string>			
+ 	<string name="no_questions_found">No Pregruntas</string>			
+</resources>

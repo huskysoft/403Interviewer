@@ -30,6 +30,7 @@
         <item>Science</item>
     </string-array>
 	
+    <string name="select">&lt;Select&gt;</string>
     <string name="ad_message">Your Ad Here</string>
     <string name="add_category">Add Category</string>
     <string name="remove_category">Remove Category</string>
