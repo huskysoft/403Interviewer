@@ -35,9 +35,9 @@ public class PostQuestionsTaskTest extends TestCase {
 	 * 
 	 * @label Black-box testing
 	 */
-	public void testPostQuestionCstr(){
+	public void testPostQuestionConstructor(){
 		Question question = new Question("Test", 
-				"Test_Posting", Category.MATH, Difficulty.HARD);
+				"testPostQuestionConstructor", Category.MATH, Difficulty.HARD);
 		Solution solution = new Solution();
 		solution.setText("TEST_SOLUTION");
 		PostQuestionsTask task = 
@@ -56,7 +56,7 @@ public class PostQuestionsTaskTest extends TestCase {
 	public void testPostQuestion() throws JsonGenerationException, 
 			JsonMappingException, IOException{
 		Question question = new Question("Test", 
-				"Test_Posting", Category.MATH, Difficulty.HARD);
+				"testPostQuestion()", Category.MATH, Difficulty.HARD);
 		Solution solution = new Solution();
 		solution.setText("TEST_SOLUTION");
 		QuestionService qs = QuestionService.getInstance();
@@ -81,13 +81,15 @@ public class PostQuestionsTaskTest extends TestCase {
 	 * @label White-box testing
 	 * 
 	 */
-	public void testBadSolutionWithQuestion(){
+	public void testQuestionWithNullSolution(){
 		Question question = new Question("Test", 
-				"Test_Posting", Category.MATH, Difficulty.HARD);
-		PostQuestionsTask task = 
-				new PostQuestionsTask(null, question, null);
-		int questionID = task.doInBackground();
-		assertEquals(-1, questionID);
+				"testQuestionWithNullSolution", Category.MATH, Difficulty.HARD);
+		try {
+			new PostQuestionsTask(null, question, null);
+			fail();
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
 	}
 	
 	/**
@@ -96,12 +98,14 @@ public class PostQuestionsTaskTest extends TestCase {
 	 * @label White-box testing
 	 * 
 	 */
-	public void testBadQuestionWithSolution(){
+	public void testNullQuestionWithSolution(){
 		Solution solution = new Solution();
-		solution.setText("TEST_SOLUTION");
-		PostQuestionsTask task = 
-				new PostQuestionsTask(null, null, solution);
-		int questionID = task.doInBackground();
-		assertEquals(-1, questionID);
+		solution.setText("testNullQuestionWithSolution");
+		try {
+			new PostQuestionsTask(null, null, solution);
+			fail();
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
 	}
 }
