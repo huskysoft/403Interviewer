@@ -254,7 +254,7 @@ public class Question implements Likeable, Serializable {
 				+ "title=" + title + ", authorId=" + authorId
 				+ ", dateCreated=" + dateCreated + ", category=" + category
 				+ ", difficulty=" + difficulty + ", likes=" + likes
-				+ ", dislikes=" + dislikes + ", likes=" + language + "]";
+				+ ", dislikes=" + dislikes + ", language=" + language + "]";
 	}
 
 }
