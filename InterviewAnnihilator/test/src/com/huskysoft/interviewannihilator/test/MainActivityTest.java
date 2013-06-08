@@ -219,7 +219,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 	 * 
 	 * @label whitebox
 	 */
-	public void testAppendQuestionsToViewNullList(){
+	public void testAddQuestionListNullList(){
 		// Clear current questions
 		ViewGroup questionView =
 				(ViewGroup) mActivity.findViewById(
@@ -227,7 +227,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 
 		questionView.removeAllViews();
 
-		mActivity.appendQuestionsToView(null);
+		mActivity.addQuestionList(null);
 
 		assertEquals(1, questionView.getChildCount());
 
@@ -244,7 +244,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 	 * 
 	 * @label whitebox
 	 */
-	public void testAppendQuestionsToViewOne(){
+	public void testAddQuestionListToViewOne(){
 		// Clear current questions
 		ViewGroup questionView =
 				(ViewGroup) mActivity.findViewById(
@@ -257,7 +257,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		test.setDateCreated(new Date());
 		List<Question> q = new LinkedList<Question>();
 		q.add(test);
-		mActivity.appendQuestionsToView(q);
+		mActivity.addQuestionList(q);
 
 		assertEquals(1, questionView.getChildCount());		
 	}

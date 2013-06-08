@@ -17,12 +17,13 @@ import com.huskysoft.interviewannihilator.runtime.*;
 import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,10 +31,7 @@ import android.view.Window;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,7 +127,6 @@ public class MainActivity extends AbstractPostingActivity {
 		for (int x = 0; x < a.getCount(); x++){
 			
 			String possible = a.getItem(x).toString().toUpperCase();
-						
 			if (possible.equals(catStrUp)){
 				spinner.setSelection(x);
 			}
@@ -137,30 +134,7 @@ public class MainActivity extends AbstractPostingActivity {
 		
 		for(int i = 1; i < cats.size(); i++){
 			catStrUp = cats.get(i).toString(Locale.getDefault()).toUpperCase();
-
-			Spinner newSpin = newCategorySpinner(catStrUp);
-			TableLayout table = 
-				(TableLayout) findViewById(R.id.slide_table);
-			TableRow row = new TableRow(this);
-			
-			int pad = UIConstants.SLIDE_MENU_PADDING;
-			row.setPaddingRelative(pad, pad, pad, pad);
-			
-			TextView categoryText = new TextView(this);
-			
-			categoryText.setText("Category");
-			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
-			
-			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.MATCH_PARENT,
-					TableRow.LayoutParams.WRAP_CONTENT);
-			
-			row.addView(categoryText, params);
-			
-			row.addView(newSpin);
-			
-			
-			table.addView(row, table.getChildCount() - 1);
+			addCategory(catStrUp);
 		}
 		if(cats.size() > 1){ // Add Remove button
 			Button removeButton = 
@@ -260,14 +234,7 @@ public class MainActivity extends AbstractPostingActivity {
 	 * 
 	 * @param questions
 	 */
-	public void appendQuestionsToView(List<Question> questionList) {
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.75f);
-		
-		//TODO: Move to XML or constants file - haven't yet figured out how
-		llp.setMargins(40, 10, 40, 10);
-		llp.gravity = 1;  // Horizontal Center
-		
+	public void addQuestionList(List<Question> questionList) {
 		ViewGroup questionView =
 				(ViewGroup) findViewById(R.id.question_layout);
 		
@@ -275,13 +242,9 @@ public class MainActivity extends AbstractPostingActivity {
 			// No new questions
 			if(questionView.getChildCount() == 0){
 				// No existing questions
-				TextView t = new TextView(this);
-	
-				t.setText(getString(R.string.no_questions_found));
-				t.setTextColor(getResources().getColor(R.color.gold));
-				// special look?
-				t.setLayoutParams(llp);
-				questionView.addView(t);
+				TextView noneFound = (TextView)
+						findViewById(R.id.questionlist_none_found_text);
+				noneFound.setVisibility(View.VISIBLE);
 			}else{
 				// Some existing questions
 				Toast.makeText(getApplicationContext(), 
@@ -289,86 +252,92 @@ public class MainActivity extends AbstractPostingActivity {
 						Toast.LENGTH_LONG).show();
 			}
 		}else{
-			// Increase the question offset so that next time we access the db, we
-			// get the next set of questions
+			// Increase the question offset so that next time we access the db,
+			// we get the next set of questions
 			questionOffset += questionList.size();
 			
 			for(int i = 0; i < questionList.size(); i++){
 				Question question = questionList.get(i);
 				if(question != null && question.getText() != null){
-					
-					//build text
-					String questionTitle = question.getTitle();
-					String questionBody = question.getText();
-					String questionDiff = question.getDifficulty().
-							toString(Locale.getDefault());
-					String questionCat = question.getCategory().
-							toString(Locale.getDefault());
-					String questionDate = question.getDateCreated().toString();
-					
-					// abbreviate
-					if (questionBody.length() > 
-							UIConstants.TEXT_PREVIEW_LENGTH){
-						questionBody = questionBody.substring(
-								0, UIConstants.TEXT_PREVIEW_LENGTH);
-						questionBody += "...";
-					}
-					int pos = 0;
-					SpannableStringBuilder sb = new SpannableStringBuilder();
-					// title
-					sb.append(questionTitle);
-					sb.setSpan(new  TextAppearanceSpan(this, 
-							R.style.question_title_appearance), pos, 
-							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					pos += questionTitle.length();
-					
-					// descriptors
-					sb.append('\n');
-					sb.append(questionCat);
-					sb.append("\t\t\t");
-					sb.append(questionDiff);
-					sb.setSpan(new  TextAppearanceSpan(
-							this, R.style.question_descriptors_appearance),
-							pos, sb.length(), 
-							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					sb.append("\n\n");
-					pos += questionDiff.length() + questionCat.length() + 5;
-					
-					// body
-					sb.append(questionBody);
-					sb.setSpan(new  TextAppearanceSpan(
-							this, R.style.question_body_appearance), pos, 
-							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					sb.append('\n');
-					pos += questionBody.length() + 1;
-					// date
-					sb.append('\n');
-					sb.append(questionDate);
-					sb.setSpan(new  TextAppearanceSpan(
-							this, R.style.question_date_appearance), pos, 
-							sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					
-					// done
-					TextView t = new TextView(this);
-					t.setLayoutParams(llp);
-					t.setId(question.getQuestionId());
-					t.setTag(question);
-					t.setText(sb);	
-					// to make it work on older versions use this instead of
-					// setBackground
-					t.setBackground(getResources().
-							getDrawable(R.drawable.listitem));
-
-					t.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							openQuestion(v);
-						}
-					});
-					questionView.addView(t);
+					addQuestion(question);
 				}
 			}
 		}
+	}
+	
+	private void addQuestion(Question question){
+		// get layout to put questions in
+		ViewGroup questionlist = (ViewGroup)
+				findViewById(R.id.question_layout);
+		
+		LayoutInflater li = (LayoutInflater)
+				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		TextView questionview = (TextView) li.inflate(
+				R.layout.questionlist_element, questionlist, false);
+		
+		//build text
+		String questionTitle = question.getTitle();
+		String questionBody = question.getText();
+		String questionDiff = question.getDifficulty().
+				toString(Locale.getDefault());
+		String questionCat = question.getCategory().
+				toString(Locale.getDefault());
+		String questionDate = question.getDateCreated().toString();
+		
+		// abbreviate
+		if (questionBody.length() > 
+				UIConstants.TEXT_PREVIEW_LENGTH){
+			questionBody = questionBody.substring(
+					0, UIConstants.TEXT_PREVIEW_LENGTH);
+			questionBody += "...";
+		}
+		int pos = 0;
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		// title
+		sb.append(questionTitle);
+		sb.setSpan(new  TextAppearanceSpan(this, 
+				R.style.question_title_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		pos += questionTitle.length();
+		
+		// descriptors
+		sb.append('\n');
+		sb.append(questionCat);
+		sb.append("\t\t\t");
+		sb.append(questionDiff);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_descriptors_appearance),
+				pos, sb.length(), 
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append("\n\n");
+		pos += questionDiff.length() + questionCat.length() + 5;
+		
+		// body
+		sb.append(questionBody);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_body_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sb.append('\n');
+		pos += questionBody.length() + 1;
+		// date
+		sb.append('\n');
+		sb.append(questionDate);
+		sb.setSpan(new  TextAppearanceSpan(
+				this, R.style.question_date_appearance), pos, 
+				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		// done
+		questionview.setId(question.getQuestionId());
+		questionview.setTag(question);
+		questionview.setText(sb);	
+
+		questionview.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openQuestion(v);
+			}
+		});
+		questionlist.addView(questionview);
 	}
 	
 	/**
