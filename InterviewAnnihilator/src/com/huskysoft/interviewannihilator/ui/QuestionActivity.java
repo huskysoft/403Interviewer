@@ -20,18 +20,15 @@ import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
 import android.os.Bundle;
 import android.app.Dialog;
-import android.app.ActionBar.LayoutParams;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
@@ -44,9 +41,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 
 	public final static String EXTRA_MESSAGE = 
 			"com.huskysoft.interviewannihilator.QUESTION";
-	
-	/** Layout that the question and solutions will populate */
-	private LinearLayout solutionsLayout;
 	
 	/** The question the user is viewing */
 	private Question question;
@@ -74,10 +68,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 				MainActivity.EXTRA_MESSAGE);
 		
 		this.setTitle(question.getTitle());
-		// Grab Linear Layout
-		solutionsLayout =
-				(LinearLayout) findViewById(R.id.question_layout_solutions);
-
+		
 		//build text
 		String questionBody = question.getText();
 		String questionDate = question.getDateCreated().toString();
@@ -115,9 +106,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		// done
 		TextView textview = (TextView) findViewById(R.id.question_text_view);
-		
-		textview.setBackground(
-				getResources().getDrawable( R.drawable.listitem));
 		textview.setText(sb);
 				
 		// Initialize values
@@ -139,17 +127,9 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 */
 	public synchronized void addSolutionList(List<Solution> solutions){
 		if(solutions == null || solutions.size() <= 0){
-			TextView t = new TextView(this);
-			t.setText(getString(R.string.no_solutions_found));
-			t.setTextColor(getResources().getColor(R.color.gold));
-			
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-			llp.setMargins(40, 10, 40, 10);
-			llp.gravity = 1; // Horizontal Center
-			t.setLayoutParams(llp);
-			
-			solutionsLayout.addView(t);
+			TextView noneFound = (TextView)
+					findViewById(R.id.solutionlist_none_found_text);
+			noneFound.setVisibility(View.VISIBLE);
 		} else {
 			for(int i = 0; i < solutions.size(); i++){
 				Solution solution = solutions.get(i);
@@ -173,11 +153,14 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 * @param llp layout parameters
 	 */
 	private void addSolution(Solution solution){
+		ViewGroup solutionInner = (ViewGroup)
+				findViewById(R.id.solutionlist_inner);
+		
 		// get layout from xml
 		LayoutInflater li = (LayoutInflater)
 				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View solutionView =
-				li.inflate(R.layout.solution_view, solutionsLayout, false);
+		View solutionView = li.inflate(
+				R.layout.solutionlist_element, solutionInner, false);
 		
 		// build text
 		String solutionBody = solution.getText();
@@ -204,7 +187,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		// get the solution TextView from solution_view.xml
 		TextView solnView = (TextView)
-				solutionView.findViewById(R.id.solution_text);
+				solutionView.findViewById(R.id.solutionlist_element_text);
 		solnView.setText(sb);
 		solnView.setId(solution.getSolutionId());
 		
@@ -254,7 +237,7 @@ public class QuestionActivity extends AbstractPostingActivity {
 			}
 		});
 		
-		solutionsLayout.addView(solutionView);
+		solutionInner.addView(solutionView);
 	}
 
 	/**
@@ -299,30 +282,9 @@ public class QuestionActivity extends AbstractPostingActivity {
 		showSolutions.setVisibility(View.GONE);
 		
 		// Reveal hidden solutions
-		solutionsLayout.setVisibility(View.VISIBLE);
-		
-		// Add post solution button to end of list
-		Button post = new Button(this);
-		post.setText(R.string.button_post_solution);
-		float dp = TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 1, 
-				getResources().getDisplayMetrics());
-		int height = (int) (40 * dp);
-		int margin = (int) (16 * dp);
-		LinearLayout.LayoutParams lp = 
-				new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, height, 1f);
-		lp.gravity = Gravity.CENTER_HORIZONTAL;
-		lp.setMargins(0, margin, 0, 0);
-		post.setLayoutParams(lp);
-		post.setPadding(margin, 0, margin, 0);
-		post.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v){
-				postSolution(v);
-			}
-		});
-		solutionsLayout.addView(post);
+		ViewGroup solutionOuter = (ViewGroup)
+				findViewById(R.id.solutionlist_outer);
+		solutionOuter.setVisibility(View.VISIBLE);
 	}
 	
 	private void loadSolutions(){

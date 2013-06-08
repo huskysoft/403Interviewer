@@ -75,7 +75,7 @@ public class QuestionActivityTest extends
 		// test solutions are initially empty
 		LinearLayout ll = (LinearLayout) mActivity.findViewById(
 				com.huskysoft.interviewannihilator.R.id.
-				question_layout_solutions);
+				solutionlist_inner);
 		assertEquals(0, ll.getChildCount());
 	}
 	
@@ -89,7 +89,7 @@ public class QuestionActivityTest extends
 		// Clear current solutions
 		ViewGroup solutionView = (ViewGroup) mActivity.findViewById(
 				com.huskysoft.interviewannihilator.R.id.
-				question_layout_solutions);
+				solutionlist_inner);
 		solutionView.removeAllViews();
 		
 		mActivity.addSolutionList(null);
@@ -113,7 +113,7 @@ public class QuestionActivityTest extends
 		// Clear current solutions
 		ViewGroup solutionView = (ViewGroup) mActivity.findViewById(
 				com.huskysoft.interviewannihilator.R.id.
-				question_layout_solutions);
+				solutionlist_inner);
 		solutionView.removeAllViews();
 		
 		List<Solution> solutionList = new ArrayList<Solution>();
@@ -140,7 +140,7 @@ public class QuestionActivityTest extends
 		// Clear current solutions
 		ViewGroup solutionView = (ViewGroup) mActivity.findViewById(
 				com.huskysoft.interviewannihilator.R.id.
-				question_layout_solutions);
+				solutionlist_inner);
 		solutionView.removeAllViews();
 		
 		List<Solution> solutionList = new ArrayList<Solution>();

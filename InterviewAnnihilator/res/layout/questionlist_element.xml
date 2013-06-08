@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- I'm ignoring this warning because if we make text selectable,
+	 then it takes two clicks to open a question -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/questionlist_element_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/listitem"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"/>
