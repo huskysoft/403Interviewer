@@ -278,8 +278,10 @@ public class MainActivity extends AbstractPostingActivity {
 		//build text
 		String questionTitle = question.getTitle();
 		String questionBody = question.getText();
-		String questionDiff = question.getDifficulty().toString(Locale.getDefault());
-		String questionCat = question.getCategory().toString(Locale.getDefault());
+		String questionDiff = question.getDifficulty().
+				toString(Locale.getDefault());
+		String questionCat = question.getCategory().
+				toString(Locale.getDefault());
 		String questionDate = question.getDateCreated().toString();
 		
 		// abbreviate
