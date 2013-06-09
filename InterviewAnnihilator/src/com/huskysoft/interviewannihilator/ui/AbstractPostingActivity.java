@@ -10,6 +10,8 @@ package com.huskysoft.interviewannihilator.ui;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+
 import com.google.android.gms.common.AccountPicker;
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Category;
@@ -26,14 +28,17 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Adapter;
@@ -74,6 +79,79 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 
 		// Get info from transfer class
 		slideMenuInfo = SlideMenuInfo.getInstance();
+	}
+	
+	////////////////////////////view stuff//////////////////////////////
+	
+	/**
+	 * Appends a questionlist_element view to a specified viewgroup.
+	 * 
+	 * @param question question datastructure used to populate the viewgroup
+	 * @param viewGroup viewgroup to which you want to append the new view
+	 * @param isClickable if true, will open a new QuestionActivity intent
+	 * 		  when this view is clicked
+	 * @param truncatedText if true, will truncate text and apppend a "..."
+	 */
+	protected void appendQuestionToView(Question question,
+			ViewGroup viewGroup, boolean isClickable, boolean truncatedText){
+		// inflate template layout from questionlist_element.xml
+		LayoutInflater li = (LayoutInflater)
+				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		ViewGroup questionElement = (ViewGroup) li.inflate(
+				R.layout.questionlist_element, viewGroup, false);
+		
+		//get text fields
+		TextView viewTitle = (TextView) questionElement.
+				findViewById(R.id.questionlist_element_title);
+		TextView viewCategory = (TextView) questionElement.
+				findViewById(R.id.questionlist_element_category);
+		TextView viewDifficulty = (TextView) questionElement.
+				findViewById(R.id.questionlist_element_difficulty);
+		TextView viewText = (TextView) questionElement.
+				findViewById(R.id.questionlist_element_text);
+		TextView viewDate = (TextView) questionElement.
+				findViewById(R.id.questionlist_element_date);
+		
+		//build text
+		String questionTitle = question.getTitle();
+		String questionBody = question.getText();
+		String questionDifficulty = question.getDifficulty().
+				toString(Locale.getDefault());
+		String questionCategory = question.getCategory().
+				toString(Locale.getDefault());
+		String questionDate = question.getDateCreated().toString();
+		
+		// abbreviate question text
+		if(truncatedText &&
+				questionBody.length() > UIConstants.TEXT_PREVIEW_LENGTH){
+			questionBody = questionBody.
+					substring(0, UIConstants.TEXT_PREVIEW_LENGTH);
+			questionBody += "...";
+		}
+		
+		// set texts
+		viewTitle.setText(questionTitle);
+		viewCategory.setText(questionCategory);
+		viewDifficulty.setText(questionDifficulty);
+		viewText.setText(questionBody);
+		viewDate.setText(questionDate);
+		
+		// set metadata
+		questionElement.setId(question.getQuestionId());
+		questionElement.setTag(question);
+		
+		// turn off onClick if isClickable is false
+		if(!isClickable){
+			questionElement.setOnClickListener(null);
+		}else{
+			viewTitle.setTextIsSelectable(false);
+			viewCategory.setTextIsSelectable(false);
+			viewDifficulty.setTextIsSelectable(false);
+			viewText.setTextIsSelectable(false);
+			viewDate.setTextIsSelectable(false);
+		}
+		// append to view group
+		viewGroup.addView(questionElement);
 	}
 
 	/////////////////////////sliding menu stuff/////////////////////////

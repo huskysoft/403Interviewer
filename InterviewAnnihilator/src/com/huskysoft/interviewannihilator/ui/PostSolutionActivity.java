@@ -14,11 +14,9 @@ import com.huskysoft.interviewannihilator.runtime.PostSolutionsTask;
 import android.os.Bundle;
 import android.app.Dialog;
 
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,30 +41,10 @@ public class PostSolutionActivity extends AbstractPostingActivity {
 		question = (Question) intent.getSerializableExtra(
 				QuestionActivity.EXTRA_MESSAGE);
 		this.setTitle(question.getTitle());
-		//setup question view
-		//build text
-		String questionBody = question.getText();
-		String questionDate = question.getDateCreated().toString();
-				
-		int pos = 0;
-		SpannableStringBuilder sb = new SpannableStringBuilder();
-		// body
-		sb.append(questionBody);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append('\n');
-		pos += questionBody.length() + 1;
-		// date
-		sb.append('\n');
-		sb.append(questionDate);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_date_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				
-		// done
-		TextView tv = (TextView) findViewById(R.id.question_view);
-		tv.setText(sb);
+		
+		ViewGroup questionView = (ViewGroup)
+				findViewById(R.id.postsolution_question_view);
+		this.appendQuestionToView(question, questionView, false, false);
 	}
 	
 

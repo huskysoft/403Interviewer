@@ -1,11 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- I'm ignoring this warning because if we make text selectable,
-	 then it takes two clicks to open a question -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/questionlist_element_text"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:background="@drawable/listitem"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+	android:layout_marginTop="@dimen/activity_vertical_margin"
+	android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:onClick="openQuestion"
+    android:background="@drawable/listitem">
+    
+	<TextView
+	    android:id="@+id/questionlist_element_title"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="5dp"
+	    android:textIsSelectable="true"
+	    style="@style/question_title_appearance" />
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="5dp"
+	    android:orientation="horizontal" >
+	    
+		<TextView 
+		    android:id="@+id/questionlist_element_category"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginRight="5dp"
+		    android:textIsSelectable="true"
+		    style="@style/question_descriptors_appearance"/>
+		<TextView 
+		    android:id="@+id/questionlist_element_difficulty"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textIsSelectable="true"
+		    style="@style/question_descriptors_appearance"/>
+		
+	</LinearLayout>
+	<TextView 
+	    android:id="@+id/questionlist_element_text"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="5dp"
+	    android:textIsSelectable="true"
+	    style="@style/question_body_appearance"/>
+	<TextView 
+	    android:id="@+id/questionlist_element_date"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textIsSelectable="true"
+	    style="@style/question_date_appearance"/>
+	
+</LinearLayout>
