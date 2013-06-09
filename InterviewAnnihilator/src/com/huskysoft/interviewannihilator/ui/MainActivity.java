@@ -254,7 +254,8 @@ public class MainActivity extends AbstractPostingActivity {
 			for(int i = 0; i < questions.size(); i++){
 				Question question = questions.get(i);
 				if(question != null && question.getText() != null){
-					appendQuestionToView(question, questionListView, true, true);
+					appendQuestionToView(
+							question, questionListView, true, true);
 				}
 			}
 		}
