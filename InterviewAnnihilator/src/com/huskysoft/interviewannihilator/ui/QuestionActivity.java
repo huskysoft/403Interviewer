@@ -11,8 +11,6 @@
 package com.huskysoft.interviewannihilator.ui;
 
 import java.util.List;
-import java.util.Locale;
-
 import com.huskysoft.interviewannihilator.R;
 import com.huskysoft.interviewannihilator.model.Question;
 import com.huskysoft.interviewannihilator.model.Solution;
@@ -20,9 +18,6 @@ import com.huskysoft.interviewannihilator.runtime.FetchSolutionsTask;
 import com.huskysoft.interviewannihilator.runtime.VoteSolutionTask;
 import android.os.Bundle;
 import android.app.Dialog;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -69,44 +64,10 @@ public class QuestionActivity extends AbstractPostingActivity {
 		
 		this.setTitle(question.getTitle());
 		
-		//build text
-		String questionBody = question.getText();
-		String questionDate = question.getDateCreated().toString();
-		String questionDiff = 
-				question.getDifficulty().toString(Locale.getDefault());
-		String questionCat = 
-				question.getCategory().toString(Locale.getDefault());
-		
-		int pos = 0;
-		SpannableStringBuilder sb = new SpannableStringBuilder();
-		// body
-		sb.append(questionBody);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append('\n');
-		pos += questionBody.length() + 1;
-		// descriptors
-				sb.append('\n');
-				sb.append(questionCat);
-				sb.append("\t\t\t");
-				sb.append(questionDiff);
-				sb.setSpan(new  TextAppearanceSpan(
-						this, R.style.question_descriptors_appearance),
-						pos, sb.length(), 
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				sb.append('\n');
-				pos += questionDiff.length() + questionCat.length() + 4;
-		// date
-		sb.append('\n');
-		sb.append(questionDate);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_date_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
-		// done
-		TextView textview = (TextView) findViewById(R.id.question_text_view);
-		textview.setText(sb);
+		// Populate the question field
+		ViewGroup layoutQuestion = (ViewGroup)
+				findViewById(R.id.question_layout_question);
+		this.appendQuestionToView(question, layoutQuestion, false, false);
 				
 		// Initialize values
 		solutionsLoaded = false;
@@ -150,7 +111,6 @@ public class QuestionActivity extends AbstractPostingActivity {
 	 * and upvote/downvote arrows.
 	 * 
 	 * @param solution solution that will populate the text view
-	 * @param llp layout parameters
 	 */
 	private void addSolution(Solution solution){
 		ViewGroup solutionInner = (ViewGroup)
@@ -162,35 +122,19 @@ public class QuestionActivity extends AbstractPostingActivity {
 		View solutionView = li.inflate(
 				R.layout.solutionlist_element, solutionInner, false);
 		
+		// get text views
+		TextView viewText = (TextView) solutionView.
+				findViewById(R.id.solutionlist_element_text);
+		TextView viewDate = (TextView) solutionView.
+				findViewById(R.id.solutionlist_element_date);
+		
 		// build text
 		String solutionBody = solution.getText();
 		String solutionDate = solution.getDateCreated().toString();
 		
-		int pos = 0;
-		SpannableStringBuilder sb = new SpannableStringBuilder();
-		
-		// body
-		sb.append(solutionBody);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.solution_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append('\n');
-		pos += solutionBody.length() + 1;
-		// date
-		sb.append('\n');
-		sb.append(solutionDate);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_date_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
-		
-		
-		// get the solution TextView from solution_view.xml
-		TextView solnView = (TextView)
-				solutionView.findViewById(R.id.solutionlist_element_text);
-		solnView.setText(sb);
-		solnView.setId(solution.getSolutionId());
-		
+		viewText.setText(solutionBody);
+		viewDate.setText(solutionDate);
+
 		// get the score TextView from solution_view.xml
 		TextView scoreView = (TextView)
 				solutionView.findViewById(R.id.score_text);

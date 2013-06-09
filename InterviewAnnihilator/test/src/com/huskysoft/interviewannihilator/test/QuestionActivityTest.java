@@ -68,9 +68,12 @@ public class QuestionActivityTest extends
 	 */
 	public void testPreConditions() {
 		// test that question view is populated
-		TextView questionView = (TextView) mActivity.findViewById(
-				com.huskysoft.interviewannihilator.R.id.question_text_view);
-		assertNotNull(questionView.getText());
+		ViewGroup questionLayout = (ViewGroup)
+				mActivity.findViewById(com.huskysoft.interviewannihilator.
+						R.id.question_layout_question);
+		TextView text = (TextView) questionLayout.
+				findViewById(R.id.questionlist_element_text);
+		assertNotNull(text.getText());
 				
 		// test solutions are initially empty
 		LinearLayout ll = (LinearLayout) mActivity.findViewById(
@@ -94,10 +97,11 @@ public class QuestionActivityTest extends
 		
 		mActivity.addSolutionList(null);
 		
-		assertEquals(1, solutionView.getChildCount());
+		assertEquals(0, solutionView.getChildCount());
 
-		TextView t = (TextView) solutionView.getChildAt(0);
-		String message = (String) t.getText();
+		TextView t = (TextView) mActivity.
+				findViewById(R.id.solutionlist_none_found_text);
+		String message = (String) t.getText().toString();
 		String expected = mActivity.getString(R.string.no_solutions_found);
 
 		assertEquals(expected, message);
@@ -119,10 +123,11 @@ public class QuestionActivityTest extends
 		List<Solution> solutionList = new ArrayList<Solution>();
 		mActivity.addSolutionList(solutionList);
 		
-		assertEquals(1, solutionView.getChildCount());
+		assertEquals(0, solutionView.getChildCount());
 		
-		TextView t = (TextView) solutionView.getChildAt(0);
-		String message = (String) t.getText();
+		TextView t = (TextView) mActivity.
+				findViewById(R.id.solutionlist_none_found_text);
+		String message = (String) t.getText().toString();
 		String expected = mActivity.getString(R.string.no_solutions_found);
 
 		assertEquals(expected, message);

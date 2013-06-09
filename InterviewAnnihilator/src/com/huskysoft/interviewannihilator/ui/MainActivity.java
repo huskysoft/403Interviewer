@@ -18,12 +18,7 @@ import com.huskysoft.interviewannihilator.util.UIConstants;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.TextAppearanceSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -234,13 +229,13 @@ public class MainActivity extends AbstractPostingActivity {
 	 * 
 	 * @param questions
 	 */
-	public void addQuestionList(List<Question> questionList) {
-		ViewGroup questionView =
+	public void addQuestionList(List<Question> questions) {
+		ViewGroup questionListView =
 				(ViewGroup) findViewById(R.id.question_layout);
 		
-		if(questionList == null || questionList.size() <= 0){
+		if(questions == null || questions.size() <= 0){
 			// No new questions
-			if(questionView.getChildCount() == 0){
+			if(questionListView.getChildCount() == 0){
 				// No existing questions
 				TextView noneFound = (TextView)
 						findViewById(R.id.questionlist_none_found_text);
@@ -254,90 +249,16 @@ public class MainActivity extends AbstractPostingActivity {
 		}else{
 			// Increase the question offset so that next time we access the db,
 			// we get the next set of questions
-			questionOffset += questionList.size();
+			questionOffset += questions.size();
 			
-			for(int i = 0; i < questionList.size(); i++){
-				Question question = questionList.get(i);
+			for(int i = 0; i < questions.size(); i++){
+				Question question = questions.get(i);
 				if(question != null && question.getText() != null){
-					addQuestion(question);
+					appendQuestionToView(
+							question, questionListView, true, true);
 				}
 			}
 		}
-	}
-	
-	private void addQuestion(Question question){
-		// get layout to put questions in
-		ViewGroup questionlist = (ViewGroup)
-				findViewById(R.id.question_layout);
-		
-		LayoutInflater li = (LayoutInflater)
-				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		TextView questionview = (TextView) li.inflate(
-				R.layout.questionlist_element, questionlist, false);
-		
-		//build text
-		String questionTitle = question.getTitle();
-		String questionBody = question.getText();
-		String questionDiff = question.getDifficulty().
-				toString(Locale.getDefault());
-		String questionCat = question.getCategory().
-				toString(Locale.getDefault());
-		String questionDate = question.getDateCreated().toString();
-		
-		// abbreviate
-		if (questionBody.length() > 
-				UIConstants.TEXT_PREVIEW_LENGTH){
-			questionBody = questionBody.substring(
-					0, UIConstants.TEXT_PREVIEW_LENGTH);
-			questionBody += "...";
-		}
-		int pos = 0;
-		SpannableStringBuilder sb = new SpannableStringBuilder();
-		// title
-		sb.append(questionTitle);
-		sb.setSpan(new  TextAppearanceSpan(this, 
-				R.style.question_title_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		pos += questionTitle.length();
-		
-		// descriptors
-		sb.append('\n');
-		sb.append(questionCat);
-		sb.append("\t\t\t");
-		sb.append(questionDiff);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_descriptors_appearance),
-				pos, sb.length(), 
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append("\n\n");
-		pos += questionDiff.length() + questionCat.length() + 5;
-		
-		// body
-		sb.append(questionBody);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_body_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sb.append('\n');
-		pos += questionBody.length() + 1;
-		// date
-		sb.append('\n');
-		sb.append(questionDate);
-		sb.setSpan(new  TextAppearanceSpan(
-				this, R.style.question_date_appearance), pos, 
-				sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
-		// done
-		questionview.setId(question.getQuestionId());
-		questionview.setTag(question);
-		questionview.setText(sb);	
-
-		questionview.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				openQuestion(v);
-			}
-		});
-		questionlist.addView(questionview);
 	}
 	
 	/**
