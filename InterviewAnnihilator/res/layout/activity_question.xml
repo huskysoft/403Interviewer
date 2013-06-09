@@ -42,6 +42,17 @@
 			    android:layout_gravity="center_horizontal">
 			</LinearLayout>
 			
+			<TextView android:id="@+id/solutionlist_none_found_text"
+		        android:textIsSelectable="true"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+			    android:layout_marginTop="@dimen/activity_vertical_margin"
+			    android:layout_marginBottom="@dimen/activity_vertical_margin"
+			    android:text="@string/no_solutions_found"
+			    android:textColor="@color/gold"
+			    android:visibility="gone" />
+			
 			<Button
 			    android:layout_width="wrap_content"
 			    android:layout_height="40dp"
@@ -51,17 +62,6 @@
 			    android:text="@string/button_post_solution" />
 			
 		</LinearLayout>
-		
-		<TextView android:id="@+id/solutionlist_none_found_text"
-	        android:textIsSelectable="true"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-		    android:layout_marginTop="@dimen/activity_vertical_margin"
-		    android:layout_marginBottom="@dimen/activity_vertical_margin"
-		    android:text="@string/no_solutions_found"
-		    android:textColor="@color/gold"
-		    android:visibility="gone" />
 		
 		<include layout="@layout/loading_anim" />
 	</LinearLayout>

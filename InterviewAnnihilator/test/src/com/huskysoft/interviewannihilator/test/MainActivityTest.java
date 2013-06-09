@@ -229,10 +229,11 @@ ActivityInstrumentationTestCase2<MainActivity> {
 
 		mActivity.addQuestionList(null);
 
-		assertEquals(1, questionView.getChildCount());
+		assertEquals(0, questionView.getChildCount());
 
-		TextView t = (TextView) questionView.getChildAt(0);
-		String message = (String) t.getText();
+		TextView t = (TextView) mActivity.
+				findViewById(R.id.questionlist_none_found_text);
+		String message = (String) t.getText().toString();
 		String expected = mActivity.getString(R.string.no_questions_found);
 
 		assertEquals(expected, message);
