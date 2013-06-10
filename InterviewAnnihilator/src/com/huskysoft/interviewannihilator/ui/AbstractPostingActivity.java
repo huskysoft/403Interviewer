@@ -188,43 +188,6 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 	}
 
 	/**
-	 * Builds a new Spinner object for a new Category.
-	 * Sets the selected value to the passed in parameter.
-	 * 
-	 * Called by MainActivity
-	 * 
-	 * @param selected
-	 * @return Spinner object.
-	 */
-	public Spinner newCategorySpinner(String selected){
-		Spinner newCategory = new Spinner(this);
-
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-						R.array.category, 
-						android.R.layout.simple_spinner_item);
-
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(
-				android.R.layout.simple_spinner_dropdown_item);
-
-		// Apply the adapter to the spinner
-		newCategory.setAdapter(adapter);
-
-		if(!selected.equals("")){
-			Adapter a = newCategory.getAdapter();
-			for (int x = 0; x < a.getCount(); x++){
-				String possible = a.getItem(x).toString().toUpperCase();
-				if (possible.equals(selected.toUpperCase())){
-					newCategory.setSelection(x);
-				}
-			}
-		}
-
-		return newCategory;
-	}
-
-	/**
 	 * Add another category spinner in the slide menu, exists to be called
 	 * by the "Add Category" button.
 	 */
@@ -239,25 +202,37 @@ public abstract class AbstractPostingActivity extends SlidingActivity{
 		TableLayout table = (TableLayout) findViewById(R.id.slide_table);
 
 		if(table.getChildCount() < Category.values().length + 3){
-			TableRow row = new TableRow(this);
-
-			int pad = UIConstants.SLIDE_MENU_PADDING;
-			row.setPaddingRelative(pad, pad, pad, pad);
-
-			TextView categoryText = new TextView(this);
-
-			categoryText.setText("Category");
-			categoryText.setTextSize(UIConstants.SLIDE_MENU_TEXT_SIZE);
-
-			TableRow.LayoutParams params = new TableRow.LayoutParams(
-					TableRow.LayoutParams.MATCH_PARENT,
-					TableRow.LayoutParams.WRAP_CONTENT);
-
-			row.addView(categoryText, params);
+			LayoutInflater li = (LayoutInflater)
+					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			TableRow tableRow = (TableRow) li.inflate(
+					R.layout.category_spinner_table_element, table, false);
 			
-			row.addView(newCategorySpinner(cat), params);
-			// Add new row before the buttons
-			table.addView(row, table.getChildCount() - 1);
+			// Set spinner settings
+			Spinner spinner = (Spinner) 
+					tableRow.findViewById(R.id.category_spinner);
+			ArrayAdapter<CharSequence> adapter = 
+					ArrayAdapter.createFromResource(this,
+							R.array.category, 
+							android.R.layout.simple_spinner_item);
+
+			// Specify the layout to use when the list of choices appears
+			adapter.setDropDownViewResource(
+					android.R.layout.simple_spinner_dropdown_item);
+
+			// Apply the adapter to the spinner
+			spinner.setAdapter(adapter);
+
+			if(!cat.equals("")){
+				Adapter a = spinner.getAdapter();
+				for (int x = 0; x < a.getCount(); x++){
+					String possible = a.getItem(x).toString().toUpperCase();
+					if (possible.equals(cat.toUpperCase())){
+						spinner.setSelection(x);
+					}
+				}
+			}
+			
+			table.addView(tableRow, table.getChildCount() - 1);
 
 			// Set Remove button visible
 			Button removeButton = 
