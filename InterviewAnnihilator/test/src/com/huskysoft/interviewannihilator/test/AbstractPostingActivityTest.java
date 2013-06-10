@@ -104,43 +104,6 @@ public class AbstractPostingActivityTest extends
 	}
 	
 	/**
-	 * Test the newCategorySpinner method. Does
-	 * not pass in a pre-selected value.
-	 * 
-	 * @label white-box
-	 */
-	@UiThreadTest
-	public void testNewCategorySpinner(){
-		Spinner s = mActivity.newCategorySpinner("");
-		
-		assertEquals(10, s.getAdapter().getCount());
-		
-		int mPos = s.getSelectedItemPosition();
-		String mSelection = (String) s.getItemAtPosition(mPos);
-		
-		assertEquals("All", mSelection);
-	}
-	
-	/** 
-	 * Tests the newCategorySpinner method. 
-	 * Does pass in selected value.
-	 * 
-	 * @label white-box
-	 */
-	@UiThreadTest
-	public void testNewCategorySpinnerValue(){
-		Spinner s = mActivity.newCategorySpinner("COMPSCI");
-		
-		assertEquals(10, s.getAdapter().getCount());
-		
-		int mPos = s.getSelectedItemPosition();
-		String mSelection = (String) s.getItemAtPosition(mPos);
-		
-		assertEquals("CompSci", mSelection);
-		
-	}
-	
-	/**
 	 * Test addCategory method. Makes sure spinner is added
 	 * and remove button is visible.
 	 * 
